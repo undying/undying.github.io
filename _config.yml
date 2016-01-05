@@ -14,9 +14,14 @@ description: > # this means to ignore newlines until "baseurl:"
   of computer technologies, Open Software, Linux and many more.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://undying.github.io" # the base hostname & protocol for your site
-#twitter_username: jekyllrb
 github_username:  undying
+linkedin_username: denis-bozhok-4248ab60
+facebook_id: 100009455237641
+facebook_username: Kron
 
 # Build settings
 markdown: kramdown
 
+paginate: 7
+
+exclude: [ vendor ]
