@@ -12,14 +12,14 @@ Also, In my case I have multiple backends. To some of them I need to send http/1
 The main problem is the mix of tcp/http modes in Haproxy. Without it everything is simple. Just use tcp mode and that's it. But here I need balancer to handle SSL for some projects, that's why simple tcp mode is not the solution. Here is the idea.
 
 	  http/https   _________
-	  ----------> |	        |
+	  ----------> |         |
 	  ----------> | Haproxy |
 	  http/2.0    |_________|
                     /\
           http/1.1 /  \ http/2.0
           ________/_   \_________
          | http/1.1 | | http/2.0 |
-         | backend	| | backend  |
+         | backend  | | backend  |
          |__________| |__________|
 
 One more requirement is to keep client ip. So, the final scheme will looks this way.
