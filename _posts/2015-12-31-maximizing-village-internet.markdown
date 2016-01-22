@@ -289,7 +289,7 @@ config interface 'wan'
         option dialnumber '*99#'
         option proto '3g'
 {% endhighlight %}
-<h5>Используемые ресурсы</h5>
+<h4>Используемые ресурсы</h4>
 <ul>
   <li><a href="http://4pda.ru/forum/lofiversion/index.php?t582284.html">4pda.ru</a> Форум по мобильным устройствам</li>
   <li><a href="https://wiki.openwrt.org/doc/recipes/3gdongle">wiki.openwrt.org</a> Вики по OpenWRT</li>
