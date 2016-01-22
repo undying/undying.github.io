@@ -237,7 +237,7 @@ AT+COPS=0,2
 AT+COPS?
 +COPS: 0,2,"25002",2
 {% endhighlight %}
-<i>Хороший справочник по AT командам можно найти <a href="http://www.hughes.com/AT_Command_Reference.html#AT_plusCREG">здесь</a></i>
+<i>Хороший справочник по AT командам можно найти <a href="http://www.hughes.com/AT_Command_Reference.html">здесь</a></i>
 
 Теперь, имея эти данные, можно зайти на сайт <a href="http://xinit.ru/bs/">http://xinit.ru/bs/</a> и посмотреть, где эти вышки расположены относительно себя.
 
@@ -291,8 +291,10 @@ config interface 'wan'
 {% endhighlight %}
 <h5>Используемые ресурсы</h5>
 <ul>
-<li><a href="http://4pda.ru/forum/lofiversion/index.php?t582284.html">4pda.ru</a></li>
-<li><a href="https://wiki.openwrt.org/doc/recipes/3gdongle">wiki.openwrt.org</a></li>
-<li><a href="http://xinit.ru/bs/">xinit.ru/bs/</a></li>
+  <li><a href="http://4pda.ru/forum/lofiversion/index.php?t582284.html">4pda.ru</a> Форум по мобильным устройствам</li>
+  <li><a href="https://wiki.openwrt.org/doc/recipes/3gdongle">wiki.openwrt.org</a> Вики по OpenWRT</li>
+  <li><a href="http://xinit.ru/bs/">xinit.ru/bs/</a> Расположение базовых станций</li>
+  <li><a href="http://www.smssolutions.net/tutorials/gsm/gsmerrorcodes/">http://www.smssolutions.net/</a> Справочник ошибок</li>
+  <li><a href="http://www.hughes.com/AT_Command_Reference.html">http://www.hughes.com/</a> Справочник <b>AT</b> Команд</li>
 </ul>
 
