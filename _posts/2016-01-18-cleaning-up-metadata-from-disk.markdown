@@ -23,5 +23,27 @@ dd if=/dev/zero of=${DEVICE} bs=512 seek=$(( $(blockdev --getsz ${DEVICE}) - 102
 dmraid -r -E ${DEVICE}
 {% endhighlight %}
 
+<h4>Example</h4>
+
+{% highlight bash %}
+~ # mkfs.btrfs /dev/sdb
+/dev/sdb appears to contain an existing filesystem (LVM2_member).
+Error: Use the -f option to force overwrite.
+
+
+~ # wipefs -a /dev/sdb
+/dev/sdb: 8 bytes were erased at offset 0x00000218 (LVM2_member): 4c 56 4d 32 20 30 30 31
+
+
+~ # mkfs.btrfs /dev/sdb
+Btrfs v3.16.2
+See http://btrfs.wiki.kernel.org for more information.
+
+Turning ON incompat feature 'extref': increased hardlink limit per file to 65536
+fs created label (null) on /dev/sdb
+        nodesize 16384 leafsize 16384 sectorsize 4096 size 744.19GiB
+
+{% endhighlight %}
+
 This is not all the ways, but for me the most easy usable (except dd, in this case).
 
