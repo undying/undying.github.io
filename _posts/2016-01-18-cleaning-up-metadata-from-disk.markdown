@@ -3,6 +3,7 @@ layout: post
 title: "How to cleanup FS metadata from partition"
 date: 2016-01-28 02:58:00 +0300
 tags: fs raid hdd
+commentIssueId: 3
 ---
 
 Sometimes you I'm need to create new FS on partition, which was already used for something else (another FS, RAID, LVM).
