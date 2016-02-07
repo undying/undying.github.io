@@ -2,67 +2,20 @@
 layout: default
 ---
 
-<link rel="stylesheet" href="{{ "/css/comments.css" | prepend: site.baseurl }}">
-<link rel="stylesheet" href="{{ "/css/images.css" | prepend: site.baseurl }}">
+{% include styles.html %}
 <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">{{ page.title }}</h1>
-    <p class="post-meta"><time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ page.date | date: "%b %-d, %Y" }}</time>{% if page.author %} • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{{ page.author }}</span></span>{% endif %}</p>
+    {% include post-header.html %}
   </header>
 
   <div class="post-content" itemprop="articleBody">
     {{ content }}
   </div>
 
-  <script type="text/javascript">
-$("#post p").each( function(index) {
-  if (index > 0 && $.trim($(this).text()).length > 0) {
-    $(this).attr("id", "par" + index.toString());
-    var html = $(this).html();
-    $(this).html(html + " <a href='#par" + index.toString() + "'>#</a>");
-  }
-});
-  </script>
-
-  <div id="comments">
-    <h2>Comments</h2>
-    <div id="header">
-      Want to leave a comment? Visit <a href="https://github.com/undying/undying.github.io/issues/{{page.commentIssueId}}"> this post's issue page on GitHub</a> (you'll need a GitHub account.).
-    </div>
+  <div>
+    {% include post-comments.html %}
   </div>
 
-  <script type="text/javascript">
-function loadComments(data) {
-  for (var i=0; i<data.length; i++) {
-    var cuser = data[i].user.login;
-    var cuserlink = "https://www.github.com/" + data[i].user.login;
-    var clink = "https://github.com/undying/undying.github.io/issues/{{page.commentIssueId}}#issuecomment-" + data[i].url.substring(data[i].url.lastIndexOf("/")+1);
-    var cbody = data[i].body_html;
-    var cavatarlink = data[i].user.avatar_url;
-    var cdate = Date.parse(data[i].created_at).toString("yyyy-MM-dd HH:mm:ss");
-    $("#comments").append("<div class='comment'><div class='commentheader'><div class='commentgravatar'>" + '<img src="' + cavatarlink + '" alt="" width="20" height="20">' + "</div><a class='commentuser' href=\""+ cuserlink + "\">" + cuser + "</a><a class='commentdate' href=\"" + clink + "\">" + cdate + "</a></div><div class='commentbody'>" + cbody + "</div></div>");
-  }
-}
-$.ajax("https://api.github.com/repos/undying/undying.github.io/issues/{{page.commentIssueId}}/comments?per_page=100", {
-  headers: {Accept: "application/vnd.github.full+json"},
-  dataType: "json",
-  success: function(msg){
-    loadComments(msg);
-  }
-});
-  </script>
-
 </article>
-
-<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- undying.github.io adaptive -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-6501580959681522"
-     data-ad-slot="4424884892"
-     data-ad-format="auto"></ins>
-<script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-</script>
 
