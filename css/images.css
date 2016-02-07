@@ -1,0 +1,10 @@
+/*********************
+ * styles for images *
+ * ******************/
+
+.border_solid_black {
+  border: 2px solid;
+}
+.border_solid_red {
+  border: 2px solid #ff0000;
+}
