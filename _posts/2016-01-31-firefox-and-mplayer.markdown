@@ -105,5 +105,12 @@ Now we can watch our favorite serials with mplayer and even with higher quality 
 
 I really liked this solution, so I decided to make the same configuration on my linux box. The main difference is that I'm using <a href="https://mpv.io/">Mpv</a> player instead of mplayer, in the rest it works the same way.
 
-
+<h4>Links</h4>
+<ul>
+  <li><a href="https://www.mozilla.org/ru/firefox/new/">Mozilla Firefox</a></li>
+  <li><a href="https://addons.mozilla.org/en-US/firefox/addon/flashgot/">FlashGot</a></li>
+  <li><a href="http://mplayerwin.sourceforge.net/downloads.html">Mplayer</a></li>
+  <li><a href="https://www.mplayerhq.hu/MPlayer/releases/codecs/windows-essential-20071007.zip">Mplayer Codecs</a></li>
+  <li><a href="https://mpv.io">Mpv</a></li>
+</ul>
 
