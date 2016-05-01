@@ -3,7 +3,7 @@ layout: post
 title: "libgcc_s.so: cannot open shared object file"
 date: 2016-04-29 02:04:00 +0300
 tags: gentoo gcc 
-commentIssueId: 0
+commentIssueId: 5
 ---
 
 Как то вечером, я решил, что стоит лечь по-раньше спать. Подумал, что надо бы выспаться, все дела, но перед этим просто загляну в ноутбук, и тут началось.
