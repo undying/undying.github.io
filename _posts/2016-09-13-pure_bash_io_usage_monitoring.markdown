@@ -46,3 +46,17 @@ done
 
 {% endhighlight %}
 
+The usage is simple:
+
+{% highlight bash %}
+
+./disk_io_usage.sh
+xvdb 10
+xvda 0
+
+./disk_io_usage.sh
+xvdb 20
+xvda 0
+
+{% endhighlight %}
+
