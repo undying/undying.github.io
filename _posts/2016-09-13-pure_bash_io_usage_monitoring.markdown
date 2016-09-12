@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "Pure Bash for IO usage monitoring"
+title: "Pure Bash script for IO usage monitoring"
 date: 2016-09-13 02:39:00 +0300
 tags: bash io usage
-commentIssueId: 2
+commentIssueId: 6
 ---
 
 
