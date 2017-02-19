@@ -17,9 +17,9 @@ emerge -av media-fonts/droid
 Then we have to enable them for wide system.
 
 {% highlight bash %}
-eselect enable 59-google-droid-sans.conf
-eselect enable 59-google-droid-sans-mono.conf
-eselect enable 59-google-droid-serif.conf
+eselect fontconfig enable 59-google-droid-sans.conf
+eselect fontconfig enable 59-google-droid-sans-mono.conf
+eselect fontconfig enable 59-google-droid-serif.conf
 {% endhighlight %}
 
 Next step is to clean fonts cache.
