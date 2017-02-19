@@ -3,7 +3,7 @@ layout: post
 title: "Gentoo: Backslash as Yen char"
 date: 2017-02-19 15:47:00 +0300
 tags: gentoo backslash yen
-commentIssueId: 6
+commentIssueId: 7
 ---
 
 If while browsing the internet you have a problem with backslash character which displayed as yen sign you can fix it this way.
