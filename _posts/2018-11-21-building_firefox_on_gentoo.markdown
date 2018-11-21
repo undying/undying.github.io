@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Gentoo: Building FireFox 63.0.3"
-date: 2018-11-21 08:10:00 +0300
+date: 2018-11-21 05:10:00 +0000
 tags: gentoo building firefox cargo
 commentIssueId: 7
 ---
