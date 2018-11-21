@@ -15,7 +15,7 @@ description: > # this means to ignore newlines until "baseurl:"
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://undying.github.io" # the base hostname & protocol for your site
 github_username:  undying
-linkedin_username: denis-bozhok-4248ab60
+linkedin_username: bozhok-denis
 facebook_id: 100009455237641
 facebook_username: Kron
 
