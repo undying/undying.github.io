@@ -7,6 +7,7 @@ commentIssueId: 7
 ---
 
 Today I was trying to update FireFox on my Gentoo box and failed with error:
+
 {% highlight %}
   0:06.75 checking rustc version... 1.30.1
   0:06.75 ERROR: Cargo package manager not found.
@@ -29,13 +30,14 @@ Also I found where cargo was already installed:
   /usr/bin/cargo-1.30.1
 {% endhighlight %}
 
-So the solution was simple.
+So the solution was simple:
 
 {% highlight bash %}
   sudo eselect rust update
 {% endhighlight %}
 
-This creates link required for build
+This creates link required for build:
+
 {% highlight bash %}
   ls -l $(which cargo)
   lrwxrwxrwx 1 root root 21 Nov 21 08:03 /usr/bin/cargo -> /usr/bin/cargo-1.30.1
