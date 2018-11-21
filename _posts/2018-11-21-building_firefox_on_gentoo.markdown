@@ -8,7 +8,7 @@ commentIssueId: 7
 
 Today I was trying to update FireFox on my Gentoo box and failed with error:
 
-{% highlight %}
+{% highlight bash %}
   0:06.75 checking rustc version... 1.30.1
   0:06.75 ERROR: Cargo package manager not found.
   0:06.75 To compile Rust language sources, you must have 'cargo' in your path.
