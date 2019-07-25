@@ -7,7 +7,7 @@ commentIssueId: 8
 ---
 
 Today was curious is it possible to mount block device into a docker container without mounting it on system.
-It's not well documented but found one interesting comment in github: https://github.com/moby/moby/issues/37893#issuecomment-424535343
+It's not well documented but found one interesting <a href="https://github.com/moby/moby/issues/37893#issuecomment-424535343">comment </a> in github.
 
 So, if --mount option in `docker run` command is "magic" on top of "mount" system call, we can use it.
 After experimenting a bit here is an example mounting lvm volumes.
