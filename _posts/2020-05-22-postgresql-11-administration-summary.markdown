@@ -40,6 +40,23 @@ ____
 
 To select some data for database, process it and then update this data in database there is a SELECT FOR UPDATE  statement for that.
 
+#### FOR ... clauses by locking strength
+
+The locking clause has general form:
+
+```sql
+FOR [lock_strength] [ OF table_name [, ...] ] [ NOWAIT | SKIP LOCKED ]
+```
+
+where *lock_strength* can be one of:
+
+- **UPDATE** (when we definitely want to update record, most strong lock)
+- **NO KEY UPDATE** (the lock is weaker and can coexist with **SELECT FOR SHARE**)
+- **SHARE** (this type lock can be handled by multiple transactions)
+- **KEY SHARE** (like **SHARE** lock but weaker. this lock conflicts with **FOR UPDATE** but can coexist with **FOR NO KEY UPDATE**)
+
+See more details [here](https://www.postgresql.org/docs/11/sql-select.html)
+
 #### FOR UPDATE SKIP LOCKED
 
 ```sql
