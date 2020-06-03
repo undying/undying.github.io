@@ -10,7 +10,7 @@ So I wrote this small function:
 
 ```vim
 " Save file on each edit exit
-function FileSaveOnLeave()
+function FileAutoSave()
   if @% == ""
     return
   elseif !filereadable(@%)
@@ -24,7 +24,7 @@ function FileSaveOnLeave()
   update
 endfunction
 
-:autocmd InsertLeave,TextChanged * call FileSaveOnLeave()
+:autocmd InsertLeave,TextChanged * call FileAutoSave()
 """
 ```
 
