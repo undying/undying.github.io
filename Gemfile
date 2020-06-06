@@ -9,4 +9,10 @@ gem 'therubyracer'
 
 group :jekyll_plugins do
   gem "jekyll-paginate"
+  gem "jekyll-mermaid"
+end
+
+group :development do
+  gem "pry"
+  gem "pry-byebug"
 end
