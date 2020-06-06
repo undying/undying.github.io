@@ -5,10 +5,6 @@ date: 2020-05-22 09:48:49 +0300
 tags: postgresql cheatsheet
 ---
 
-{% include toc.html %}
-
----
-
 ## Intro
 Not so long ago I read a beautiful [book about PostgreSQL 11 Administration](https://www.labirint.ru/books/685536/) and decided to make a summary of interesting for my point of view details.
 
