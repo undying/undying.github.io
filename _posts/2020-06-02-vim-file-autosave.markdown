@@ -13,7 +13,7 @@ So I wrote this small function:
 function FileAutoSave()
   if @% == ""
     return
-  elseif !filereadable(@%)
+  elseif !filewritable(@%)
     return
   endif
 
