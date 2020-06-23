@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+
+  
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Using docker with LVM Thin Pool</title>
+  <meta name="description" content="Docker is the nice tool for almost every use case in my sphere. It’s easy to use, it’s fast to build and deploy. Docker can be used with miscellaneous storag...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://undying.github.io/2016/02/08/using-docker-with-lvm-thin-volumes.html">
+  <link rel="alternate" type="application/rss+xml" title="Blog abount Linux, Technologies and Life" href="http://undying.github.io/feed.xml">
+
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://datejs.googlecode.com/svn/trunk/build/date-en-US.js"></script>
+
+  
+  <script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-73378547-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+
+
+  
+
+
+
+</head>
+
+
+
+  <body>
+
+    <header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="/">Blog abount Linux, Technologies and Life</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+  </div>
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        
+<link rel="stylesheet" href="/css/comments.css">
+<link rel="stylesheet" href="/css/common.css">
+
+
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    
+<h1 class="post-title" itemprop="name headline">Using docker with LVM Thin Pool</h1>
+<p class="post-meta"><time datetime="2016-02-08T00:21:00+03:00" itemprop="datePublished">Feb 8, 2016</time></p>
+
+
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>Docker is the nice tool for almost every use case in my sphere. It’s easy to use, it’s fast to build and deploy. 
+Docker can be used with miscellaneous storage drivers such as btrfs, datamapper, overlayfs, aufs. A long time I was using docker with btrfs backend and everything seems to be nice, but when load on this server increased, corrupted layers are began to appear.</p>
+
+<p>It looks like build process in the next RUN step unable to find files from previous step. I had no desire to dig into it because of time, so I decided to change storage backend. It may looks like the choice is big enough, in fact every variant is full of surprises. Some of them is still not in the linux kernel, some of them have serious bugs, and others is just slow.</p>
+
+<p>Some time ago I heard abount LVM thin provisioning. It’s relatively new feature and I had no use cases to use it. Now I have it, because docker can work with it. You can create Virtual Group directly on block device and pass it to docker daemon. It works fast enough to hold many parallel docker builds in a single moment in time. So, let’s try it.</p>
+
+<p>Creating <b>V</b>irtual <b>G</b>roup <b>docker</b>:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">pvcreate /dev/sdb
+vgcreate docker /dev/sdb</code></pre></figure>
+
+<p>Now we shall create a volume for metadata. <a href="http://linux.die.net/man/8/lvcreate">man 8 lvcreate</a> gives us a formula for calculating a size for metadata volume.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">(</span>Pool_LV_size / Pool_LV_chunk_size <span class="k">*</span> 64b<span class="o">)</span></code></pre></figure>
+
+<p>Default chink size is 64KiB, now lets find desired metadata size.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">echo</span> <span class="nv">$[</span>799057190584.31995 / 65536 <span class="k">*</span> 64]
+  780329287.67999995
+<span class="nb">echo</span> <span class="nv">$[</span>780329287.67999995/1024/1024]
+  744.17999999999995</code></pre></figure>
+
+<p><b>780329287.67999995</b> - The VG size in bytes (744GiB)<br />
+<b>65536</b> - chunk size in bytes (64KiB)</p>
+
+<p>Now creating metadata volume with calculated size.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">lvcreate <span class="nt">-n</span> docker-pool-meta <span class="nt">-L</span> 744M docker
+  Logical volume <span class="s2">"docker-pool-meta"</span> created.</code></pre></figure>
+
+<p class="border_solid_red"><i>Beware that this metadata size may not be enough for your needs. In my case it was to small, so I was using metadata size about 16GiB. This is the maximum supported size for now, and at this time I'm testing how does it works.</i></p>
+
+<p>Next, we need to create a volume for data. In my situations I just use the rest size of virtual group. First, I was trying to create volume this way:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">lvcreate <span class="nt">-n</span> docker-pool-data <span class="nt">-l</span> 100%FREE docker
+  Logical volume <span class="s2">"docker-pool-data"</span> created.</code></pre></figure>
+
+<p>It’s successfully created, but It fails in the next step when we need to convert this two volumes to the thin pool.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">lvconvert <span class="nt">--type</span> thin-pool <span class="nt">--poolmetadata</span> docker/docker-pool-meta docker/docker-pool-data
+  WARNING: Converting logical volume docker/docker-pool-data and docker/docker-pool-meta to pool<span class="s1">'s data and metadata volumes.
+  THIS WILL DESTROY CONTENT OF LOGICAL VOLUME (filesystem etc.)
+Do you really want to convert docker/docker-pool-data and docker/docker-pool-meta? [y/n]: y
+  Volume group "docker" has insufficient free space (0 extents): 38102 required.</span></code></pre></figure>
+
+<p>If in your case everything is fine, my congratulations, you can <a href="/2016/02/08/using-docker-with-lvm-thin-volumes.html#final">skip</a> this part.</p>
+
+<p>Looks like when pool is being creating lvm needs some extra space, in my situation it’s 38102 extents. Okay, so I need to create volume with size smaller on 38102 extents.
+Lets find the virtual group size in extents.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">vgs <span class="nt">-o</span> +vg_free_count,vg_extent_count
+  VG     <span class="c">#PV #LV #SN Attr   VSize   VFree  Free #Ext</span>
+  docker   1   2   0 wz--n- 744,18g     0     0 190511</code></pre></figure>
+
+<p>Fine, now lets see how many extents uses metadata volume.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">lvs <span class="nt">-o</span> +vg_extent_count
+  LV               VG     Attr       LSize    <span class="c">#Ext</span>
+  docker-pool-meta docker twi-aotz-- 744,0m   185</code></pre></figure>
+
+<p>Now, it’s easy to find desired data volume size.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">echo</span> <span class="nv">$[</span>190511-38102-185]
+  152224</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">lvremove docker/docker-pool-data
+  Logical volume <span class="s2">"docker-pool-data"</span> successfully removed
+
+lvcreate <span class="nt">-n</span> docker-pool-data <span class="nt">-l</span> 152224 docker
+  Logical volume <span class="s2">"docker-pool-data"</span> created.</code></pre></figure>
+
+<p>Time to convert it.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">lvconvert <span class="nt">--type</span> thin-pool <span class="nt">--poolmetadata</span> docker/docker-pool-meta docker/docker-pool-data
+  WARNING: Converting logical volume docker/docker-pool-data and docker/docker-pool-meta to pool<span class="s1">'s data and metadata volumes.
+  THIS WILL DESTROY CONTENT OF LOGICAL VOLUME (filesystem etc.)</span></code></pre></figure>
+
+<p id="final">That's it, volumes are converted to thin pool and now can be used by docker daemon. We need a few options to ask docker to use this pool.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">/usr/bin/docker daemon <span class="nt">-H</span> unix:///run/docker.sock <span class="nt">-H</span> tcp://0.0.0.0:2375 <span class="nt">--dns</span><span class="o">=</span>172.17.0.1 <span class="nt">--storage-driver</span><span class="o">=</span>devicemapper <span class="nt">--storage-opt</span> dm.thinpooldev<span class="o">=</span>/dev/mapper/docker-docker--pool--data <span class="nt">--storage-opt</span><span class="o">=</span>dm.use_deferred_removal<span class="o">=</span><span class="nb">true</span> <span class="nt">--storage-opt</span><span class="o">=</span>dm.mountopt<span class="o">=</span>noatime <span class="nt">--storage-opt</span><span class="o">=</span>dm.fs<span class="o">=</span>xfs</code></pre></figure>
+
+<table class="border_solid_black">
+  <tr><td><b>-H unix:///run/docker.sock</b></td><td></td><td>listen socket. needed for docker cli</td></tr>
+  <tr><td><b>-H tcp://0.0.0.0:2375</b></td><td></td><td>listen tcp. using for remote docker build</td></tr>
+  <tr><td><b>--dns=172.17.0.1</b></td><td></td><td>pass to all new containers this ip as DNS resolver*</td></tr>
+  <tr><td><b>--storage-driver=devicemapper</b></td><td></td><td>use devicemapper as storage driver</td></tr>
+  <tr><td><b>--storage-opt dm.thinpooldev=/dev/mapper/docker-docker--pool--data</b></td><td></td><td>pass thin pool name to the docker daemon</td></tr>
+  <tr><td><b>--storage-opt=dm.use_deferred_removal=true</b></td><td></td><td>support deffered devices removal</td></tr>
+  <tr><td><b>--storage-opt=dm.mountopt=noatime</b></td><td></td><td>small FS optimisation</td></tr>
+  <tr><td><b>--storage-opt=dm.fs=xfs</b></td><td></td><td>use XFS as root volume for containers</td></tr>
+</table>
+<table>
+  <tr><td>*</td><td>I'm using local <a href="https://wiki.archlinux.org/index.php/Dnsmasq">dnsmasq</a> to cache most frequent dns requests</td></tr>
+</table>
+
+<p>At this time I’m actively testing this solution with thin pools so this article may be updated from time to time If I’ll find some new problems or features.
+In fact as I think, this is the most acceptable solution for now in ratio speed/safety. Maybe soon we will see something more interesting, I hope so.</p>
+
+<h4>Links:</h4>
+
+<ul>
+  <li><a href="http://linux.die.net/man/8/lvcreate">man 8 lvcreate</a></li>
+  <li><a href="http://man7.org/linux/man-pages/man7/lvmthin.7.html">man 7 lvmthin</a></li>
+  <li><a href="https://docs.docker.com/engine/reference/commandline/daemon/">docker docs</a></li>
+</ul>
+
+
+  </div>
+</article>
+
+
+      </div>
+    </div>
+
+    
+<footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Blog abount Linux, Technologies and Life</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>Blog abount Linux, Technologies and Life</li>
+          <li><a href="mailto:undying.k@gmail.com">undying.k@gmail.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/undying">
+  <span class="icon icon--github"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub icon</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></span>
+  <span class="username">undying</span>
+</a>
+
+          </li>
+          
+
+          
+          <li>
+            <a href="https://web.facebook.com/profile.php?id=100009455237641">
+  <span class="icon icon--facebook"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Facebook icon</title><path d="M23.9981 11.9991C23.9981 5.37216 18.626 0 11.9991 0C5.37216 0 0 5.37216 0 11.9991C0 17.9882 4.38789 22.9522 10.1242 23.8524V15.4676H7.07758V11.9991H10.1242V9.35553C10.1242 6.34826 11.9156 4.68714 14.6564 4.68714C15.9692 4.68714 17.3424 4.92149 17.3424 4.92149V7.87439H15.8294C14.3388 7.87439 13.8739 8.79933 13.8739 9.74824V11.9991H17.2018L16.6698 15.4676H13.8739V23.8524C19.6103 22.9522 23.9981 17.9882 23.9981 11.9991Z"/></svg></span>
+  <span class="username">Kron</span>
+</a>
+
+          </li>
+          
+
+          
+          <li>
+            <a href="https://linkedin.com/in/bozhok-denis">
+  <span class="icon icon--linkedin"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>LinkedIn icon</title><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></span>
+  <span class="username">bozhok-denis</span>
+</a>
+
+          </li>
+          
+
+          
+          <li>
+            <a href="https://www.instagram.com/undying.k/">
+  <span class="icon icon--instagram"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Instagram icon</title><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/></svg></span>
+  <span class="username">undying.k</span>
+</a>
+
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/undying_k">
+  <span class="icon icon--twitter"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Twitter icon</title><path d="M23.954 4.569c-.885.389-1.83.654-2.825.775 1.014-.611 1.794-1.574 2.163-2.723-.951.555-2.005.959-3.127 1.184-.896-.959-2.173-1.559-3.591-1.559-2.717 0-4.92 2.203-4.92 4.917 0 .39.045.765.127 1.124C7.691 8.094 4.066 6.13 1.64 3.161c-.427.722-.666 1.561-.666 2.475 0 1.71.87 3.213 2.188 4.096-.807-.026-1.566-.248-2.228-.616v.061c0 2.385 1.693 4.374 3.946 4.827-.413.111-.849.171-1.296.171-.314 0-.615-.03-.916-.086.631 1.953 2.445 3.377 4.604 3.417-1.68 1.319-3.809 2.105-6.102 2.105-.39 0-.779-.023-1.17-.067 2.189 1.394 4.768 2.209 7.557 2.209 9.054 0 13.999-7.496 13.999-13.986 0-.209 0-.42-.015-.63.961-.689 1.8-1.56 2.46-2.548l-.047-.02z"/></svg></span>
+  <span class="username">undying_k</span>
+</a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>In this blog I will describe situations that I meet in my life when working with a variety of technologies. This includes any kind of computer technologies, Open Software, Linux and many more.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+
+  </body>
+
+</html>

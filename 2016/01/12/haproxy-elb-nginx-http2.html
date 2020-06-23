@@ -7,12 +7,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Blog abount Linux, Technologies and Life</title>
-  <meta name="description" content="In this blog I will describe situations that I meet in my life when working with a variety of technologies. This includes any kind of computer technologies, Open Software, Linux and many more.
-">
+  <title>Enabling HTTP/2.0 support with Haproxy -> Amazon ELB -> Nginx</title>
+  <meta name="description" content="I have a Haproxy balancer that routes traffic for multiple projects with different host names and now, I need to enable HTTP/2.0 support for couple or all of...">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://undying.github.io/">
+  <link rel="canonical" href="http://undying.github.io/2016/01/12/haproxy-elb-nginx-http2.html">
   <link rel="alternate" type="application/rss+xml" title="Blog abount Linux, Technologies and Life" href="http://undying.github.io/feed.xml">
 
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
@@ -75,161 +74,163 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="home">
+        
+<link rel="stylesheet" href="/css/comments.css">
+<link rel="stylesheet" href="/css/common.css">
 
-  <h1 class="page-heading">Posts</h1>
 
-  <ul class="post-list">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
     
-      <li>
-        <span class="post-meta">Jun 20, 2020</span>
+<h1 class="post-title" itemprop="name headline">Enabling HTTP/2.0 support with Haproxy -> Amazon ELB -> Nginx</h1>
+<p class="post-meta"><time datetime="2016-01-12T20:35:00+03:00" itemprop="datePublished">Jan 12, 2016</time></p>
 
-        <h2>
-          <a class="post-link" href="/2020/06/20/capturing-tcp-retransmissions.html">Network: Capturing TCP Retransmissions</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jun 6, 2020</span>
 
-        <h2>
-          <a class="post-link" href="/2020/06/06/vim-append-filetype.html">VIM: Append Filetype</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jun 2, 2020</span>
+  </header>
 
-        <h2>
-          <a class="post-link" href="/2020/06/02/vim-file-autosave.html">VIM: File Autosave</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">May 29, 2020</span>
+  <div class="post-content" itemprop="articleBody">
+    <p>I have a Haproxy balancer that routes traffic for multiple projects with different host names and now, I need to enable HTTP/2.0 support for couple or all of them. The problem is that current version of Haproxy not supporting HTTP/2.0 protocol.
+Also, In my case I have multiple backends. To some of them I need to send http/1.1 traffic and to some of them http/2.0.</p>
 
-        <h2>
-          <a class="post-link" href="/2020/05/29/route-53-resolver-servfail.html">Route 53 Resolver: NXDOMAIN|SERVFAIL</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">May 22, 2020</span>
+<p>The main problem is the mix of tcp/http modes in Haproxy. Without it everything is simple. Just use tcp mode and that’s it. But here I need balancer to handle SSL for some projects, that’s why simple tcp mode is not the solution. Here is the idea.</p>
 
-        <h2>
-          <a class="post-link" href="/2020/05/22/postgresql-11-administration-summary.html">PostgreSQL 11 Administration Summary</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">May 8, 2020</span>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  http/https   _________
+  ----------&gt; |         |
+  ----------&gt; | Haproxy |
+  http/2.0    |_________|
+                /\
+      http/1.1 /  \ http/2.0
+      ________/_   \_________
+     | http/1.1 | | http/2.0 |
+     | backend  | | backend  |
+     |__________| |__________|
+</code></pre></div></div>
 
-        <h2>
-          <a class="post-link" href="/2020/05/08/cyrillic-symbols-in-konsole.html">Fixing cyrillic symbols in KDE Konsole</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Mar 1, 2020</span>
+<p>One more requirement is to keep client ip. So, the final scheme will looks this way.</p>
 
-        <h2>
-          <a class="post-link" href="/2020/03/01/configuring-gentoo-to-play-steam.html">configuring Gentoo to play Steam</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jul 25, 2019</span>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>             _________                                 _______
+http/https  |         |            http               |       |
+----------&gt; | Haproxy | ---------------------------&gt;  | nginx |
+            |_________| X-Forwarded-For: &lt;client_ip&gt;  |_______|
+                   |
+             proxy-protocol
+               http/2.0      http/2.0  _______
+             ______|___   /---------&gt; | nginx |
+            |    ELB   | /
+            | tcp mode |/
+            |__________|\
+                         \  http/2.0   _______
+                          \---------&gt; | nginx |
+</code></pre></div></div>
 
-        <h2>
-          <a class="post-link" href="/2019/07/25/ck-unlock-session-alias.html">command not found: ck-unlock-session</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jul 25, 2019</span>
+<p>Now the most interesting part - configuration.</p>
 
-        <h2>
-          <a class="post-link" href="/2019/07/25/mounting_block_devices_into_docker.html">Docker: Mounting block devices into container</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Nov 21, 2018</span>
+<h4><b>Haproxy Configuration</b></h4>
 
-        <h2>
-          <a class="post-link" href="/2018/11/21/building_firefox_on_gentoo.html">Gentoo: Building FireFox 63.0.3</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Feb 19, 2017</span>
+<p>Haproxy must be built with OpenSSL that supports ALPN. This support was introduced in version 1.0.2. Haproxy ALPN support was implemented in 1.5-dev18 version.</p>
 
-        <h2>
-          <a class="post-link" href="/2017/02/19/backslash_as_yen.html">Gentoo: Backslash as Yen char</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Sep 13, 2016</span>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>global
+  maxconn 81920
+  tune.ssl.default-dh-param 2048
+  pidfile /run/haproxy.pid
+  stats socket /run/haproxy.sock level admin
 
-        <h2>
-          <a class="post-link" href="/2016/09/13/pure_bash_io_usage_monitoring.html">Pure Bash script for IO usage monitoring</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Apr 29, 2016</span>
+defaults
+  mode http
+  option forwardfor
+  maxconn 20480
+  timeout connect 2s
+  timeout client 180000
+  timeout server 180000
+  stats enable
+  stats uri /status/
+  stats realm Name\ Yourself
+  stats auth name:password
 
-        <h2>
-          <a class="post-link" href="/2016/04/29/lib_gcc_s_so-cannot_open_shared_object_file.html">libgcc_s.so: cannot open shared object file</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Feb 8, 2016</span>
+frontend listen_http
+  bind 0.0.0.0:80
+  reqadd X-Forwarded-Proto:\ http
 
-        <h2>
-          <a class="post-link" href="/2016/02/08/using-docker-with-lvm-thin-volumes.html">Using docker with LVM Thin Pool</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jan 31, 2016</span>
+  use_backend project1 if { hdr(host) -i project1.domain.local }
+  default_backend project2-http
 
-        <h2>
-          <a class="post-link" href="/2016/01/31/firefox-and-mplayer.html">Using FireFox to play video with Mplayer on Windows</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jan 28, 2016</span>
+frontend listen_https
+  mode tcp
+  bind 0.0.0.0:443 ssl crt /etc/haproxy/ssl/cert_key.pem alpn h2 ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA
 
-        <h2>
-          <a class="post-link" href="/2016/01/28/cleaning-up-metadata-from-disk.html">How to cleanup FS metadata from partition</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jan 12, 2016</span>
+  reqadd X-Forwarded-Proto:\ https
 
-        <h2>
-          <a class="post-link" href="/2016/01/12/haproxy-elb-nginx-http2.html">Enabling HTTP/2.0 support with Haproxy -> Amazon ELB -> Nginx</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Dec 31, 2015</span>
+  use_backend project1 if { ssl_fc_sni -i project1.domain.local }
+  use_backend project2-http2 if { ssl_fc_alpn -i h2 }
 
-        <h2>
-          <a class="post-link" href="/2015/12/31/maximizing-village-internet.html">Выжимаем максимум интернета из деревенских сот</a>
-        </h2>
-      </li>
-    
-  </ul>
+  default_backend project2-https
 
-  <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
+backend project1
+  server project1 172.17.0.10:80 check
 
-</div>
+backend project2-http
+  server project2 172.17.0.20:80 check send-proxy
+
+backend project2-https
+  mode tcp
+  server project2 172.17.0.20:443 check send-proxy ssl verify none
+
+backend project2-http2
+  mode tcp
+  server project2 172.17.0.20:8443 check send-proxy
+</code></pre></div></div>
+
+<h4>Details</h4>
+
+<p><code class="highlighter-rouge">
+reqadd X-Forwarded-Proto:\ http
+</code></p>
+
+<p>Handle http-&gt;https redirect on backend side.</p>
+
+<p><code class="highlighter-rouge">
+option forwardfor
+</code></p>
+
+<p>Send client ip to http backends with header X-Forwarded-For.</p>
+
+<p><code class="highlighter-rouge">
+bind 0.0.0.0:443 ssl crt /etc/haproxy/ssl/cert_key.pem alpn h2 ciphers ...
+</code></p>
+
+<p>Here we are terminating ssl and enabling support for http/2.0 over TLS with <code class="highlighter-rouge">alpn h2</code>. Pay attention with ciphers, Google Chrome need <i>strong</i> ciphers to use.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use_backend project1 if { ssl_fc_sni -i project1.domain.local }
+</code></pre></div></div>
+
+<p>Use backend project1 if SSL SNI matches <b>project1.domain.local</b>. This is useful when we can’t use http mode and parse headers.</p>
+
+<p><code class="highlighter-rouge">
+use_backend project2-http2 if { ssl_fc_alpn -i h2 }
+</code></p>
+
+<p>Pass clients to project2-http2 backend if SSL ALPN field matches h2 (http/2.0).</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>backend project2-http2
+  mode tcp
+  server project2 172.17.0.20:8443 check send-proxy
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">send-proxy</code> Enables proxy-protocol to send Client IP to the backend.</p>
+
+<h4>Nginx Configuration</h4>
+
+<p>In nginx everything is pretty simple. Modifying listen attribute for http2 support. Nginx must be built with module ngx_http_v2_module. This module was introduced in version 1.9.5.</p>
+
+<figure class="highlight"><pre><code class="language-nginx" data-lang="nginx"><span class="k">listen</span> <span class="mi">8443</span> <span class="s">http2</span> <span class="s">proxy_protocol</span><span class="p">;</span></code></pre></figure>
+
+<p>Thats it.</p>
+
+
+  </div>
+</article>
+
 
       </div>
     </div>

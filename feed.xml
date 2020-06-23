@@ -1,30 +1,668 @@
----
-layout: null
----
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>{{ site.title | xml_escape }}</title>
-    <description>{{ site.description | xml_escape }}</description>
-    <link>{{ site.url }}{{ site.baseurl }}/</link>
-    <atom:link href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}" rel="self" type="application/rss+xml"/>
-    <pubDate>{{ site.time | date_to_rfc822 }}</pubDate>
-    <lastBuildDate>{{ site.time | date_to_rfc822 }}</lastBuildDate>
-    <generator>Jekyll v{{ jekyll.version }}</generator>
-    {% for post in site.posts limit:10 %}
+    <title>Blog abount Linux, Technologies and Life</title>
+    <description>In this blog I will describe situations that I meet in my life when working with a variety of technologies. This includes any kind of computer technologies, Open Software, Linux and many more.
+</description>
+    <link>http://undying.github.io/</link>
+    <atom:link href="http://undying.github.io/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Tue, 23 Jun 2020 22:58:43 +0300</pubDate>
+    <lastBuildDate>Tue, 23 Jun 2020 22:58:43 +0300</lastBuildDate>
+    <generator>Jekyll v3.8.7</generator>
+    
       <item>
-        <title>{{ post.title | xml_escape }}</title>
-        <description>{{ post.content | xml_escape }}</description>
-        <pubDate>{{ post.date | date_to_rfc822 }}</pubDate>
-        <link>{{ post.url | prepend: site.baseurl | prepend: site.url }}</link>
-        <guid isPermaLink="true">{{ post.url | prepend: site.baseurl | prepend: site.url }}</guid>
-        {% for tag in post.tags %}
-        <category>{{ tag | xml_escape }}</category>
-        {% endfor %}
-        {% for cat in post.categories %}
-        <category>{{ cat | xml_escape }}</category>
-        {% endfor %}
+        <title>Network: Capturing TCP Retransmissions</title>
+        <description>&lt;p&gt;When server have a lot network connections it’s not rare to see tcp retransmissions. The permanent background retransmissions it’s even normal situation if it’s not abnormally high.&lt;/p&gt;
+
+&lt;p&gt;But when the charts shows abnormally jump of retransmissions it’s good to find the reason.&lt;/p&gt;
+
+&lt;p&gt;The reason is may be:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;server is overloaded&lt;/li&gt;
+  &lt;li&gt;remote server is overloaded&lt;/li&gt;
+  &lt;li&gt;network where servers is based is degraded&lt;/li&gt;
+  &lt;li&gt;network of remote endpoint is degraded&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;When servers is not overloaded the next step is to find which endpoint causes the retransmissions. We can see this in multiple ways described below.&lt;/p&gt;
+
+&lt;h3 id=&quot;netstat&quot;&gt;Netstat&lt;/h3&gt;
+
+&lt;h3 id=&quot;tshark&quot;&gt;&lt;a href=&quot;https://www.wireshark.org/docs/man-pages/tshark.html&quot;&gt;TShark&lt;/a&gt;&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Realtime output with source and destination
+    &lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tshark &lt;span class=&quot;nt&quot;&gt;-R&lt;/span&gt; tcp.analysis.retransmission
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Capture result into pcap file
+    &lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tshark &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; any &lt;span class=&quot;nt&quot;&gt;-w&lt;/span&gt; /tmp/result.pcap &lt;span class=&quot;nt&quot;&gt;-R&lt;/span&gt; tcp.analysis.retransmission
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Collecting data and displaying statistics after the CTRL-C
+    &lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tshark &lt;span class=&quot;nt&quot;&gt;-q&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-z&lt;/span&gt; io,stat,1,&lt;span class=&quot;s2&quot;&gt;&quot;COUNT(tcp.analysis.retransmission) tcp.analysis.retransmission&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Use more columns in statistics.
+    &lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;tshark &lt;span class=&quot;nt&quot;&gt;-q&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-z&lt;/span&gt; io,stat,1,&lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;&quot;COUNT(tcp.analysis.fast_retransmission) tcp.analysis.fast_retransmission&quot;&lt;/span&gt;,&lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;&quot;COUNT(tcp.analysis.retransmission) tcp.analysis.retransmission&quot;&lt;/span&gt;,&lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;&quot;COUNT(tcp.analysis.duplicate_ack) tcp.analysis.duplicate_ack&quot;&lt;/span&gt;,&lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;&quot;COUNT(tcp.analysis.lost_segment) tcp.analysis.lost_segment&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Sat, 20 Jun 2020 16:04:35 +0300</pubDate>
+        <link>http://undying.github.io/2020/06/20/capturing-tcp-retransmissions.html</link>
+        <guid isPermaLink="true">http://undying.github.io/2020/06/20/capturing-tcp-retransmissions.html</guid>
+        
+        <category>linux</category>
+        
+        <category>network</category>
+        
+        <category>tcp</category>
+        
+        
       </item>
-    {% endfor %}
+    
+      <item>
+        <title>VIM: Append Filetype</title>
+        <description>&lt;p&gt;If you open a file with a non-standard extension, syntax highlighting will not work. This is easily solved by installing filetype manually.&lt;/p&gt;
+
+&lt;div class=&quot;language-vim highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;filetype&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;markdown
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You can add a hint for VIM about the file type to the file so that you don’t have to set the type manually the next time.&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;~ &lt;span class=&quot;nb&quot;&gt;cat &lt;/span&gt;Readme
+&lt;span class=&quot;c&quot;&gt;# vi:syntax=markdown&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I wanted to make a hotkey to add information about its type to the end of the file. So I wrote a short function for this and mapped key &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;F2&amp;gt;&lt;/code&gt; for it.&lt;/p&gt;
+
+&lt;div class=&quot;language-vim highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;&quot;&quot;&quot; insert current filetype at the end of a file&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; FileWriteSyntax&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;call&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;line&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'$'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'# vi:syntax='&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt; &amp;amp;&lt;span class=&quot;k&quot;&gt;filetype&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;endfunction&lt;/span&gt;
+
+nnoremap &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;F2&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;call&lt;/span&gt; FileWriteSyntax&lt;span class=&quot;p&quot;&gt;()&amp;lt;&lt;/span&gt;CR&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;&quot;&quot;&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now pressing F2 will append current filetype at the end of the file.&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 06 Jun 2020 22:47:03 +0300</pubDate>
+        <link>http://undying.github.io/2020/06/06/vim-append-filetype.html</link>
+        <guid isPermaLink="true">http://undying.github.io/2020/06/06/vim-append-filetype.html</guid>
+        
+        <category>vim</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>VIM: File Autosave</title>
+        <description>&lt;p&gt;I was wondering how to save file in VIM automatically. Found some solutions in internet but decided to do it my way.
+So I wrote this small solution:&lt;/p&gt;
+
+&lt;div class=&quot;language-vim highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;&quot;&quot;&quot; Save file on each edit exit&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; FileAutoSave&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;exists&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'g:file_autosave_async'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;endif&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; @% &lt;span class=&quot;p&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;elseif&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;filewritable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;@%&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;endif&lt;/span&gt;
+
+
+  &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;g:file_autosave_async&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;call&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;timer_start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;500&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'FileAutoSaveAsync'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'repeat'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;endfunction&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; FileAutoSaveAsync&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;timer&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;update&lt;/span&gt;
+  unlet &lt;span class=&quot;nv&quot;&gt;g:file_autosave_async&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;endfunction&lt;/span&gt;
+
+&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;autocmd &lt;span class=&quot;nb&quot;&gt;InsertLeave&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;TextChanged&lt;/span&gt; * &lt;span class=&quot;k&quot;&gt;call&lt;/span&gt; FileAutoSave&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;&quot;&quot;&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;It updates file in two cases:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;when you leave insert mode&lt;/li&gt;
+  &lt;li&gt;when text in buffer have been changed&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Event “TextChanged” can be triggered too often, that’s why I decided to use VIM 8 feature &lt;a href=&quot;https://vimhelp.org/eval.txt.html#timer_start%28%29&quot;&gt;timer_start()&lt;/a&gt;.
+After edit event timer will be triggered and file will be saved with delay of 500ms.
+This solution will prevent to trigger update too often and will save after every buffer change.&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 02 Jun 2020 00:10:12 +0300</pubDate>
+        <link>http://undying.github.io/2020/06/02/vim-file-autosave.html</link>
+        <guid isPermaLink="true">http://undying.github.io/2020/06/02/vim-file-autosave.html</guid>
+        
+        <category>vim</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Route 53 Resolver: NXDOMAIN|SERVFAIL</title>
+        <description>&lt;p&gt;What we have:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;On premises data center with own domain zone (domain.local) and dns servers&lt;/li&gt;
+  &lt;li&gt;AWS VPC with it’s own domain zone (domain.r53) and using Route 53 as DNS Server&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;What we need:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Ability to resolve domain zone hosted on premises DNS Servers from AWS VPC&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;mermaid&quot;&gt;graph LR
+  A[EC2 Instance] --&amp;gt;|a.domain.local| B[Route 53 Forward] --&amp;gt;|a.domain.local| C[DNS On Premises]&lt;/div&gt;
+
+&lt;p&gt;The configuration is straightforward and well described in &lt;a href=&quot;https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver.html&quot;&gt;official documentation&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;You simply create rules:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;what domain this rule for&lt;/li&gt;
+  &lt;li&gt;where forward requests to&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;But there is a problem. When you are trying to resolve domain that points to CNAME you can get a timeout.
+When investigating traffic you can find the following errors:&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;18:32:21.328494 IP 10.0.0.2.domain &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; 192.168.1.10.33414: 57918 NXDomain 0/0/0 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;68&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+18:32:22.127343 IP 10.0.0.2.domain &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; 192.168.1.10.46394: 31940 ServFail 0/0/0 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;38&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This is because when dealing with CNAME server makes multiple requests.
+And if there is no rules for CNAME requests will go to the internet resolvers.&lt;/p&gt;
+
+&lt;div class=&quot;mermaid&quot;&gt;graph LR
+  A[EC2 Instance] --&amp;gt;|a.domain.local| B[Route 53] --&amp;gt;|a.domain.local| C[DNS On Premises]
+  C --&amp;gt; |CNAME x.domain.local| B&lt;/div&gt;
+
+&lt;div class=&quot;mermaid&quot;&gt;graph LR
+  A[EC2 Instance] --&amp;gt;|a.domain.local| B[Route 53] --&amp;gt;|x.domain.local| C[Internet]
+  C --&amp;gt;|NXDOMAIN| B
+  B --&amp;gt;|NXDOMAIN| A&lt;/div&gt;
+
+&lt;p&gt;To fix errors we need create R53 Forward Rules for CNAME domains as well.&lt;/p&gt;
+
+&lt;div class=&quot;mermaid&quot;&gt;graph LR
+  A[EC2 Instance] --&amp;gt;|a.domain.local| B[R53 Forward] --&amp;gt;|a.domain.local| C[DNS On Premises]
+  C[DNS On Premises] --&amp;gt;|CNAME x.domain.local| B[R53 Forward]&lt;/div&gt;
+
+&lt;div class=&quot;mermaid&quot;&gt;graph LR
+  A[EC2 Instance] --&amp;gt;|a.domain.local| B[R53 Forward] --&amp;gt;|x.domain.local| C[DNS On Premises]
+  C --&amp;gt;|A 192.168.1.200| B
+  B --&amp;gt;|A 192.168.1.200| A&lt;/div&gt;
+
+</description>
+        <pubDate>Fri, 29 May 2020 11:24:01 +0300</pubDate>
+        <link>http://undying.github.io/2020/05/29/route-53-resolver-servfail.html</link>
+        <guid isPermaLink="true">http://undying.github.io/2020/05/29/route-53-resolver-servfail.html</guid>
+        
+        <category>aws</category>
+        
+        <category>dns</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>PostgreSQL 11 Administration Summary</title>
+        <description>&lt;h2 id=&quot;intro&quot;&gt;Intro&lt;/h2&gt;
+&lt;p&gt;Not so long ago I read a beautiful &lt;a href=&quot;https://www.labirint.ru/books/685536/&quot;&gt;book about PostgreSQL 11 Administration&lt;/a&gt; and decided to make a summary of interesting for my point of view details.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;locks&quot;&gt;Locks&lt;/h2&gt;
+&lt;h3 id=&quot;using-cte-with-returning&quot;&gt;Using CTE with RETURNING&lt;/h3&gt;
+
+&lt;p&gt;When you need to update record and use result value and don’t want to use explicit blocking or long transaction, it’s possible to use CTE and UPDATE with RETURNING statement.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t_order&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;PRIMARY&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;KEY&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t_room&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t_room&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WITH&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;UPDATE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t_room&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RETURNING&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t_order&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RETURNING&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+ &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;____&lt;/span&gt;
+  &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;for-share-and-for-update&quot;&gt;FOR SHARE and FOR UPDATE&lt;/h3&gt;
+
+&lt;p&gt;To select some data for database, process it and then update this data in database there is a SELECT FOR UPDATE  statement for that.&lt;/p&gt;
+
+&lt;h4 id=&quot;for--clauses-by-locking-strength&quot;&gt;FOR … clauses by locking strength&lt;/h4&gt;
+
+&lt;p&gt;The locking clause has general form:&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;FOR&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lock_strength&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OF&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;table_name&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;...]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;NOWAIT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SKIP&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LOCKED&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;where &lt;em&gt;lock_strength&lt;/em&gt; can be one of:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;UPDATE&lt;/strong&gt; (when we definitely want to update record, most strong lock)&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;NO KEY UPDATE&lt;/strong&gt; (the lock is weaker and can coexist with &lt;strong&gt;SELECT FOR SHARE&lt;/strong&gt;)&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;SHARE&lt;/strong&gt; (this type lock can be handled by multiple transactions)&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;KEY SHARE&lt;/strong&gt; (like &lt;strong&gt;SHARE&lt;/strong&gt; lock but weaker. this lock conflicts with &lt;strong&gt;FOR UPDATE&lt;/strong&gt; but can coexist with &lt;strong&gt;FOR NO KEY UPDATE&lt;/strong&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;See more details &lt;a href=&quot;https://www.postgresql.org/docs/11/sql-select.html&quot;&gt;here&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h4 id=&quot;for-update-skip-locked&quot;&gt;FOR UPDATE SKIP LOCKED&lt;/h4&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t_room&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;generate_series&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Transaction 1&lt;/th&gt;
+      &lt;th&gt;Transaction 2&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;BEGIN;&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;BEGIN;&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SELECT * FROM t_room LIMIT 2 FOR UPDATE SKIP LOCKED;&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SELECT * FROM t_room LIMIT 2 FOR UPDATE SKIP LOCKED;&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;# &lt;strong&gt;returns 1, 2&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;# &lt;strong&gt;returns 3, 4&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;This only works well if there is no &lt;a href=&quot;https://www.postgresqltutorial.com/postgresql-foreign-key/&quot;&gt;REFERENCES&lt;/a&gt; in the table. If table have &lt;a href=&quot;https://www.postgresqltutorial.com/postgresql-foreign-key/&quot;&gt;REFERENCES&lt;/a&gt; second transaction with UPDATE will be blocked till first transaction will end.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;recommended-locks&quot;&gt;Recommended Locks&lt;/h3&gt;
+
+&lt;p&gt;It’s possible to use locks for applications synchronization.
+In this case you lock not rows but numbers instead.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Transaction 1&lt;/th&gt;
+      &lt;th&gt;Transaction 2&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;BEGIN;&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SELECT pg_advisory_lock(15);&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SELECT pg_advisory_lock(15);&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;waiting for lock…&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;waiting for lock…&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;COMMIT;&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;waiting for lock…&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SELECT pg_advisory_unlock(15);&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;waiting for lock…&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;lock granted!&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Handy functions:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pg_advisory_unlock_all()&lt;/code&gt; - unlock all previous locks&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pg_try_advisory_lock()&lt;/code&gt; - get lock if possible&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;More details in &lt;a href=&quot;https://www.postgresql.org/docs/11/functions-admin.html&quot;&gt;documentation&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;vacuum&quot;&gt;VACUUM&lt;/h2&gt;
+&lt;h3 id=&quot;autovacuum&quot;&gt;autovacuum&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.postgresql.org/docs/11/runtime-config-autovacuum.html&quot;&gt;Options&lt;/a&gt;:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;autovacuum_naptime&lt;/strong&gt;: Specifies the minimum delay between autovacuum runs on any given database. The delay is measured in seconds, and the default is one minute (1min).&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;autovacuum_vacuum_threshold&lt;/strong&gt;: Specifies the minimum number of updated or deleted tuples needed to trigger a VACUUM in any one table. The default is 50 tuples.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;autovacuum_analyze_threshold&lt;/strong&gt;: Specifies the minimum number of inserted, updated or deleted tuples needed to trigger an ANALYZE in any one table. The default is 50 tuples.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;autovacuum_vacuum_scale_factor&lt;/strong&gt;: Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a VACUUM. The default is 0.2 (20% of table size).&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;autovacuum_analyze_scale_factor&lt;/strong&gt;: Specifies a fraction of the table size to add to autovacuum_analyze_threshold when deciding whether to trigger an ANALYZE. The default is 0.1 (10% of table size).&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;transaction-id-wraparound&quot;&gt;Transaction ID Wraparound&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.postgresql.org/docs/11/runtime-config-autovacuum.html&quot;&gt;Options&lt;/a&gt;:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;autovacuum_freeze_max_age&lt;/strong&gt;: Specifies the maximum age (in transactions) that a table’s pg_class.relfrozenxid field can attain before a VACUUM operation is forced to prevent transaction ID wraparound within the table. Note that the system will launch autovacuum processes to prevent wraparound even when autovacuum is otherwise disabled.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;autovacuum_multixact_freeze_max_age&lt;/strong&gt;: Specifies the maximum age (in multixacts) that a table’s pg_class.relminmxid field can attain before a VACUUM operation is forced to prevent multixact ID wraparound within the table. Note that the system will launch autovacuum processes to prevent wraparound even when autovacuum is otherwise disabled.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Wraparound References:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;https://www.postgresql.org/docs/11/routine-vacuuming.html#VACUUM-FOR-WRAPAROUND&lt;/li&gt;
+  &lt;li&gt;https://www.cybertec-postgresql.com/en/autovacuum-wraparound-protection-in-postgresql/&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;transaction-duration&quot;&gt;Transaction Duration&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;old_snapshot_threshold&lt;/strong&gt;: Sets the minimum time that a snapshot can be used without risk of a snapshot too old error occurring when using the snapshot. This parameter can only be set at server start.&lt;/p&gt;
+
+&lt;p&gt;Beyond the threshold, old data may be vacuumed away. This can help prevent bloat in the face of snapshots which remain in use for a long time. To prevent incorrect results due to cleanup of data which would otherwise be visible to the snapshot, an error is generated when the snapshot is older than this threshold and the snapshot is used to read a page which has been modified since the snapshot was built. &lt;a href=&quot;https://www.postgresql.org/docs/11/runtime-config-resource.html#GUC-OLD-SNAPSHOT-THRESHOLD&quot;&gt;More details&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;indexing&quot;&gt;Indexing&lt;/h2&gt;
+&lt;h3 id=&quot;costs-model&quot;&gt;Costs Model&lt;/h3&gt;
+
+&lt;p&gt;Costs formula for &lt;code class=&quot;highlighter-rouge&quot;&gt;Seq Scan&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(blocks to read * seq_page_cost) \
+  + (rows scanned * cpu_tuple_cost + rows scanned * cpu_operator_cost)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;To get sum of block per table:&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pg_relation_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'table_name'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8192&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Useful &lt;a href=&quot;https://www.postgresql.org/docs/11/runtime-config-query.html&quot;&gt;options&lt;/a&gt;:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.postgresql.org/docs/11/runtime-config-query.html#GUC-RANDOM-PAGE-COST&quot;&gt;random_page_cost&lt;/a&gt;: Sets the planner’s estimate of the cost of a non-sequentially-fetched disk page. The default is 4.0.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.postgresql.org/docs/11/runtime-config-query.html#GUC-CPU-INDEX-TUPLE-COST&quot;&gt;cpu_index_tuple_cost&lt;/a&gt;: Sets the planner’s estimate of the cost of processing each index entry during an index scan. The default is 0.005.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For parallel jobs:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.postgresql.org/docs/11/runtime-config-query.html#GUC-PARALLEL-TUPLE-COST&quot;&gt;parallel_tuple_cost&lt;/a&gt;: Sets the planner’s estimate of the cost of transferring one tuple from a parallel worker process to another process. The default is 0.1.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.postgresql.org/docs/11/runtime-config-query.html#GUC-PARALLEL-SETUP-COST&quot;&gt;parallel_setup_cost&lt;/a&gt;: Sets the planner’s estimate of the cost of launching parallel worker processes. The default is 1000.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.postgresql.org/docs/11/runtime-config-query.html#GUC-MIN-PARALLEL-TABLE-SCAN-SIZE&quot;&gt;min_parallel_table_scan_size&lt;/a&gt;: Sets the minimum amount of table data that must be scanned in order for a parallel scan to be considered. The default is 8 megabytes (8MB).&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.postgresql.org/docs/11/runtime-config-query.html#GUC-MIN-PARALLEL-INDEX-SCAN-SIZE&quot;&gt;min_parallel_index_scan_size&lt;/a&gt;: Sets the minimum amount of index data that must be scanned in order for a parallel scan to be considered. The default is 512 kilobytes (512kB).&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;References:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;https://www.postgresql.org/docs/11/runtime-config-query.html&lt;/li&gt;
+  &lt;li&gt;https://www.postgresql.org/docs/11/index-cost-estimation.html&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;style&gt;
+table{
+  border-collapse: collapse;
+  border-spacing: 0;
+  border:2px solid #000000;
+}
+
+th{
+  border:2px solid #000000;
+}
+
+td{
+  border:1px solid #000000;
+}
+&lt;/style&gt;
+
+</description>
+        <pubDate>Fri, 22 May 2020 09:48:49 +0300</pubDate>
+        <link>http://undying.github.io/2020/05/22/postgresql-11-administration-summary.html</link>
+        <guid isPermaLink="true">http://undying.github.io/2020/05/22/postgresql-11-administration-summary.html</guid>
+        
+        <category>postgresql</category>
+        
+        <category>cheatsheet</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Fixing cyrillic symbols in KDE Konsole</title>
+        <description>&lt;p&gt;После очередной переустановки системы, вернее после установки ради интереса новой системы, в терминале Konsole возникли проблемы с кириллицей.
+Что характерно, в виртуальных терминалах (tty1-7) с кодировкой проблем не было, а значит системные шрифты были настроены верно.&lt;/p&gt;
+
+&lt;p&gt;Знатно покопавшись в сетях нашел &lt;a href=&quot;https://gentoo.ru/node/29037#comment-215877&quot;&gt;древний пост&lt;/a&gt; на эту тему.
+Попробовал выставить &lt;code class=&quot;highlighter-rouge&quot;&gt;LC_ALL=en_US.utf8&lt;/code&gt; и запустить konsole, чудо произошло. Осталось сделать это красиво.&lt;/p&gt;
+
+&lt;p&gt;А красиво можно запилить двумя путями:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;глобально закинув определение переменной куда-нибудь сюда /etc/profile.d&lt;/li&gt;
+  &lt;li&gt;сделать изменения для профиля&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Т.к. системой пользуюсь только я, то мне второй вариант больше понравился.
+Делаем такой небольшой файл:&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cat&lt;/span&gt; ~/.config/plasma-workspace/env/locale.sh
+
+&lt;span class=&quot;c&quot;&gt;#! /bin/bash&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;LC_ALL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;en_US.utf8
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;После перелогина проблема должна исчезнуть.&lt;/p&gt;
+
+</description>
+        <pubDate>Fri, 08 May 2020 19:19:00 +0300</pubDate>
+        <link>http://undying.github.io/2020/05/08/cyrillic-symbols-in-konsole.html</link>
+        <guid isPermaLink="true">http://undying.github.io/2020/05/08/cyrillic-symbols-in-konsole.html</guid>
+        
+        <category>cyrillic</category>
+        
+        <category>encoding</category>
+        
+        <category>locale</category>
+        
+        <category>kde</category>
+        
+        <category>plasma</category>
+        
+        <category>konsole</category>
+        
+        <category>terminal</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>configuring Gentoo to play Steam</title>
+        <description>&lt;p&gt;Some time ago my friends called me to play Drone Racing League. I’m using Gentoo Linux on my both home and work laptops so I had a bad feeling about running a game on them. Anyway I decided to try because why not.
+My home laptop (https://www.asus.com/ru/Laptops/U32VJ/) is pretty old but it has a discrete video card, so if I would like to play a game it’s better be done on this laptop. Also this laptop has an technology called Optimus, when there is a multiple video cards and you switch between them for performance or power effectiveness.
+There is a multiple ways to use discrete video card, in most of them you will need bumblebee and run games (or any application that uses discrete video card) with commands such as optirun (legacy) or primusrun. The main downside is that the both methods are not fast enough and do not providing full acceleration that card can perform. I have tried all of them and performance was poor.
+Another solution is a bit strange one but it provides the best performance available - it’s to run another X session on discrete card.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 01 Mar 2020 16:52:00 +0300</pubDate>
+        <link>http://undying.github.io/2020/03/01/configuring-gentoo-to-play-steam.html</link>
+        <guid isPermaLink="true">http://undying.github.io/2020/03/01/configuring-gentoo-to-play-steam.html</guid>
+        
+        <category>gentoo</category>
+        
+        <category>nvidia</category>
+        
+        <category>intel</category>
+        
+        <category>optirun</category>
+        
+        <category>primusrun</category>
+        
+        <category>bumblebee</category>
+        
+        <category>openbox</category>
+        
+        <category>steam</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>command not found: ck-unlock-session</title>
+        <description>&lt;p&gt;This evening I was updating my Gentoo laptop. While updating, my session were locked with the message, that to unlock it I have to use ck-unlock-session. Unfortunately shell told me that there is no such command on my laptop:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;  └&amp;gt; ck-unlock-session
+  zsh: &lt;span class=&quot;nb&quot;&gt;command &lt;/span&gt;not found: ck-unlock-session&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;In the vastness of the Internet found the solution, but it’s too long to remember:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;  dbus-send &lt;span class=&quot;nt&quot;&gt;--system&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--print-reply&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--dest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;org.freedesktop.ConsoleKit&quot;&lt;/span&gt; /org/freedesktop/ConsoleKit/Session1 org.freedesktop.ConsoleKit.Session.Unlock&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Session1&lt;/code&gt; - session name and it may differs. Name can be found by &lt;code class=&quot;highlighter-rouge&quot;&gt;ck-list-sessions&lt;/code&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Thu, 25 Jul 2019 17:27:00 +0300</pubDate>
+        <link>http://undying.github.io/2019/07/25/ck-unlock-session-alias.html</link>
+        <guid isPermaLink="true">http://undying.github.io/2019/07/25/ck-unlock-session-alias.html</guid>
+        
+        <category>gentoo</category>
+        
+        <category>kde</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Docker: Mounting block devices into container</title>
+        <description>&lt;p&gt;Today was curious is it possible to mount block device into a docker container without mounting it on system.
+It’s not well documented but found one interesting &lt;a href=&quot;https://github.com/moby/moby/issues/37893#issuecomment-424535343&quot;&gt;comment &lt;/a&gt; in github.&lt;/p&gt;
+
+&lt;p&gt;So, if –mount option in &lt;code class=&quot;highlighter-rouge&quot;&gt;docker run&lt;/code&gt; command is “magic” on top of “mount” system call, we can use it.
+After experimenting a bit here is an example mounting lvm volumes.&lt;/p&gt;
+
+&lt;p&gt;First, let’s create loop device for LVM:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;  &lt;span class=&quot;nb&quot;&gt;dd &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/dev/zero &lt;span class=&quot;nv&quot;&gt;of&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/tmp/loop &lt;span class=&quot;nv&quot;&gt;bs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1M &lt;span class=&quot;nv&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;100
+  losetup /dev/loop0 /tmp/loop&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Then, making an LVM device:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;  pvcreate /dev/loop0
+  vgcreate vg1 /dev/loop0
+  lvcreate &lt;span class=&quot;nt&quot;&gt;--size&lt;/span&gt; 90M &lt;span class=&quot;nt&quot;&gt;--name&lt;/span&gt; lv1 vg1
+  mkfs.xfs /dev/vg1/lv1&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;And finally let’s run container and mount block device:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;docker run &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;--rm&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-it&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;--mount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'type=volume,dst=/opt,volume-driver=local,volume-opt=type=xfs,volume-opt=device=/dev/vg1/lv1'&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  ubuntu:18.04 bash&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;That’s it.&lt;/p&gt;
+
+</description>
+        <pubDate>Thu, 25 Jul 2019 17:27:00 +0300</pubDate>
+        <link>http://undying.github.io/2019/07/25/mounting_block_devices_into_docker.html</link>
+        <guid isPermaLink="true">http://undying.github.io/2019/07/25/mounting_block_devices_into_docker.html</guid>
+        
+        <category>mount</category>
+        
+        <category>block</category>
+        
+        <category>lvm</category>
+        
+        <category>docker</category>
+        
+        <category>container</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Gentoo: Building FireFox 63.0.3</title>
+        <description>&lt;p&gt;Today I was trying to update FireFox on my Gentoo box and failed with error:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;  0:06.75 checking rustc version... 1.30.1
+  0:06.75 ERROR: Cargo package manager not found.
+  0:06.75 To compile Rust language sources, you must have &lt;span class=&quot;s1&quot;&gt;'cargo'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;your path.
+  0:06.75 See https://www.rust-lang.org/ &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;more information.
+  0:06.75
+  0:06.75 You can &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;cargo by running &lt;span class=&quot;s1&quot;&gt;'./mach bootstrap'&lt;/span&gt;
+  0:06.75 or by directly running the installer from https://rustup.rs/
+  0:06.75
+  0:06.79 &lt;span class=&quot;k&quot;&gt;***&lt;/span&gt; Fix above errors and &lt;span class=&quot;k&quot;&gt;then &lt;/span&gt;restart with&lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  0:06.79                &lt;span class=&quot;s2&quot;&gt;&quot;/usr/bin/gmake -f client.mk build&quot;&lt;/span&gt;
+  0:06.79 gmake: &lt;span class=&quot;k&quot;&gt;***&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;client.mk:127: configure] Error 1&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;I have already installed virtual/cargo and dev-lang/rust.
+Also I found where cargo was already installed:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;  equery f dev-lang/rust|grep cargo
+  /usr/bin/cargo-1.30.1&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;So the solution was simple:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;  &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;eselect rust update&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;This creates link required for build:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;  &lt;span class=&quot;nb&quot;&gt;ls&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-l&lt;/span&gt; &lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;which cargo&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+  lrwxrwxrwx 1 root root 21 Nov 21 08:03 /usr/bin/cargo -&amp;gt; /usr/bin/cargo-1.30.1&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+</description>
+        <pubDate>Wed, 21 Nov 2018 08:10:00 +0300</pubDate>
+        <link>http://undying.github.io/2018/11/21/building_firefox_on_gentoo.html</link>
+        <guid isPermaLink="true">http://undying.github.io/2018/11/21/building_firefox_on_gentoo.html</guid>
+        
+        <category>gentoo</category>
+        
+        <category>building</category>
+        
+        <category>firefox</category>
+        
+        <category>cargo</category>
+        
+        
+      </item>
+    
   </channel>
 </rss>
