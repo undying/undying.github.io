@@ -5,9 +5,9 @@ post_new:
 jekyll_doctor:
 	bundle exec jekyll doctor
 
-jekyll_build:
+jekyll_build: jekyll_doctor
 	bundle exec jekyll build
 
-jekyll_server: jekyll_doctor
+jekyll_server: jekyll_doctor jekyll_build
 	reset
 	bundle exec jekyll server --livereload
