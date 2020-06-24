@@ -104,7 +104,15 @@
 
 <p>When servers is not overloaded the next step is to find which endpoint causes the retransmissions. We can see this in multiple ways described below.</p>
 
-<h3 id="netstat">Netstat</h3>
+<h3 id="netstat"><a href="https://linux.die.net/man/8/netstat">Netstat</a></h3>
+
+<ul>
+  <li>To begin with it makes sense to collect statistics on retransmited packages. Netstat can help with that.
+Compare total segments count with retransmited.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>netstat <span class="nt">-s</span>|grep segments
+</code></pre></div>    </div>
+  </li>
+</ul>
 
 <h3 id="tshark"><a href="https://www.wireshark.org/docs/man-pages/tshark.html">TShark</a></h3>
 
@@ -127,6 +135,19 @@
 <span class="s2">"COUNT(tcp.analysis.retransmission) tcp.analysis.retransmission"</span>,<span class="se">\</span>
 <span class="s2">"COUNT(tcp.analysis.duplicate_ack) tcp.analysis.duplicate_ack"</span>,<span class="se">\</span>
 <span class="s2">"COUNT(tcp.analysis.lost_segment) tcp.analysis.lost_segment"</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h3 id="perf-tools"><a href="https://github.com/brendangregg/perf-tools">Perf-Tools</a></h3>
+
+<ul>
+  <li>perf-tools has great tool named <a href="https://github.com/brendangregg/perf-tools/blob/master/net/tcpretrans">tcpretrans</a>.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./tcpretrans
+TIME     PID    LADDR:LPORT          <span class="nt">--</span> RADDR:RPORT          STATE
+05:16:44 3375   10.150.18.225:53874  R&gt; 10.105.152.3:6001    ESTABLISHED
+05:16:44 3375   10.150.18.225:53874  R&gt; 10.105.152.3:6001    ESTABLISHED
+05:16:54 4028   10.150.18.225:6002   R&gt; 10.150.30.249:1710   ESTABLISHED
 </code></pre></div>    </div>
   </li>
 </ul>

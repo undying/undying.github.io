@@ -11,3 +11,6 @@ jekyll_build: jekyll_doctor
 jekyll_server: jekyll_doctor jekyll_build
 	reset
 	bundle exec jekyll server --livereload
+
+publish: jekyll_build
+	cd _site/ && git add . && git commit -av

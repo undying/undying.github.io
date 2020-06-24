@@ -6,8 +6,8 @@
 </description>
     <link>http://undying.github.io/</link>
     <atom:link href="http://undying.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 23 Jun 2020 23:07:05 +0300</pubDate>
-    <lastBuildDate>Tue, 23 Jun 2020 23:07:05 +0300</lastBuildDate>
+    <pubDate>Wed, 24 Jun 2020 21:59:22 +0300</pubDate>
+    <lastBuildDate>Wed, 24 Jun 2020 21:59:22 +0300</lastBuildDate>
     <generator>Jekyll v3.8.7</generator>
     
       <item>
@@ -26,7 +26,15 @@
 
 &lt;p&gt;When servers is not overloaded the next step is to find which endpoint causes the retransmissions. We can see this in multiple ways described below.&lt;/p&gt;
 
-&lt;h3 id=&quot;netstat&quot;&gt;Netstat&lt;/h3&gt;
+&lt;h3 id=&quot;netstat&quot;&gt;&lt;a href=&quot;https://linux.die.net/man/8/netstat&quot;&gt;Netstat&lt;/a&gt;&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;To begin with it makes sense to collect statistics on retransmited packages. Netstat can help with that.
+Compare total segments count with retransmited.
+    &lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;netstat &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt;|grep segments
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;h3 id=&quot;tshark&quot;&gt;&lt;a href=&quot;https://www.wireshark.org/docs/man-pages/tshark.html&quot;&gt;TShark&lt;/a&gt;&lt;/h3&gt;
 
@@ -49,6 +57,19 @@
 &lt;span class=&quot;s2&quot;&gt;&quot;COUNT(tcp.analysis.retransmission) tcp.analysis.retransmission&quot;&lt;/span&gt;,&lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
 &lt;span class=&quot;s2&quot;&gt;&quot;COUNT(tcp.analysis.duplicate_ack) tcp.analysis.duplicate_ack&quot;&lt;/span&gt;,&lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
 &lt;span class=&quot;s2&quot;&gt;&quot;COUNT(tcp.analysis.lost_segment) tcp.analysis.lost_segment&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;perf-tools&quot;&gt;&lt;a href=&quot;https://github.com/brendangregg/perf-tools&quot;&gt;Perf-Tools&lt;/a&gt;&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;perf-tools has great tool named &lt;a href=&quot;https://github.com/brendangregg/perf-tools/blob/master/net/tcpretrans&quot;&gt;tcpretrans&lt;/a&gt;.
+    &lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./tcpretrans
+TIME     PID    LADDR:LPORT          &lt;span class=&quot;nt&quot;&gt;--&lt;/span&gt; RADDR:RPORT          STATE
+05:16:44 3375   10.150.18.225:53874  R&amp;gt; 10.105.152.3:6001    ESTABLISHED
+05:16:44 3375   10.150.18.225:53874  R&amp;gt; 10.105.152.3:6001    ESTABLISHED
+05:16:54 4028   10.150.18.225:6002   R&amp;gt; 10.150.30.249:1710   ESTABLISHED
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
@@ -516,36 +537,6 @@ td{
       </item>
     
       <item>
-        <title>configuring Gentoo to play Steam</title>
-        <description>&lt;p&gt;Some time ago my friends called me to play Drone Racing League. I’m using Gentoo Linux on my both home and work laptops so I had a bad feeling about running a game on them. Anyway I decided to try because why not.
-My home laptop (https://www.asus.com/ru/Laptops/U32VJ/) is pretty old but it has a discrete video card, so if I would like to play a game it’s better be done on this laptop. Also this laptop has an technology called Optimus, when there is a multiple video cards and you switch between them for performance or power effectiveness.
-There is a multiple ways to use discrete video card, in most of them you will need bumblebee and run games (or any application that uses discrete video card) with commands such as optirun (legacy) or primusrun. The main downside is that the both methods are not fast enough and do not providing full acceleration that card can perform. I have tried all of them and performance was poor.
-Another solution is a bit strange one but it provides the best performance available - it’s to run another X session on discrete card.&lt;/p&gt;
-</description>
-        <pubDate>Sun, 01 Mar 2020 16:52:00 +0300</pubDate>
-        <link>http://undying.github.io/2020/03/01/configuring-gentoo-to-play-steam.html</link>
-        <guid isPermaLink="true">http://undying.github.io/2020/03/01/configuring-gentoo-to-play-steam.html</guid>
-        
-        <category>gentoo</category>
-        
-        <category>nvidia</category>
-        
-        <category>intel</category>
-        
-        <category>optirun</category>
-        
-        <category>primusrun</category>
-        
-        <category>bumblebee</category>
-        
-        <category>openbox</category>
-        
-        <category>steam</category>
-        
-        
-      </item>
-    
-      <item>
         <title>command not found: ck-unlock-session</title>
         <description>&lt;p&gt;This evening I was updating my Gentoo laptop. While updating, my session were locked with the message, that to unlock it I have to use ck-unlock-session. Unfortunately shell told me that there is no such command on my laptop:&lt;/p&gt;
 
@@ -660,6 +651,43 @@ Also I found where cargo was already installed:&lt;/p&gt;
         <category>firefox</category>
         
         <category>cargo</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Gentoo: Backslash as Yen char</title>
+        <description>&lt;p&gt;If while browsing the internet you have a problem with backslash character which displayed as yen sign you can fix it this way.&lt;/p&gt;
+
+&lt;p&gt;First, let’s install the appropriate fonts.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;emerge &lt;span class=&quot;nt&quot;&gt;-av&lt;/span&gt; media-fonts/droid&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Then we have to enable them for wide system.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;eselect fontconfig &lt;span class=&quot;nb&quot;&gt;enable &lt;/span&gt;59-google-droid-sans.conf
+eselect fontconfig &lt;span class=&quot;nb&quot;&gt;enable &lt;/span&gt;59-google-droid-sans-mono.conf
+eselect fontconfig &lt;span class=&quot;nb&quot;&gt;enable &lt;/span&gt;59-google-droid-serif.conf&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Next step is to clean fonts cache.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;fc-cache &lt;span class=&quot;nt&quot;&gt;-rf&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;That’s all.&lt;/p&gt;
+
+&lt;p&gt;P.S.
+Also I had a problem displaying cyrillic characters. Droid fonts also helps with that, but I found that chinese fonts (media-fonts/wqy-zenhei) can help.&lt;/p&gt;
+
+</description>
+        <pubDate>Sun, 19 Feb 2017 15:47:00 +0300</pubDate>
+        <link>http://undying.github.io/2017/02/19/backslash_as_yen.html</link>
+        <guid isPermaLink="true">http://undying.github.io/2017/02/19/backslash_as_yen.html</guid>
+        
+        <category>gentoo</category>
+        
+        <category>backslash</category>
+        
+        <category>yen</category>
         
         
       </item>
