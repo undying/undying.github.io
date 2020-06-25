@@ -99,7 +99,7 @@ git config user.email <span class="s2">"anderson@corp.in"</span>
 <p>In personal repository you may use some cool nickname and personal email.</p>
 
 <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config user.name <span class="s2">"Neo"</span>
-git config user.email 0xff@matr.ix
+git config user.email <span class="s2">"0xff@matr.ix"</span>
 </code></pre></div></div>
 
 <p>But there is an headache to not forget configure every repository to be corporate or personal after cloning.
@@ -122,7 +122,7 @@ So I decided to make my default configuration to be personal, and change it in c
 <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>_git_config_user<span class="o">(){</span>
   <span class="k">case</span> <span class="k">${</span><span class="nv">PWD</span><span class="k">}</span> <span class="k">in</span>
     <span class="k">*</span><span class="s2">"mycompany/repos"</span><span class="k">*</span><span class="p">)</span>
-      git config user.email kron@mycompany.com
+      git config user.email <span class="s2">"denis@mycompany.com"</span>
       git config user.name <span class="s2">"Denis Bozhok"</span>
       <span class="p">;;</span>
     <span class="k">*</span><span class="p">)</span>

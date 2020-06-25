@@ -6,8 +6,8 @@
 </description>
     <link>http://undying.github.io/</link>
     <atom:link href="http://undying.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 25 Jun 2020 23:54:10 +0300</pubDate>
-    <lastBuildDate>Thu, 25 Jun 2020 23:54:10 +0300</lastBuildDate>
+    <pubDate>Thu, 25 Jun 2020 23:57:47 +0300</pubDate>
+    <lastBuildDate>Thu, 25 Jun 2020 23:57:47 +0300</lastBuildDate>
     <generator>Jekyll v3.8.7</generator>
     
       <item>
@@ -21,7 +21,7 @@ git config user.email &lt;span class=&quot;s2&quot;&gt;&quot;anderson@corp.in&qu
 &lt;p&gt;In personal repository you may use some cool nickname and personal email.&lt;/p&gt;
 
 &lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git config user.name &lt;span class=&quot;s2&quot;&gt;&quot;Neo&quot;&lt;/span&gt;
-git config user.email 0xff@matr.ix
+git config user.email &lt;span class=&quot;s2&quot;&gt;&quot;0xff@matr.ix&quot;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;But there is an headache to not forget configure every repository to be corporate or personal after cloning.
@@ -44,7 +44,7 @@ So I decided to make my default configuration to be personal, and change it in c
 &lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;_git_config_user&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;PWD&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;mycompany/repos&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-      git config user.email kron@mycompany.com
+      git config user.email &lt;span class=&quot;s2&quot;&gt;&quot;denis@mycompany.com&quot;&lt;/span&gt;
       git config user.name &lt;span class=&quot;s2&quot;&gt;&quot;Denis Bozhok&quot;&lt;/span&gt;
       &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
