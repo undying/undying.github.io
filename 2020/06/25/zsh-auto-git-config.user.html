@@ -7,12 +7,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Blog abount Linux, Technologies and Life</title>
-  <meta name="description" content="In this blog I will describe situations that I meet in my life when working with a variety of technologies. This includes any kind of computer technologies, Open Software, Linux and many more.
-">
+  <title>ZSH: auto git config.user</title>
+  <meta name="description" content="On my laptop and desktop I usually have many git repositories. Some of them are personal and some of them are from my main job. In companies it’s common prac...">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://undying.github.io/page2/">
+  <link rel="canonical" href="http://undying.github.io/2020/06/25/zsh-auto-git-config.user.html">
   <link rel="alternate" type="application/rss+xml" title="Blog abount Linux, Technologies and Life" href="http://undying.github.io/feed.xml">
 
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
@@ -75,161 +74,78 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="home">
+        
+<link rel="stylesheet" href="/css/comments.css">
+<link rel="stylesheet" href="/css/common.css">
 
-  <h1 class="page-heading">Posts</h1>
 
-  <ul class="post-list">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
     
-      <li>
-        <span class="post-meta">Jun 25, 2020</span>
+<h1 class="post-title" itemprop="name headline">ZSH: auto git config.user</h1>
+<p class="post-meta"><time datetime="2020-06-25T22:36:59+03:00" itemprop="datePublished">Jun 25, 2020</time></p>
 
-        <h2>
-          <a class="post-link" href="/2020/06/25/zsh-auto-git-config.user.html">ZSH: auto git config.user</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jun 20, 2020</span>
 
-        <h2>
-          <a class="post-link" href="/2020/06/20/capturing-tcp-retransmissions.html">Network: Capturing TCP Retransmissions</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jun 6, 2020</span>
+  </header>
 
-        <h2>
-          <a class="post-link" href="/2020/06/06/vim-append-filetype.html">VIM: Append Filetype</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jun 2, 2020</span>
+  <div class="post-content" itemprop="articleBody">
+    <p>On my laptop and desktop I usually have many git repositories. Some of them are personal and some of them are from my main job. In companies it’s common practice to have corporate email that used in repository configuration.</p>
 
-        <h2>
-          <a class="post-link" href="/2020/06/02/vim-file-autosave.html">VIM: File Autosave</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">May 29, 2020</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config user.name <span class="s2">"Mr Anderson"</span>
+git config user.email <span class="s2">"anderson@corp.in"</span>
+</code></pre></div></div>
 
-        <h2>
-          <a class="post-link" href="/2020/05/29/route-53-resolver-servfail.html">Route 53 Resolver: NXDOMAIN|SERVFAIL</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">May 22, 2020</span>
+<p>In personal repository you may use some cool nickname and personal email.</p>
 
-        <h2>
-          <a class="post-link" href="/2020/05/22/postgresql-11-administration-summary.html">PostgreSQL 11 Administration Summary</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">May 8, 2020</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config user.name <span class="s2">"Neo"</span>
+git config user.email 0xff@matr.ix
+</code></pre></div></div>
 
-        <h2>
-          <a class="post-link" href="/2020/05/08/cyrillic-symbols-in-konsole.html">Fixing cyrillic symbols in KDE Konsole</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jul 25, 2019</span>
+<p>But there is an headache to not forget configure every repository to be corporate or personal after cloning.
+I’m using zsh and I have found easy solution for this.</p>
 
-        <h2>
-          <a class="post-link" href="/2019/07/25/ck-unlock-session-alias.html">command not found: ck-unlock-session</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jul 25, 2019</span>
+<p>On file system I keep corporate repositories in special folder like <code class="highlighter-rouge">&lt;company&gt;/repos</code>.
+So I decided to make my default configuration to be personal, and change it in corporate repositories on demand.</p>
 
-        <h2>
-          <a class="post-link" href="/2019/07/25/mounting_block_devices_into_docker.html">Docker: Mounting block devices into container</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Nov 21, 2018</span>
+<p>Zsh have a <a href="http://zsh.sourceforge.net/Doc/Release/Functions.html">hook system</a>. You can create a function and specify in which hook you want to call it. There is a hook named chdir, it’s called when you changing your directory.</p>
 
-        <h2>
-          <a class="post-link" href="/2018/11/21/building_firefox_on_gentoo.html">Gentoo: Building FireFox 63.0.3</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Feb 19, 2017</span>
+<p>The algorithm is simple:</p>
+<ul>
+  <li>check that current directory is a git repository</li>
+  <li>if so, check in which directory it’s based</li>
+  <li>if it’s corporate directory - set corporate email and name</li>
+</ul>
 
-        <h2>
-          <a class="post-link" href="/2017/02/19/backslash_as_yen.html">Gentoo: Backslash as Yen char</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Sep 13, 2016</span>
+<p>Here is a functions added to .zsrc:</p>
 
-        <h2>
-          <a class="post-link" href="/2016/09/13/pure_bash_io_usage_monitoring.html">Pure Bash script for IO usage monitoring</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Apr 29, 2016</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>_git_config_user<span class="o">(){</span>
+  <span class="k">case</span> <span class="k">${</span><span class="nv">PWD</span><span class="k">}</span> <span class="k">in</span>
+    <span class="k">*</span><span class="s2">"mycompany/repos"</span><span class="k">*</span><span class="p">)</span>
+      git config user.email kron@mycompany.com
+      git config user.name <span class="s2">"Denis Bozhok"</span>
+      <span class="p">;;</span>
+    <span class="k">*</span><span class="p">)</span>
+      <span class="k">return </span>0
+  <span class="k">esac</span>
+<span class="o">}</span>
 
-        <h2>
-          <a class="post-link" href="/2016/04/29/lib_gcc_s_so-cannot_open_shared_object_file.html">libgcc_s.so: cannot open shared object file</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Feb 8, 2016</span>
+__git_cd_functions_set<span class="o">(){</span>
+  <span class="o">[[</span> <span class="nt">-d</span> .git <span class="o">]]</span> <span class="o">||</span> <span class="k">return </span>0
+  _git_config_user
+<span class="o">}</span>
+chpwd_functions+<span class="o">=(</span> __git_cd_functions_set <span class="o">)</span>
+</code></pre></div></div>
 
-        <h2>
-          <a class="post-link" href="/2016/02/08/using-docker-with-lvm-thin-volumes.html">Using docker with LVM Thin Pool</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jan 31, 2016</span>
+<p>Last string appends function <code class="highlighter-rouge">__git_cd_functions_set</code> to chpwd hooks chain:</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chpwd_functions+<span class="o">=(</span> __git_cd_functions_set <span class="o">)</span>
+</code></pre></div></div>
 
-        <h2>
-          <a class="post-link" href="/2016/01/31/firefox-and-mplayer.html">Using FireFox to play video with Mplayer on Windows</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jan 28, 2016</span>
+<p>Now any repository placed in directory which path contains <code class="highlighter-rouge">mycompany/repos</code> will be configured to have corporate name and email.</p>
 
-        <h2>
-          <a class="post-link" href="/2016/01/28/cleaning-up-metadata-from-disk.html">How to cleanup FS metadata from partition</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jan 12, 2016</span>
+  </div>
+</article>
 
-        <h2>
-          <a class="post-link" href="/2016/01/12/haproxy-elb-nginx-http2.html">Enabling HTTP/2.0 support with Haproxy -> Amazon ELB -> Nginx</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Dec 31, 2015</span>
-
-        <h2>
-          <a class="post-link" href="/2015/12/31/maximizing-village-internet.html">Выжимаем максимум интернета из деревенских сот</a>
-        </h2>
-      </li>
-    
-  </ul>
-
-  <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
-
-</div>
 
       </div>
     </div>

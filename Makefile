@@ -13,4 +13,4 @@ jekyll_server: jekyll_doctor jekyll_build
 	bundle exec jekyll server --livereload
 
 publish: jekyll_build
-	cd _site/ && git add . && git commit -av
+	./tools/post_publish.sh

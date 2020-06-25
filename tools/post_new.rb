@@ -9,7 +9,7 @@ date = Time.now()
 
 printf("Enter title: ")
 title = $stdin.gets().strip()
-title_clean = title.gsub(/\s/, '-').downcase()
+title_clean = title.gsub(/[:\s]/, '-').downcase()
 
 printf("Enter tags: ")
 tags = $stdin.gets().strip()

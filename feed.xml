@@ -6,9 +6,75 @@
 </description>
     <link>http://undying.github.io/</link>
     <atom:link href="http://undying.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 24 Jun 2020 21:59:22 +0300</pubDate>
-    <lastBuildDate>Wed, 24 Jun 2020 21:59:22 +0300</lastBuildDate>
+    <pubDate>Thu, 25 Jun 2020 23:54:10 +0300</pubDate>
+    <lastBuildDate>Thu, 25 Jun 2020 23:54:10 +0300</lastBuildDate>
     <generator>Jekyll v3.8.7</generator>
+    
+      <item>
+        <title>ZSH: auto git config.user</title>
+        <description>&lt;p&gt;On my laptop and desktop I usually have many git repositories. Some of them are personal and some of them are from my main job. In companies it’s common practice to have corporate email that used in repository configuration.&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git config user.name &lt;span class=&quot;s2&quot;&gt;&quot;Mr Anderson&quot;&lt;/span&gt;
+git config user.email &lt;span class=&quot;s2&quot;&gt;&quot;anderson@corp.in&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;In personal repository you may use some cool nickname and personal email.&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git config user.name &lt;span class=&quot;s2&quot;&gt;&quot;Neo&quot;&lt;/span&gt;
+git config user.email 0xff@matr.ix
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;But there is an headache to not forget configure every repository to be corporate or personal after cloning.
+I’m using zsh and I have found easy solution for this.&lt;/p&gt;
+
+&lt;p&gt;On file system I keep corporate repositories in special folder like &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;company&amp;gt;/repos&lt;/code&gt;.
+So I decided to make my default configuration to be personal, and change it in corporate repositories on demand.&lt;/p&gt;
+
+&lt;p&gt;Zsh have a &lt;a href=&quot;http://zsh.sourceforge.net/Doc/Release/Functions.html&quot;&gt;hook system&lt;/a&gt;. You can create a function and specify in which hook you want to call it. There is a hook named chdir, it’s called when you changing your directory.&lt;/p&gt;
+
+&lt;p&gt;The algorithm is simple:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;check that current directory is a git repository&lt;/li&gt;
+  &lt;li&gt;if so, check in which directory it’s based&lt;/li&gt;
+  &lt;li&gt;if it’s corporate directory - set corporate email and name&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Here is a functions added to .zsrc:&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;_git_config_user&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;PWD&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;mycompany/repos&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      git config user.email kron@mycompany.com
+      git config user.name &lt;span class=&quot;s2&quot;&gt;&quot;Denis Bozhok&quot;&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;return &lt;/span&gt;0
+  &lt;span class=&quot;k&quot;&gt;esac&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+__git_cd_functions_set&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;[[&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; .git &lt;span class=&quot;o&quot;&gt;]]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return &lt;/span&gt;0
+  _git_config_user
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+chpwd_functions+&lt;span class=&quot;o&quot;&gt;=(&lt;/span&gt; __git_cd_functions_set &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Last string appends function &lt;code class=&quot;highlighter-rouge&quot;&gt;__git_cd_functions_set&lt;/code&gt; to chpwd hooks chain:&lt;/p&gt;
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;chpwd_functions+&lt;span class=&quot;o&quot;&gt;=(&lt;/span&gt; __git_cd_functions_set &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now any repository placed in directory which path contains &lt;code class=&quot;highlighter-rouge&quot;&gt;mycompany/repos&lt;/code&gt; will be configured to have corporate name and email.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 25 Jun 2020 22:36:59 +0300</pubDate>
+        <link>http://undying.github.io/2020/06/25/zsh-auto-git-config.user.html</link>
+        <guid isPermaLink="true">http://undying.github.io/2020/06/25/zsh-auto-git-config.user.html</guid>
+        
+        <category>zsh</category>
+        
+        <category>git</category>
+        
+        
+      </item>
     
       <item>
         <title>Network: Capturing TCP Retransmissions</title>
@@ -651,43 +717,6 @@ Also I found where cargo was already installed:&lt;/p&gt;
         <category>firefox</category>
         
         <category>cargo</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Gentoo: Backslash as Yen char</title>
-        <description>&lt;p&gt;If while browsing the internet you have a problem with backslash character which displayed as yen sign you can fix it this way.&lt;/p&gt;
-
-&lt;p&gt;First, let’s install the appropriate fonts.&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;emerge &lt;span class=&quot;nt&quot;&gt;-av&lt;/span&gt; media-fonts/droid&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Then we have to enable them for wide system.&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;eselect fontconfig &lt;span class=&quot;nb&quot;&gt;enable &lt;/span&gt;59-google-droid-sans.conf
-eselect fontconfig &lt;span class=&quot;nb&quot;&gt;enable &lt;/span&gt;59-google-droid-sans-mono.conf
-eselect fontconfig &lt;span class=&quot;nb&quot;&gt;enable &lt;/span&gt;59-google-droid-serif.conf&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Next step is to clean fonts cache.&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;fc-cache &lt;span class=&quot;nt&quot;&gt;-rf&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;That’s all.&lt;/p&gt;
-
-&lt;p&gt;P.S.
-Also I had a problem displaying cyrillic characters. Droid fonts also helps with that, but I found that chinese fonts (media-fonts/wqy-zenhei) can help.&lt;/p&gt;
-
-</description>
-        <pubDate>Sun, 19 Feb 2017 15:47:00 +0300</pubDate>
-        <link>http://undying.github.io/2017/02/19/backslash_as_yen.html</link>
-        <guid isPermaLink="true">http://undying.github.io/2017/02/19/backslash_as_yen.html</guid>
-        
-        <category>gentoo</category>
-        
-        <category>backslash</category>
-        
-        <category>yen</category>
         
         
       </item>
