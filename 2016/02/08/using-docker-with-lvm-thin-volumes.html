@@ -123,7 +123,7 @@ vgcreate docker /dev/sdb</code></pre></figure>
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">lvcreate <span class="nt">-n</span> docker-pool-meta <span class="nt">-L</span> 744M docker
   Logical volume <span class="s2">"docker-pool-meta"</span> created.</code></pre></figure>
 
-<p class="border_solid_red"><i>Beware that this metadata size may not be enough for your needs. In my case it was to small, so I was using metadata size about 16GiB. This is the maximum supported size for now, and at this time I'm testing how does it works.</i></p>
+<p class="border_solid_red"><i>Beware that this metadata size may not be enough for your needs. In my case it was too small, so I was using metadata size about 16GiB. This is the maximum supported size for now, and at this time I'm testing how does it works.</i></p>
 
 <p>Next, we need to create a volume for data. In my situations I just use the rest size of virtual group. First, I was trying to create volume this way:</p>
 
