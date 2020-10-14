@@ -6,9 +6,48 @@
 </description>
     <link>http://undying.github.io/</link>
     <atom:link href="http://undying.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 27 Jun 2020 11:48:47 +0300</pubDate>
-    <lastBuildDate>Sat, 27 Jun 2020 11:48:47 +0300</lastBuildDate>
+    <pubDate>Wed, 14 Oct 2020 23:16:39 +0300</pubDate>
+    <lastBuildDate>Wed, 14 Oct 2020 23:16:39 +0300</lastBuildDate>
     <generator>Jekyll v3.8.7</generator>
+    
+      <item>
+        <title>VIM, YCM and Pipenv</title>
+        <description>&lt;p&gt;While writing another python script under pipenv I have met a problem that YCM autocomplete worked only for built in functions.
+That was annoying because without autocomplete YCM looses it’s sense.&lt;/p&gt;
+
+&lt;h2 id=&quot;solution&quot;&gt;Solution&lt;/h2&gt;
+
+&lt;p&gt;Let’s create module for filetype plugin.&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cat&lt;/span&gt; ~/.vim/after/ftplugin/python.vim
+
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;empty&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$VIRTUAL_ENV&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;let &lt;/span&gt;g:ycm_server_python_interpreter &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$VIRTUAL_ENV&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/bin/python'&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$PYTHONPATH&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; finddir&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'site-packages'&lt;/span&gt;, &lt;span class=&quot;nv&quot;&gt;$VIRTUAL_ENV&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/lib/*'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+endif
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Then you can simply run command&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pipenv run vim some/script.py
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;And now YCM works correctly :3&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 14 Oct 2020 23:03:02 +0300</pubDate>
+        <link>http://undying.github.io/2020/10/14/vim-ycm-and-pipenv.html</link>
+        <guid isPermaLink="true">http://undying.github.io/2020/10/14/vim-ycm-and-pipenv.html</guid>
+        
+        <category>vim</category>
+        
+        <category>ycm</category>
+        
+        <category>pipenv</category>
+        
+        
+      </item>
     
       <item>
         <title>ZSH: auto git config.user</title>
@@ -670,53 +709,6 @@ After experimenting a bit here is an example mounting lvm volumes.&lt;/p&gt;
         <category>docker</category>
         
         <category>container</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Gentoo: Building FireFox 63.0.3</title>
-        <description>&lt;p&gt;Today I was trying to update FireFox on my Gentoo box and failed with error:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;  0:06.75 checking rustc version... 1.30.1
-  0:06.75 ERROR: Cargo package manager not found.
-  0:06.75 To compile Rust language sources, you must have &lt;span class=&quot;s1&quot;&gt;'cargo'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;your path.
-  0:06.75 See https://www.rust-lang.org/ &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;more information.
-  0:06.75
-  0:06.75 You can &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;cargo by running &lt;span class=&quot;s1&quot;&gt;'./mach bootstrap'&lt;/span&gt;
-  0:06.75 or by directly running the installer from https://rustup.rs/
-  0:06.75
-  0:06.79 &lt;span class=&quot;k&quot;&gt;***&lt;/span&gt; Fix above errors and &lt;span class=&quot;k&quot;&gt;then &lt;/span&gt;restart with&lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  0:06.79                &lt;span class=&quot;s2&quot;&gt;&quot;/usr/bin/gmake -f client.mk build&quot;&lt;/span&gt;
-  0:06.79 gmake: &lt;span class=&quot;k&quot;&gt;***&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;client.mk:127: configure] Error 1&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;I have already installed virtual/cargo and dev-lang/rust.
-Also I found where cargo was already installed:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;  equery f dev-lang/rust|grep cargo
-  /usr/bin/cargo-1.30.1&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;So the solution was simple:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;  &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;eselect rust update&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;This creates link required for build:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;  &lt;span class=&quot;nb&quot;&gt;ls&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-l&lt;/span&gt; &lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;which cargo&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-  lrwxrwxrwx 1 root root 21 Nov 21 08:03 /usr/bin/cargo -&amp;gt; /usr/bin/cargo-1.30.1&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-</description>
-        <pubDate>Wed, 21 Nov 2018 08:10:00 +0300</pubDate>
-        <link>http://undying.github.io/2018/11/21/building_firefox_on_gentoo.html</link>
-        <guid isPermaLink="true">http://undying.github.io/2018/11/21/building_firefox_on_gentoo.html</guid>
-        
-        <category>gentoo</category>
-        
-        <category>building</category>
-        
-        <category>firefox</category>
-        
-        <category>cargo</category>
         
         
       </item>
