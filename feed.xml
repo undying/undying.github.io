@@ -6,9 +6,47 @@
 </description>
     <link>http://undying.github.io/</link>
     <atom:link href="http://undying.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 14 Oct 2020 23:54:23 +0300</pubDate>
-    <lastBuildDate>Wed, 14 Oct 2020 23:54:23 +0300</lastBuildDate>
+    <pubDate>Thu, 15 Oct 2020 23:23:47 +0300</pubDate>
+    <lastBuildDate>Thu, 15 Oct 2020 23:23:47 +0300</lastBuildDate>
     <generator>Jekyll v3.8.7</generator>
+    
+      <item>
+        <title>VIM: Handle Urls</title>
+        <description>&lt;h1 id=&quot;making-a-shortcut-to-open-urls-under-cursor&quot;&gt;Making a shortcut to open urls under cursor&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: &lt;em&gt;There is also available &lt;code class=&quot;highlighter-rouge&quot;&gt;gx&lt;/code&gt; shortcut that uses netrw plugin.
+But I’ve decided to use own little solution instead of big plugin for one function.&lt;/em&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-vimscript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;&quot;&quot;&quot; open urls using \u shortcut&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; HandleURL&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;uri &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;matchstr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;getline&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;.&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'[a-z]*:\/\/[^ &amp;gt;,;)]*'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;uri &lt;span class=&quot;p&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;silent&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;call&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;system&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;xdg-open &quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;shellescape&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;uri&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+    echo &lt;span class=&quot;s2&quot;&gt;&quot;No URI found in line.&quot;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;endif&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;endfunction&lt;/span&gt;
+
+nnoremap &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;leader&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;u&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;call&lt;/span&gt; HandleURL&lt;span class=&quot;p&quot;&gt;()&amp;lt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;cr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;&quot;&quot;&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now if we hit \u shortcut while our cursor is on the url line, this url will be opened in default browser.
+You may like to change xdg-open to any other program you need.&lt;/p&gt;
+
+</description>
+        <pubDate>Thu, 15 Oct 2020 22:32:39 +0300</pubDate>
+        <link>http://undying.github.io/2020/10/15/vim-handle-urls.html</link>
+        <guid isPermaLink="true">http://undying.github.io/2020/10/15/vim-handle-urls.html</guid>
+        
+        <category>vim</category>
+        
+        <category>url</category>
+        
+        <category>http</category>
+        
+        
+      </item>
     
       <item>
         <title>VIM: Making Markdown Checklist Shortcut</title>
@@ -686,31 +724,6 @@ td{
         <category>konsole</category>
         
         <category>terminal</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>command not found: ck-unlock-session</title>
-        <description>&lt;p&gt;This evening I was updating my Gentoo laptop. While updating, my session were locked with the message, that to unlock it I have to use ck-unlock-session. Unfortunately shell told me that there is no such command on my laptop:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;  └&amp;gt; ck-unlock-session
-  zsh: &lt;span class=&quot;nb&quot;&gt;command &lt;/span&gt;not found: ck-unlock-session&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;In the vastness of the Internet found the solution, but it’s too long to remember:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;  dbus-send &lt;span class=&quot;nt&quot;&gt;--system&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--print-reply&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--dest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;org.freedesktop.ConsoleKit&quot;&lt;/span&gt; /org/freedesktop/ConsoleKit/Session1 org.freedesktop.ConsoleKit.Session.Unlock&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Session1&lt;/code&gt; - session name and it may differs. Name can be found by &lt;code class=&quot;highlighter-rouge&quot;&gt;ck-list-sessions&lt;/code&gt;&lt;/p&gt;
-
-</description>
-        <pubDate>Thu, 25 Jul 2019 17:27:00 +0300</pubDate>
-        <link>http://undying.github.io/2019/07/25/ck-unlock-session-alias.html</link>
-        <guid isPermaLink="true">http://undying.github.io/2019/07/25/ck-unlock-session-alias.html</guid>
-        
-        <category>gentoo</category>
-        
-        <category>kde</category>
         
         
       </item>
