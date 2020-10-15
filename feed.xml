@@ -6,8 +6,8 @@
 </description>
     <link>http://undying.github.io/</link>
     <atom:link href="http://undying.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 15 Oct 2020 23:23:47 +0300</pubDate>
-    <lastBuildDate>Thu, 15 Oct 2020 23:23:47 +0300</lastBuildDate>
+    <pubDate>Thu, 15 Oct 2020 23:32:58 +0300</pubDate>
+    <lastBuildDate>Thu, 15 Oct 2020 23:32:58 +0300</lastBuildDate>
     <generator>Jekyll v3.8.7</generator>
     
       <item>
@@ -31,7 +31,7 @@ nnoremap &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;leader&lt;span cla
 &lt;span class=&quot;c&quot;&gt;&quot;&quot;&quot;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Now if we hit \u shortcut while our cursor is on the url line, this url will be opened in default browser.
+&lt;p&gt;Now if we hit &lt;code class=&quot;highlighter-rouge&quot;&gt;\u&lt;/code&gt; shortcut while our cursor is on the url line, this url will be opened in default browser.
 You may like to change xdg-open to any other program you need.&lt;/p&gt;
 
 </description>
