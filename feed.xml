@@ -6,8 +6,8 @@
 </description>
     <link>http://undying.github.io/</link>
     <atom:link href="http://undying.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 15 Oct 2020 23:32:58 +0300</pubDate>
-    <lastBuildDate>Thu, 15 Oct 2020 23:32:58 +0300</lastBuildDate>
+    <pubDate>Wed, 21 Oct 2020 07:53:04 +0300</pubDate>
+    <lastBuildDate>Wed, 21 Oct 2020 07:53:04 +0300</lastBuildDate>
     <generator>Jekyll v3.8.7</generator>
     
       <item>
@@ -438,12 +438,139 @@ And if there is no rules for CNAME requests will go to the internet resolvers.&l
     
       <item>
         <title>PostgreSQL 11 Administration Summary</title>
-        <description>&lt;h2 id=&quot;intro&quot;&gt;Intro&lt;/h2&gt;
-&lt;p&gt;Not so long ago I read a beautiful &lt;a href=&quot;https://www.labirint.ru/books/685536/&quot;&gt;book about PostgreSQL 11 Administration&lt;/a&gt; and decided to make a summary of interesting for my point of view details.&lt;/p&gt;
+        <description>&lt;!-- vim-markdown-toc Marked --&gt;
 
-&lt;hr /&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;#postgresql-administration-cheatsheet&quot;&gt;PostgreSQL Administration Cheatsheet&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#intro&quot;&gt;Intro&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#new-in-postgresql-11&quot;&gt;New In PostgreSQL 11&lt;/a&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#wal-size&quot;&gt;WAL Size&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#create-statistics&quot;&gt;CREATE STATISTICS&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#include-indexes&quot;&gt;INCLUDE indexes&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#create-index-in-parallel&quot;&gt;CREATE INDEX in parallel&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#pg_prewarm&quot;&gt;pg_prewarm&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#updated-window-functions&quot;&gt;Updated WINDOW Functions&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#locks&quot;&gt;Locks&lt;/a&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#using-cte-with-returning&quot;&gt;Using CTE with RETURNING&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#for-share-and-for-update&quot;&gt;FOR SHARE and FOR UPDATE&lt;/a&gt;
+            &lt;ul&gt;
+              &lt;li&gt;&lt;a href=&quot;#for-...-clauses-by-locking-strength&quot;&gt;FOR … clauses by locking strength&lt;/a&gt;&lt;/li&gt;
+              &lt;li&gt;&lt;a href=&quot;#for-update-skip-locked&quot;&gt;FOR UPDATE SKIP LOCKED&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#recommended-locks&quot;&gt;Recommended Locks&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#vacuum&quot;&gt;VACUUM&lt;/a&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#autovacuum&quot;&gt;autovacuum&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#transaction-id-wraparound&quot;&gt;Transaction ID Wraparound&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#transaction-duration&quot;&gt;Transaction Duration&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#indexing&quot;&gt;Indexing&lt;/a&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#costs-model&quot;&gt;Costs Model&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!-- vim-markdown-toc --&gt;
+
+&lt;h1 id=&quot;postgresql-administration-cheatsheet&quot;&gt;PostgreSQL Administration Cheatsheet&lt;/h1&gt;
+
+&lt;h2 id=&quot;intro&quot;&gt;Intro&lt;/h2&gt;
+
+&lt;p&gt;This cheatsheet is based on the great
+&lt;a href=&quot;https://www.packtpub.com/product/mastering-postgresql-11-second-edition/9781789537819&quot;&gt;book about PostgreSQL 11 Administration&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Big thanks to it’s author - Hans-Jürgen Schönig.&lt;/p&gt;
+
+&lt;h2 id=&quot;new-in-postgresql-11&quot;&gt;New In PostgreSQL 11&lt;/h2&gt;
+
+&lt;h3 id=&quot;wal-size&quot;&gt;WAL Size&lt;/h3&gt;
+
+&lt;p&gt;Default WAL size is: &lt;strong&gt;16M&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;To change size during setup: &lt;code class=&quot;highlighter-rouge&quot;&gt;initdb -D /pgdata --wal-segsize=32&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;create-statistics&quot;&gt;CREATE STATISTICS&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; &lt;em&gt;This actually from PostgreSQL 10.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;CREATE STATISTICS will create a new extended statistics object tracking data about the specified table, foreign table or materialized view. The statistics object will be created in the current database and will be owned by the user issuing the command.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;The great thing is that statistics collected by every column you need.&lt;/p&gt;
+
+&lt;p&gt;References:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.postgresql.org/docs/10/sql-createstatistics.html&quot;&gt;CREATE STATISTICS&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.citusdata.com/blog/2018/03/06/postgres-planner-and-its-usage-of-statistics/&quot;&gt;The Postgres 10 feature you didn’t know about: CREATE STATISTICS &lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;include-indexes&quot;&gt;INCLUDE indexes&lt;/h3&gt;
+
+&lt;p&gt;In addition to the indexed column, the index can contain an additional column.
+This can be usefull to avoid table scan and use only index scan.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;CREATE UNIQUE INDEX some_name ON person USING btree (id) INCLUDE (name);&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Note: &lt;em&gt;Always select only those columns you need. When using &lt;code class=&quot;highlighter-rouge&quot;&gt;SELECT *&lt;/code&gt; you gathering all data from table and that hurts your performance.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;create-index-in-parallel&quot;&gt;CREATE INDEX in parallel&lt;/h3&gt;
+
+&lt;p&gt;PostgreSQL can build indexes while leveraging multiple CPUs in order to process the table rows faster. This feature is known as parallel index build. For index methods that support building indexes in parallel (currently, only B-tree), &lt;a href=&quot;https://www.postgresql.org/docs/11/runtime-config-resource.html#GUC-MAINTENANCE-WORK-MEM&quot;&gt;maintenance_work_mem&lt;/a&gt; specifies the maximum amount of memory that can be used by each index build operation as a whole, regardless of how many worker processes were started. Generally, a cost model automatically determines how many worker processes should be requested, if any.&lt;/p&gt;
+
+&lt;p&gt;Parallel index builds may benefit from increasing maintenance_work_mem where an equivalent serial index build will see little or no benefit. Note that maintenance_work_mem may influence the number of worker processes requested, since parallel workers must have at least a 32MB share of the total maintenance_work_mem budget. There must also be a remaining 32MB share for the leader process. Increasing &lt;a href=&quot;https://www.postgresql.org/docs/11/runtime-config-resource.html#GUC-MAX-PARALLEL-WORKERS-MAINTENANCE&quot;&gt;max_parallel_maintenance_workers&lt;/a&gt; may allow more workers to be used, which will reduce the time needed for index creation, so long as the index build is not already I/O bound. Of course, there should also be sufficient CPU capacity that would otherwise lie idle.&lt;/p&gt;
+
+&lt;p&gt;References:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.postgresql.org/docs/11/sql-createindex.html&quot;&gt;CREATE INDEX&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.cybertec-postgresql.com/en/postgresql-parallel-create-index-for-better-performance/&quot;&gt;PostgreSQL: Parallel CREATE INDEX for better performance&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;pg_prewarm&quot;&gt;pg_prewarm&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-SQL&quot;&gt;CREATE EXTENSION pg_prewarm;
+SELECT pg_prewarm('tablename');
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;References:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.cybertec-postgresql.com/en/prewarming-postgresql-i-o-caches/&quot;&gt;Prewarming PostgreSQL I/O caches&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;updated-window-functions&quot;&gt;Updated WINDOW Functions&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.postgresqltutorial.com/postgresql-between/&quot;&gt;RANGE BETWEEN&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;EXCLUDE
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;EXCLUDE CURRENT ROW&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;EXCLUDE TIES&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;References:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.cybertec-postgresql.com/en/timeseries-exclude-ties-current-row-and-group/&quot;&gt;Timeseries: EXCLUDE TIES, CURRENT ROW and GROUP&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.postgresql.org/docs/11/tutorial-window.html&quot;&gt;Window Functions&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;h2 id=&quot;locks&quot;&gt;Locks&lt;/h2&gt;
+
 &lt;h3 id=&quot;using-cte-with-returning&quot;&gt;Using CTE with RETURNING&lt;/h3&gt;
 
 &lt;p&gt;When you need to update record and use result value and don’t want to use explicit blocking or long transaction, it’s possible to use CTE and UPDATE with RETURNING statement.&lt;/p&gt;
@@ -622,14 +749,17 @@ In this case you lock not rows but numbers instead.&lt;/p&gt;
 &lt;p&gt;Beyond the threshold, old data may be vacuumed away. This can help prevent bloat in the face of snapshots which remain in use for a long time. To prevent incorrect results due to cleanup of data which would otherwise be visible to the snapshot, an error is generated when the snapshot is older than this threshold and the snapshot is used to read a page which has been modified since the snapshot was built. &lt;a href=&quot;https://www.postgresql.org/docs/11/runtime-config-resource.html#GUC-OLD-SNAPSHOT-THRESHOLD&quot;&gt;More details&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h2 id=&quot;indexing&quot;&gt;Indexing&lt;/h2&gt;
+
 &lt;h3 id=&quot;costs-model&quot;&gt;Costs Model&lt;/h3&gt;
 
 &lt;p&gt;Costs formula for &lt;code class=&quot;highlighter-rouge&quot;&gt;Seq Scan&lt;/code&gt;:&lt;/p&gt;
+
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(blocks to read * seq_page_cost) \
   + (rows scanned * cpu_tuple_cost + rows scanned * cpu_operator_cost)
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;To get sum of block per table:&lt;/p&gt;
+
 &lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pg_relation_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'table_name'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8192&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
@@ -648,6 +778,7 @@ In this case you lock not rows but numbers instead.&lt;/p&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;References:&lt;/p&gt;
+
 &lt;ul&gt;
   &lt;li&gt;https://www.postgresql.org/docs/11/runtime-config-query.html&lt;/li&gt;
   &lt;li&gt;https://www.postgresql.org/docs/11/index-cost-estimation.html&lt;/li&gt;
