@@ -6,8 +6,8 @@
 </description>
     <link>http://undying.github.io/</link>
     <atom:link href="http://undying.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 21 Oct 2020 07:53:04 +0300</pubDate>
-    <lastBuildDate>Wed, 21 Oct 2020 07:53:04 +0300</lastBuildDate>
+    <pubDate>Wed, 28 Oct 2020 07:56:45 +0300</pubDate>
+    <lastBuildDate>Wed, 28 Oct 2020 07:56:45 +0300</lastBuildDate>
     <generator>Jekyll v3.8.7</generator>
     
       <item>
@@ -452,6 +452,17 @@ And if there is no rules for CNAME requests will go to the internet resolvers.&l
           &lt;li&gt;&lt;a href=&quot;#create-index-in-parallel&quot;&gt;CREATE INDEX in parallel&lt;/a&gt;&lt;/li&gt;
           &lt;li&gt;&lt;a href=&quot;#pg_prewarm&quot;&gt;pg_prewarm&lt;/a&gt;&lt;/li&gt;
           &lt;li&gt;&lt;a href=&quot;#updated-window-functions&quot;&gt;Updated WINDOW Functions&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#jit-compilation&quot;&gt;JIT Compilation&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#better-partitioning&quot;&gt;Better Partitioning&lt;/a&gt;
+            &lt;ul&gt;
+              &lt;li&gt;&lt;a href=&quot;#default-partition&quot;&gt;Default Partition&lt;/a&gt;&lt;/li&gt;
+              &lt;li&gt;&lt;a href=&quot;#partition-key-updating&quot;&gt;Partition Key Updating&lt;/a&gt;&lt;/li&gt;
+              &lt;li&gt;&lt;a href=&quot;#hash-partitioning&quot;&gt;Hash Partitioning&lt;/a&gt;&lt;/li&gt;
+              &lt;li&gt;&lt;a href=&quot;#index-created-on-parent-table&quot;&gt;Index Created on Parent Table&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#better-support-of-stored-procedures&quot;&gt;Better Support Of Stored Procedures&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#faster-alter-table&quot;&gt;Faster ALTER TABLE&lt;/a&gt;&lt;/li&gt;
         &lt;/ul&gt;
       &lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;#locks&quot;&gt;Locks&lt;/a&gt;
@@ -519,11 +530,11 @@ And if there is no rules for CNAME requests will go to the internet resolvers.&l
 &lt;h3 id=&quot;include-indexes&quot;&gt;INCLUDE indexes&lt;/h3&gt;
 
 &lt;p&gt;In addition to the indexed column, the index can contain an additional column.
-This can be usefull to avoid table scan and use only index scan.&lt;/p&gt;
+This can be useful to avoid table scan and use only index scan.&lt;/p&gt;
 
 &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;CREATE UNIQUE INDEX some_name ON person USING btree (id) INCLUDE (name);&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;Note: &lt;em&gt;Always select only those columns you need. When using &lt;code class=&quot;highlighter-rouge&quot;&gt;SELECT *&lt;/code&gt; you gathering all data from table and that hurts your performance.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Note: Always select only those columns you need. When using &lt;code class=&quot;highlighter-rouge&quot;&gt;SELECT *&lt;/code&gt; you gathering all data from table and that hurts your performance.&lt;/p&gt;
 
 &lt;h3 id=&quot;create-index-in-parallel&quot;&gt;CREATE INDEX in parallel&lt;/h3&gt;
 
@@ -568,6 +579,80 @@ SELECT pg_prewarm('tablename');
   &lt;li&gt;&lt;a href=&quot;https://www.cybertec-postgresql.com/en/timeseries-exclude-ties-current-row-and-group/&quot;&gt;Timeseries: EXCLUDE TIES, CURRENT ROW and GROUP&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://www.postgresql.org/docs/11/tutorial-window.html&quot;&gt;Window Functions&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
+
+&lt;h3 id=&quot;jit-compilation&quot;&gt;JIT Compilation&lt;/h3&gt;
+
+&lt;p&gt;Just-in-Time (JIT) compilation is the process of turning some form of interpreted program evaluation into a native program, and doing so at run time. For example, instead of using general-purpose code that can evaluate arbitrary SQL expressions to evaluate a particular SQL predicate like WHERE a.col = 3, it is possible to generate a function that is specific to that expression and can be natively executed by the CPU, yielding a speedup.&lt;/p&gt;
+
+&lt;p&gt;PostgreSQL has builtin support to perform JIT compilation using LLVM when PostgreSQL is built with –with-llvm.&lt;/p&gt;
+
+&lt;p&gt;References:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.postgresql.org/docs/11/jit-reason.html&quot;&gt;JIT Reason&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;better-partitioning&quot;&gt;Better Partitioning&lt;/h3&gt;
+
+&lt;h4 id=&quot;default-partition&quot;&gt;Default Partition&lt;/h4&gt;
+
+&lt;p&gt;If row does not match any partition already created, it’s now can be moved to the default partition.&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;default_part&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OF&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;another_table&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DEFAULT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;partition-key-updating&quot;&gt;Partition Key Updating&lt;/h4&gt;
+
+&lt;p&gt;Now when updating the value of partition key, row is moved to another partition by PostgreSQL automatically.&lt;/p&gt;
+
+&lt;h4 id=&quot;hash-partitioning&quot;&gt;Hash Partitioning&lt;/h4&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tab&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HASH&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tab_0&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OF&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tab&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FOR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WITH&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MODULUS&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;REMAINDER&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;index-created-on-parent-table&quot;&gt;Index Created on Parent Table&lt;/h4&gt;
+
+&lt;p&gt;Now when creating index on parent table it automatically created on all child`s tables.
+Also, creating “global” unique index on parent table creates unique index on all child`s table.&lt;/p&gt;
+
+&lt;p&gt;References:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://severalnines.com/database-blog/guide-partitioning-data-postgresql&quot;&gt;A Guide to Partitioning Data In PostgreSQL&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://severalnines.com/database-blog/how-take-advantage-new-partitioning-features-postgresql-11&quot;&gt;How to Take Advantage of the New Partitioning Features in PostgreSQL 11&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.postgresql.org/docs/11/ddl-partitioning.html&quot;&gt;Table Partitioning&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;better-support-of-stored-procedures&quot;&gt;Better Support Of Stored Procedures&lt;/h3&gt;
+
+&lt;p&gt;Main difference between functions ans procedures in PostgreSQL is that function is a part of transaction.
+But procedure may contain multiple transactions.&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;PROCEDURE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test_proc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;LANGUAGE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;plpgsql&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$$&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;BEGIN&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;aid&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bid&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;COMMIT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cid&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;ROLLBACK&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;END&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;err&quot;&gt;$$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;faster-alter-table&quot;&gt;Faster ALTER TABLE&lt;/h3&gt;
+
+&lt;p&gt;To add a column to the table we can use such command:&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ADD&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;COLUMN&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ADD&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;COLUMN&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;z&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DEFAULT&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;57&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;First command will work fast always, because it simply updates system catalog.
+Second command will work fast only in PostgreSQL 11 and newer versions.
+In the PG10 this will lead table to be rewritten which may be slow.&lt;/p&gt;
 
 &lt;h2 id=&quot;locks&quot;&gt;Locks&lt;/h2&gt;
 

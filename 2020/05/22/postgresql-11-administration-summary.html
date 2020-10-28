@@ -106,6 +106,17 @@
           <li><a href="#create-index-in-parallel">CREATE INDEX in parallel</a></li>
           <li><a href="#pg_prewarm">pg_prewarm</a></li>
           <li><a href="#updated-window-functions">Updated WINDOW Functions</a></li>
+          <li><a href="#jit-compilation">JIT Compilation</a></li>
+          <li><a href="#better-partitioning">Better Partitioning</a>
+            <ul>
+              <li><a href="#default-partition">Default Partition</a></li>
+              <li><a href="#partition-key-updating">Partition Key Updating</a></li>
+              <li><a href="#hash-partitioning">Hash Partitioning</a></li>
+              <li><a href="#index-created-on-parent-table">Index Created on Parent Table</a></li>
+            </ul>
+          </li>
+          <li><a href="#better-support-of-stored-procedures">Better Support Of Stored Procedures</a></li>
+          <li><a href="#faster-alter-table">Faster ALTER TABLE</a></li>
         </ul>
       </li>
       <li><a href="#locks">Locks</a>
@@ -173,11 +184,11 @@
 <h3 id="include-indexes">INCLUDE indexes</h3>
 
 <p>In addition to the indexed column, the index can contain an additional column.
-This can be usefull to avoid table scan and use only index scan.</p>
+This can be useful to avoid table scan and use only index scan.</p>
 
 <p><code class="highlighter-rouge">CREATE UNIQUE INDEX some_name ON person USING btree (id) INCLUDE (name);</code></p>
 
-<p>Note: <em>Always select only those columns you need. When using <code class="highlighter-rouge">SELECT *</code> you gathering all data from table and that hurts your performance.</em></p>
+<p>Note: Always select only those columns you need. When using <code class="highlighter-rouge">SELECT *</code> you gathering all data from table and that hurts your performance.</p>
 
 <h3 id="create-index-in-parallel">CREATE INDEX in parallel</h3>
 
@@ -222,6 +233,80 @@ SELECT pg_prewarm('tablename');
   <li><a href="https://www.cybertec-postgresql.com/en/timeseries-exclude-ties-current-row-and-group/">Timeseries: EXCLUDE TIES, CURRENT ROW and GROUP</a></li>
   <li><a href="https://www.postgresql.org/docs/11/tutorial-window.html">Window Functions</a></li>
 </ul>
+
+<h3 id="jit-compilation">JIT Compilation</h3>
+
+<p>Just-in-Time (JIT) compilation is the process of turning some form of interpreted program evaluation into a native program, and doing so at run time. For example, instead of using general-purpose code that can evaluate arbitrary SQL expressions to evaluate a particular SQL predicate like WHERE a.col = 3, it is possible to generate a function that is specific to that expression and can be natively executed by the CPU, yielding a speedup.</p>
+
+<p>PostgreSQL has builtin support to perform JIT compilation using LLVM when PostgreSQL is built with –with-llvm.</p>
+
+<p>References:</p>
+
+<ul>
+  <li><a href="https://www.postgresql.org/docs/11/jit-reason.html">JIT Reason</a></li>
+</ul>
+
+<h3 id="better-partitioning">Better Partitioning</h3>
+
+<h4 id="default-partition">Default Partition</h4>
+
+<p>If row does not match any partition already created, it’s now can be moved to the default partition.</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">default_part</span> <span class="n">PARTITION</span> <span class="k">OF</span> <span class="n">another_table</span> <span class="k">DEFAULT</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h4 id="partition-key-updating">Partition Key Updating</h4>
+
+<p>Now when updating the value of partition key, row is moved to another partition by PostgreSQL automatically.</p>
+
+<h4 id="hash-partitioning">Hash Partitioning</h4>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">tab</span><span class="p">(</span><span class="n">i</span> <span class="nb">int</span><span class="p">,</span> <span class="n">i</span> <span class="nb">text</span><span class="p">)</span> <span class="n">PARTITION</span> <span class="k">BY</span> <span class="n">HASH</span> <span class="p">(</span><span class="n">i</span><span class="p">);</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">tab_0</span> <span class="n">PARTITION</span> <span class="k">OF</span> <span class="n">tab</span> <span class="k">FOR</span> <span class="k">VALUES</span> <span class="k">WITH</span> <span class="p">(</span><span class="n">MODULUS</span> <span class="mi">4</span><span class="p">,</span> <span class="n">REMAINDER</span> <span class="mi">0</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h4 id="index-created-on-parent-table">Index Created on Parent Table</h4>
+
+<p>Now when creating index on parent table it automatically created on all child`s tables.
+Also, creating “global” unique index on parent table creates unique index on all child`s table.</p>
+
+<p>References:</p>
+
+<ul>
+  <li><a href="https://severalnines.com/database-blog/guide-partitioning-data-postgresql">A Guide to Partitioning Data In PostgreSQL</a></li>
+  <li><a href="https://severalnines.com/database-blog/how-take-advantage-new-partitioning-features-postgresql-11">How to Take Advantage of the New Partitioning Features in PostgreSQL 11</a></li>
+  <li><a href="https://www.postgresql.org/docs/11/ddl-partitioning.html">Table Partitioning</a></li>
+</ul>
+
+<h3 id="better-support-of-stored-procedures">Better Support Of Stored Procedures</h3>
+
+<p>Main difference between functions ans procedures in PostgreSQL is that function is a part of transaction.
+But procedure may contain multiple transactions.</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">PROCEDURE</span> <span class="n">test_proc</span><span class="p">()</span>
+  <span class="k">LANGUAGE</span> <span class="n">plpgsql</span>
+  <span class="k">AS</span> <span class="err">$$</span>
+    <span class="k">BEGIN</span>
+      <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">a</span> <span class="p">(</span><span class="n">aid</span> <span class="nb">int</span><span class="p">);</span>
+      <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">b</span> <span class="p">(</span><span class="n">bid</span> <span class="nb">int</span><span class="p">);</span>
+      <span class="k">COMMIT</span><span class="p">;</span>
+      <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="k">c</span> <span class="p">(</span><span class="n">cid</span> <span class="nb">int</span><span class="p">);</span>
+      <span class="k">ROLLBACK</span><span class="p">;</span>
+    <span class="k">END</span><span class="p">;</span>
+  <span class="err">$$</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h3 id="faster-alter-table">Faster ALTER TABLE</h3>
+
+<p>To add a column to the table we can use such command:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">x</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">y</span> <span class="nb">int</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">x</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">z</span> <span class="nb">int</span> <span class="k">DEFAULT</span> <span class="mi">57</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>First command will work fast always, because it simply updates system catalog.
+Second command will work fast only in PostgreSQL 11 and newer versions.
+In the PG10 this will lead table to be rewritten which may be slow.</p>
 
 <h2 id="locks">Locks</h2>
 
