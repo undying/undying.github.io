@@ -119,8 +119,11 @@
           <li><a href="#faster-alter-table">Faster ALTER TABLE</a></li>
         </ul>
       </li>
-      <li><a href="#locks">Locks</a>
+      <li><a href="#locks-and-transactions">Locks and Transactions</a>
         <ul>
+          <li><a href="#now()-function">now() function</a></li>
+          <li><a href="#savepoint">SAVEPOINT</a></li>
+          <li><a href="#ddl-commands-are-transaction-safe">DDL commands are transaction safe</a></li>
           <li><a href="#using-cte-with-returning">Using CTE with RETURNING</a></li>
           <li><a href="#for-share-and-for-update">FOR SHARE and FOR UPDATE</a>
             <ul>
@@ -308,7 +311,69 @@ But procedure may contain multiple transactions.</p>
 Second command will work fast only in PostgreSQL 11 and newer versions.
 In the PG10 this will lead table to be rewritten which may be slow.</p>
 
-<h2 id="locks">Locks</h2>
+<h2 id="locks-and-transactions">Locks and Transactions</h2>
+
+<h3 id="now-function">now() function</h3>
+
+<p><code class="highlighter-rouge">now()</code> function returns time of the transaction beginning. So calling it twice in one transaction will return the same data. If you need the real time, you have to use function <code class="highlighter-rouge">clock_timestamp()</code></p>
+
+<h3 id="savepoint"><a href="https://www.postgresql.org/docs/11/sql-savepoint.html">SAVEPOINT</a></h3>
+
+<p>In long transaction which may fail in the middle of process it’s possible to use savepoint and rollback to it saving the job that already completed successfully.</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">postgres</span><span class="o">=#</span> <span class="k">BEGIN</span><span class="p">;</span>
+<span class="k">BEGIN</span>
+<span class="n">postgres</span><span class="o">=#</span> <span class="k">SELECT</span> <span class="mi">1</span><span class="p">;</span>
+ <span class="o">?</span><span class="k">column</span><span class="o">?</span>
+<span class="c1">----------</span>
+        <span class="mi">1</span>
+<span class="p">(</span><span class="mi">1</span> <span class="k">row</span><span class="p">)</span>
+
+<span class="n">postgres</span><span class="o">=#</span> <span class="n">SAVEPOINT</span> <span class="n">a</span><span class="p">;</span>
+<span class="n">SAVEPOINT</span>
+<span class="n">postgres</span><span class="o">=#</span> <span class="k">SELECT</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">ERROR</span><span class="p">:</span>  <span class="n">division</span> <span class="k">by</span> <span class="n">zero</span>
+<span class="n">postgres</span><span class="o">=#</span> <span class="k">SELECT</span> <span class="mi">2</span><span class="p">;</span>
+<span class="n">ERROR</span><span class="p">:</span>  <span class="k">current</span> <span class="n">transaction</span> <span class="k">is</span> <span class="n">aborted</span><span class="p">,</span> <span class="n">commands</span> <span class="n">ignored</span> <span class="k">until</span> <span class="k">end</span> <span class="k">of</span> <span class="n">transaction</span> <span class="n">block</span>
+<span class="n">postgres</span><span class="o">=#</span> <span class="k">ROLLBACK</span> <span class="k">TO</span> <span class="n">SAVEPOINT</span> <span class="n">a</span><span class="p">;</span>
+<span class="k">ROLLBACK</span>
+<span class="n">postgres</span><span class="o">=#</span> <span class="k">SELECT</span> <span class="mi">3</span><span class="p">;</span>
+ <span class="o">?</span><span class="k">column</span><span class="o">?</span>
+<span class="c1">----------</span>
+        <span class="mi">3</span>
+<span class="p">(</span><span class="mi">1</span> <span class="k">row</span><span class="p">)</span>
+
+<span class="n">postgres</span><span class="o">=#</span> <span class="k">COMMIT</span><span class="p">;</span>
+<span class="k">COMMIT</span>
+</code></pre></div></div>
+
+<h3 id="ddl-commands-are-transaction-safe">DDL commands are transaction safe</h3>
+
+<p>It’s possible to create and modify tables in transaction then rollback all changes during error.</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">postgres</span><span class="o">=#</span> <span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="n">test</span><span class="p">;</span>
+<span class="k">CREATE</span> <span class="k">DATABASE</span>
+<span class="n">postgres</span><span class="o">=#</span> <span class="err">\</span><span class="k">c</span> <span class="n">test</span>
+<span class="n">You</span> <span class="k">are</span> <span class="n">now</span> <span class="n">connected</span> <span class="k">to</span> <span class="k">database</span> <span class="nv">"test"</span> <span class="k">as</span> <span class="k">user</span> <span class="nv">"postgres"</span><span class="p">.</span>
+<span class="n">test</span><span class="o">=#</span> <span class="err">\</span><span class="n">d</span>
+<span class="n">Did</span> <span class="k">not</span> <span class="n">find</span> <span class="k">any</span> <span class="n">relations</span><span class="p">.</span>
+<span class="n">test</span><span class="o">=#</span> <span class="k">BEGIN</span><span class="p">;</span>
+<span class="k">BEGIN</span>
+<span class="n">test</span><span class="o">=#</span> <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t_test</span> <span class="p">(</span><span class="n">id</span> <span class="nb">int</span><span class="p">);</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span>
+<span class="n">test</span><span class="o">=#</span> <span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">t_test</span> <span class="k">ALTER</span> <span class="k">COLUMN</span> <span class="n">id</span> <span class="k">TYPE</span> <span class="n">int8</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span>
+<span class="n">test</span><span class="o">=#</span> <span class="err">\</span><span class="n">d</span> <span class="n">t_test</span><span class="p">;</span>
+              <span class="k">Table</span> <span class="nv">"public.t_test"</span>
+ <span class="k">Column</span> <span class="o">|</span>  <span class="k">Type</span>  <span class="o">|</span> <span class="k">Collation</span> <span class="o">|</span> <span class="k">Nullable</span> <span class="o">|</span> <span class="k">Default</span>
+<span class="c1">--------+--------+-----------+----------+---------</span>
+ <span class="n">id</span>     <span class="o">|</span> <span class="nb">bigint</span> <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>
+
+<span class="n">test</span><span class="o">=#</span> <span class="k">ROLLBACK</span><span class="p">;</span>
+<span class="k">ROLLBACK</span>
+<span class="n">test</span><span class="o">=#</span> <span class="err">\</span><span class="n">d</span>
+<span class="n">Did</span> <span class="k">not</span> <span class="n">find</span> <span class="k">any</span> <span class="n">relations</span><span class="p">.</span>
+</code></pre></div></div>
 
 <h3 id="using-cte-with-returning">Using CTE with RETURNING</h3>
 

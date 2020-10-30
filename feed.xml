@@ -6,8 +6,8 @@
 </description>
     <link>http://undying.github.io/</link>
     <atom:link href="http://undying.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 28 Oct 2020 07:56:45 +0300</pubDate>
-    <lastBuildDate>Wed, 28 Oct 2020 07:56:45 +0300</lastBuildDate>
+    <pubDate>Fri, 30 Oct 2020 07:55:54 +0300</pubDate>
+    <lastBuildDate>Fri, 30 Oct 2020 07:55:54 +0300</lastBuildDate>
     <generator>Jekyll v3.8.7</generator>
     
       <item>
@@ -465,8 +465,11 @@ And if there is no rules for CNAME requests will go to the internet resolvers.&l
           &lt;li&gt;&lt;a href=&quot;#faster-alter-table&quot;&gt;Faster ALTER TABLE&lt;/a&gt;&lt;/li&gt;
         &lt;/ul&gt;
       &lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#locks&quot;&gt;Locks&lt;/a&gt;
+      &lt;li&gt;&lt;a href=&quot;#locks-and-transactions&quot;&gt;Locks and Transactions&lt;/a&gt;
         &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#now()-function&quot;&gt;now() function&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#savepoint&quot;&gt;SAVEPOINT&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#ddl-commands-are-transaction-safe&quot;&gt;DDL commands are transaction safe&lt;/a&gt;&lt;/li&gt;
           &lt;li&gt;&lt;a href=&quot;#using-cte-with-returning&quot;&gt;Using CTE with RETURNING&lt;/a&gt;&lt;/li&gt;
           &lt;li&gt;&lt;a href=&quot;#for-share-and-for-update&quot;&gt;FOR SHARE and FOR UPDATE&lt;/a&gt;
             &lt;ul&gt;
@@ -654,7 +657,69 @@ But procedure may contain multiple transactions.&lt;/p&gt;
 Second command will work fast only in PostgreSQL 11 and newer versions.
 In the PG10 this will lead table to be rewritten which may be slow.&lt;/p&gt;
 
-&lt;h2 id=&quot;locks&quot;&gt;Locks&lt;/h2&gt;
+&lt;h2 id=&quot;locks-and-transactions&quot;&gt;Locks and Transactions&lt;/h2&gt;
+
+&lt;h3 id=&quot;now-function&quot;&gt;now() function&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;now()&lt;/code&gt; function returns time of the transaction beginning. So calling it twice in one transaction will return the same data. If you need the real time, you have to use function &lt;code class=&quot;highlighter-rouge&quot;&gt;clock_timestamp()&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;savepoint&quot;&gt;&lt;a href=&quot;https://www.postgresql.org/docs/11/sql-savepoint.html&quot;&gt;SAVEPOINT&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;In long transaction which may fail in the middle of process it’s possible to use savepoint and rollback to it saving the job that already completed successfully.&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;postgres&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BEGIN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;BEGIN&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;postgres&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;column&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;----------&lt;/span&gt;
+        &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;row&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;postgres&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SAVEPOINT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;SAVEPOINT&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;postgres&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;ERROR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;division&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;by&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;zero&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;postgres&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;ERROR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;  &lt;span class=&quot;k&quot;&gt;current&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;transaction&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;aborted&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;commands&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ignored&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;until&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;of&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;transaction&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;postgres&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ROLLBACK&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SAVEPOINT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;ROLLBACK&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;postgres&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;column&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;----------&lt;/span&gt;
+        &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;row&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;postgres&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;COMMIT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;COMMIT&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;ddl-commands-are-transaction-safe&quot;&gt;DDL commands are transaction safe&lt;/h3&gt;
+
+&lt;p&gt;It’s possible to create and modify tables in transaction then rollback all changes during error.&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;postgres&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DATABASE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DATABASE&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;postgres&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;You&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;are&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;now&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;connected&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;database&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;&quot;test&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;&quot;postgres&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Did&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;find&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;any&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;relations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BEGIN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;BEGIN&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t_test&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t_test&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;COLUMN&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TYPE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;int8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t_test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+              &lt;span class=&quot;k&quot;&gt;Table&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;&quot;public.t_test&quot;&lt;/span&gt;
+ &lt;span class=&quot;k&quot;&gt;Column&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  &lt;span class=&quot;k&quot;&gt;Type&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;Collation&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;Nullable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;Default&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;--------+--------+-----------+----------+---------&lt;/span&gt;
+ &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;     &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;bigint&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;           &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;          &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ROLLBACK&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;ROLLBACK&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Did&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;find&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;any&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;relations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;using-cte-with-returning&quot;&gt;Using CTE with RETURNING&lt;/h3&gt;
 
