@@ -6,8 +6,8 @@
 </description>
     <link>http://undying.github.io/</link>
     <atom:link href="http://undying.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 30 Oct 2020 07:55:54 +0300</pubDate>
-    <lastBuildDate>Fri, 30 Oct 2020 07:55:54 +0300</lastBuildDate>
+    <pubDate>Fri, 06 Nov 2020 07:36:51 +0300</pubDate>
+    <lastBuildDate>Fri, 06 Nov 2020 07:36:51 +0300</lastBuildDate>
     <generator>Jekyll v3.8.7</generator>
     
       <item>
@@ -470,6 +470,12 @@ And if there is no rules for CNAME requests will go to the internet resolvers.&l
           &lt;li&gt;&lt;a href=&quot;#now()-function&quot;&gt;now() function&lt;/a&gt;&lt;/li&gt;
           &lt;li&gt;&lt;a href=&quot;#savepoint&quot;&gt;SAVEPOINT&lt;/a&gt;&lt;/li&gt;
           &lt;li&gt;&lt;a href=&quot;#ddl-commands-are-transaction-safe&quot;&gt;DDL commands are transaction safe&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#explicit-locking&quot;&gt;Explicit Locking&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#for-share-and-for-update&quot;&gt;FOR SHARE and FOR UPDATE&lt;/a&gt;
+            &lt;ul&gt;
+              &lt;li&gt;&lt;a href=&quot;#skip-locked&quot;&gt;SKIP LOCKED&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
           &lt;li&gt;&lt;a href=&quot;#using-cte-with-returning&quot;&gt;Using CTE with RETURNING&lt;/a&gt;&lt;/li&gt;
           &lt;li&gt;&lt;a href=&quot;#for-share-and-for-update&quot;&gt;FOR SHARE and FOR UPDATE&lt;/a&gt;
             &lt;ul&gt;
@@ -721,6 +727,186 @@ In the PG10 this will lead table to be rewritten which may be slow.&lt;/p&gt;
 &lt;span class=&quot;n&quot;&gt;Did&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;find&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;any&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;relations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
+&lt;h3 id=&quot;explicit-locking&quot;&gt;Explicit Locking&lt;/h3&gt;
+
+&lt;p&gt;Sometime it’s needed to use locks to fix this kind of errors:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Transaction 1&lt;/th&gt;
+      &lt;th&gt;Transaction 2&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;BEGIN;&lt;/td&gt;
+      &lt;td&gt;BEGIN;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;SELECT max(id) FROM product;&lt;/td&gt;
+      &lt;td&gt;SELECT max(id) FROM product;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;– query returned 17&lt;/td&gt;
+      &lt;td&gt;– query returned 17&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;– user added product 18&lt;/td&gt;
+      &lt;td&gt;– user added product 18&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;INSERT INTO product … VALUES (18, …)&lt;/td&gt;
+      &lt;td&gt;INSERT INTO product … VALUES (18, …)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;COMMIT;&lt;/td&gt;
+      &lt;td&gt;COMMIT;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;This error can be avoided this way:&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;BEGIN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;LOCK&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;product&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ACCESS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXCLUSIVE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;MODE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;product&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;...&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;product&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;COMMIT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;But this is very bad for performance reasons.
+Alternative solutions is to separate tables in this way:&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t_invoice&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;PRIMARY&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;KEY&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t_watermark&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t_watermark&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;WITH&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;UPDATE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t_watermark&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RETURNING&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t_invoice&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RETURNING&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Only one UPDATE can be occurred at once but this does not blocks SELECT queries.&lt;/p&gt;
+
+&lt;p&gt;References:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.postgresql.org/docs/11/explicit-locking.html&quot;&gt;Explicit Locking&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;for-share-and-for-update&quot;&gt;FOR SHARE and FOR UPDATE&lt;/h3&gt;
+
+&lt;p&gt;This is &lt;strong&gt;wrong&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;BEGIN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;invoice&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;processed&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;-- now make some work with returned data&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;UPDATE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;invoice&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;processed&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;true&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;COMMIT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Multiple requests can select the same data and then try to insert updated data.
+&lt;code class=&quot;highlighter-rouge&quot;&gt;SELECT FOR UPDATE&lt;/code&gt; for the rescue.&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;BEGIN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;invoice&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;processed&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;false&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FOR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;UPDATE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;-- now processing data with modifications&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;UPDATE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;invoice&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;processed&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;COMMIT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;When running multiple transactions on the same rows the second one will wait until the first one will end. But we can skip them with &lt;code class=&quot;highlighter-rouge&quot;&gt;NOWAIT&lt;/code&gt;.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Transaction 1&lt;/th&gt;
+      &lt;th&gt;Transaction 2&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;BEGIN;&lt;/td&gt;
+      &lt;td&gt;BEGIN;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;SELECT … FROM table WHERE … FOR UPDATE NOWAIT;&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;– processing&lt;/td&gt;
+      &lt;td&gt;SELECT … FROM tab WHERE … FOR UPDATE NOWAIT;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;– still processing&lt;/td&gt;
+      &lt;td&gt;ERROR: could not obtain lock on row in relation “table”&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;There is also parameter &lt;code class=&quot;highlighter-rouge&quot;&gt;lock_timeout&lt;/code&gt; to set how long we are ready to wait lock.&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lock_timeout&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TO&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;-- set timeout to 5 seconds&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;skip-locked&quot;&gt;SKIP LOCKED&lt;/h4&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SELECT FOR UDATE&lt;/code&gt; can block others requests for UPDATE&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Transaction 1&lt;/th&gt;
+      &lt;th&gt;Transaction 2&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;BEING;&lt;/td&gt;
+      &lt;td&gt;BEING;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;SELECT … FROM table LIMIT 1 FOR UPDATE;&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;– waiting for user action&lt;/td&gt;
+      &lt;td&gt;SELECT … FROM table LIMIT 1 FOR UPDATE;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;– waiting for user action&lt;/td&gt;
+      &lt;td&gt;– waiting Transaction 1&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;To fix that we can use &lt;code class=&quot;highlighter-rouge&quot;&gt;SKIP LOCKED&lt;/code&gt;.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Transaction 1&lt;/th&gt;
+      &lt;th&gt;Transaction 2&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;BEGIN;&lt;/td&gt;
+      &lt;td&gt;BEGIN;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;SELECT * FROM table LIMIT 2 FOR UPDATE SKIP LOCKED;&lt;/td&gt;
+      &lt;td&gt;SELECT * FROM table LIMIT 2 FOR UPDATE SKIP LOCKED;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;– returns first pair of not locked rows&lt;/td&gt;
+      &lt;td&gt;– returns second pair of not locked rows&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;:
+When using &lt;code class=&quot;highlighter-rouge&quot;&gt;FOR UPDATE&lt;/code&gt; on table with &lt;code class=&quot;highlighter-rouge&quot;&gt;FOREIGN KEY&lt;/code&gt;, both tables will be blocked.&lt;/p&gt;
+
 &lt;h3 id=&quot;using-cte-with-returning&quot;&gt;Using CTE with RETURNING&lt;/h3&gt;
 
 &lt;p&gt;When you need to update record and use result value and don’t want to use explicit blocking or long transaction, it’s possible to use CTE and UPDATE with RETURNING statement.&lt;/p&gt;
@@ -746,7 +932,7 @@ In the PG10 this will lead table to be rewritten which may be slow.&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;h3 id=&quot;for-share-and-for-update&quot;&gt;FOR SHARE and FOR UPDATE&lt;/h3&gt;
+&lt;h3 id=&quot;for-share-and-for-update-1&quot;&gt;FOR SHARE and FOR UPDATE&lt;/h3&gt;
 
 &lt;p&gt;To select some data for database, process it and then update this data in database there is a SELECT FOR UPDATE  statement for that.&lt;/p&gt;
 

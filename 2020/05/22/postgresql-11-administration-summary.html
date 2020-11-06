@@ -124,6 +124,12 @@
           <li><a href="#now()-function">now() function</a></li>
           <li><a href="#savepoint">SAVEPOINT</a></li>
           <li><a href="#ddl-commands-are-transaction-safe">DDL commands are transaction safe</a></li>
+          <li><a href="#explicit-locking">Explicit Locking</a></li>
+          <li><a href="#for-share-and-for-update">FOR SHARE and FOR UPDATE</a>
+            <ul>
+              <li><a href="#skip-locked">SKIP LOCKED</a></li>
+            </ul>
+          </li>
           <li><a href="#using-cte-with-returning">Using CTE with RETURNING</a></li>
           <li><a href="#for-share-and-for-update">FOR SHARE and FOR UPDATE</a>
             <ul>
@@ -375,6 +381,186 @@ In the PG10 this will lead table to be rewritten which may be slow.</p>
 <span class="n">Did</span> <span class="k">not</span> <span class="n">find</span> <span class="k">any</span> <span class="n">relations</span><span class="p">.</span>
 </code></pre></div></div>
 
+<h3 id="explicit-locking">Explicit Locking</h3>
+
+<p>Sometime it’s needed to use locks to fix this kind of errors:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Transaction 1</th>
+      <th>Transaction 2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BEGIN;</td>
+      <td>BEGIN;</td>
+    </tr>
+    <tr>
+      <td>SELECT max(id) FROM product;</td>
+      <td>SELECT max(id) FROM product;</td>
+    </tr>
+    <tr>
+      <td>– query returned 17</td>
+      <td>– query returned 17</td>
+    </tr>
+    <tr>
+      <td>– user added product 18</td>
+      <td>– user added product 18</td>
+    </tr>
+    <tr>
+      <td>INSERT INTO product … VALUES (18, …)</td>
+      <td>INSERT INTO product … VALUES (18, …)</td>
+    </tr>
+    <tr>
+      <td>COMMIT;</td>
+      <td>COMMIT;</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>This error can be avoided this way:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">BEGIN</span><span class="p">;</span>
+<span class="k">LOCK</span> <span class="k">TABLE</span> <span class="n">product</span> <span class="k">in</span> <span class="k">ACCESS</span> <span class="k">EXCLUSIVE</span> <span class="k">MODE</span><span class="p">;</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">product</span> <span class="k">SELECT</span> <span class="k">max</span><span class="p">(</span><span class="n">id</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">...</span> <span class="k">FROM</span> <span class="n">product</span><span class="p">;</span>
+<span class="k">COMMIT</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>But this is very bad for performance reasons.
+Alternative solutions is to separate tables in this way:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t_invoice</span> <span class="p">(</span><span class="n">id</span> <span class="nb">int</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">);</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t_watermark</span> <span class="p">(</span><span class="n">id</span> <span class="nb">int</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">t_watermark</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="k">WITH</span> <span class="n">x</span> <span class="k">AS</span> <span class="p">(</span><span class="k">UPDATE</span> <span class="n">t_watermark</span> <span class="k">SET</span> <span class="n">id</span> <span class="o">=</span> <span class="n">id</span> <span class="o">+</span> <span class="mi">1</span> <span class="n">RETURNING</span> <span class="n">id</span><span class="p">)</span>
+  <span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">t_invoice</span>
+  <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">x</span> <span class="n">RETURNING</span> <span class="n">id</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Only one UPDATE can be occurred at once but this does not blocks SELECT queries.</p>
+
+<p>References:</p>
+
+<ul>
+  <li><a href="https://www.postgresql.org/docs/11/explicit-locking.html">Explicit Locking</a></li>
+</ul>
+
+<h3 id="for-share-and-for-update">FOR SHARE and FOR UPDATE</h3>
+
+<p>This is <strong>wrong</strong>:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">BEGIN</span><span class="p">;</span>
+<span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">invoice</span> <span class="k">WHERE</span> <span class="n">processed</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+<span class="c1">-- now make some work with returned data</span>
+<span class="k">UPDATE</span> <span class="n">invoice</span> <span class="k">SET</span> <span class="n">processed</span> <span class="o">=</span> <span class="k">true</span> <span class="p">...</span>
+<span class="k">COMMIT</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Multiple requests can select the same data and then try to insert updated data.
+<code class="highlighter-rouge">SELECT FOR UPDATE</code> for the rescue.</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">BEGIN</span><span class="p">;</span>
+<span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">invoice</span> <span class="k">WHERE</span> <span class="n">processed</span> <span class="o">=</span> <span class="k">false</span> <span class="k">FOR</span> <span class="k">UPDATE</span><span class="p">;</span>
+<span class="c1">-- now processing data with modifications</span>
+<span class="k">UPDATE</span> <span class="n">invoice</span> <span class="k">SET</span> <span class="n">processed</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+<span class="k">COMMIT</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>When running multiple transactions on the same rows the second one will wait until the first one will end. But we can skip them with <code class="highlighter-rouge">NOWAIT</code>.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Transaction 1</th>
+      <th>Transaction 2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BEGIN;</td>
+      <td>BEGIN;</td>
+    </tr>
+    <tr>
+      <td>SELECT … FROM table WHERE … FOR UPDATE NOWAIT;</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>– processing</td>
+      <td>SELECT … FROM tab WHERE … FOR UPDATE NOWAIT;</td>
+    </tr>
+    <tr>
+      <td>– still processing</td>
+      <td>ERROR: could not obtain lock on row in relation “table”</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>There is also parameter <code class="highlighter-rouge">lock_timeout</code> to set how long we are ready to wait lock.</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SET</span> <span class="n">lock_timeout</span> <span class="k">TO</span> <span class="mi">5000</span><span class="p">;</span> <span class="c1">-- set timeout to 5 seconds</span>
+</code></pre></div></div>
+
+<h4 id="skip-locked">SKIP LOCKED</h4>
+
+<p><code class="highlighter-rouge">SELECT FOR UDATE</code> can block others requests for UPDATE</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Transaction 1</th>
+      <th>Transaction 2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BEING;</td>
+      <td>BEING;</td>
+    </tr>
+    <tr>
+      <td>SELECT … FROM table LIMIT 1 FOR UPDATE;</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>– waiting for user action</td>
+      <td>SELECT … FROM table LIMIT 1 FOR UPDATE;</td>
+    </tr>
+    <tr>
+      <td>– waiting for user action</td>
+      <td>– waiting Transaction 1</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>To fix that we can use <code class="highlighter-rouge">SKIP LOCKED</code>.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Transaction 1</th>
+      <th>Transaction 2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BEGIN;</td>
+      <td>BEGIN;</td>
+    </tr>
+    <tr>
+      <td>SELECT * FROM table LIMIT 2 FOR UPDATE SKIP LOCKED;</td>
+      <td>SELECT * FROM table LIMIT 2 FOR UPDATE SKIP LOCKED;</td>
+    </tr>
+    <tr>
+      <td>– returns first pair of not locked rows</td>
+      <td>– returns second pair of not locked rows</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Note</strong>:
+When using <code class="highlighter-rouge">FOR UPDATE</code> on table with <code class="highlighter-rouge">FOREIGN KEY</code>, both tables will be blocked.</p>
+
 <h3 id="using-cte-with-returning">Using CTE with RETURNING</h3>
 
 <p>When you need to update record and use result value and don’t want to use explicit blocking or long transaction, it’s possible to use CTE and UPDATE with RETURNING statement.</p>
@@ -400,7 +586,7 @@ In the PG10 this will lead table to be rewritten which may be slow.</p>
 
 <hr />
 
-<h3 id="for-share-and-for-update">FOR SHARE and FOR UPDATE</h3>
+<h3 id="for-share-and-for-update-1">FOR SHARE and FOR UPDATE</h3>
 
 <p>To select some data for database, process it and then update this data in database there is a SELECT FOR UPDATE  statement for that.</p>
 
