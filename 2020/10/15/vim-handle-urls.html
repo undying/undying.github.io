@@ -7,12 +7,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>About</title>
-  <meta name="description" content="In this blog I will describe situations that I meet in my life when working with a variety of technologies. This includes any kind of computer technologies, Open Software, Linux and many more.
-">
+  <title>VIM: Handle Urls</title>
+  <meta name="description" content="Making a shortcut to open urls under cursor">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://undying.github.io/about/">
+  <link rel="canonical" href="http://undying.github.io/2020/10/15/vim-handle-urls.html">
   <link rel="alternate" type="application/rss+xml" title="Blog abount Linux, Technologies and Life" href="http://undying.github.io/feed.xml">
 
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
@@ -77,19 +76,48 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <article class="post">
+        
+<link rel="stylesheet" href="/css/comments.css">
+<link rel="stylesheet" href="/css/common.css">
+
+
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title">About</h1>
+    
+<h1 class="post-title" itemprop="name headline">VIM: Handle Urls</h1>
+<p class="post-meta"><time datetime="2020-10-15T22:32:39+03:00" itemprop="datePublished">Oct 15, 2020</time></p>
+
+
   </header>
 
-  <div class="post-content">
-    <p>I have decided to begin this blog, because very often I`m meeting very specific situations concerning technologies which I am using every day. So I want to save and share the solutions I have found for me and everybody who may need them too.</p>
+  <div class="post-content" itemprop="articleBody">
+    <h1 id="making-a-shortcut-to-open-urls-under-cursor">Making a shortcut to open urls under cursor</h1>
+
+<p><strong>Note</strong>: <em>There is also available <code class="language-plaintext highlighter-rouge">gx</code> shortcut that uses netrw plugin.
+But I’ve decided to use own little solution instead of big plugin for one function.</em></p>
+
+<div class="language-vimscript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">""" open urls using \u shortcut</span>
+<span class="k">function</span> HandleURL<span class="p">()</span>
+  <span class="k">let</span> <span class="k">l</span><span class="p">:</span>uri <span class="p">=</span> <span class="nb">matchstr</span><span class="p">(</span><span class="nb">getline</span><span class="p">(</span><span class="s2">"."</span><span class="p">),</span> <span class="s1">'[a-z]*:\/\/[^ &gt;,;)]*'</span><span class="p">)</span>
+  <span class="k">if</span> <span class="k">l</span><span class="p">:</span>uri <span class="p">!=</span> <span class="s2">""</span>
+    <span class="k">silent</span> <span class="k">call</span> <span class="nb">system</span><span class="p">(</span><span class="s2">"xdg-open "</span> <span class="p">.</span> <span class="nb">shellescape</span><span class="p">(</span><span class="k">l</span><span class="p">:</span>uri<span class="p">,</span> <span class="m">1</span><span class="p">))</span>
+  <span class="k">else</span>
+    echo <span class="s2">"No URI found in line."</span>
+  <span class="k">endif</span>
+<span class="k">endfunction</span>
+
+nnoremap <span class="p">&lt;</span>leader<span class="p">&gt;</span><span class="k">u</span> <span class="p">:</span><span class="k">call</span> HandleURL<span class="p">()&lt;</span><span class="k">cr</span><span class="p">&gt;</span>
+<span class="c">"""</span>
+</code></pre></div></div>
+
+<p>Now if we hit <code class="language-plaintext highlighter-rouge">\u</code> shortcut while our cursor is on the url line, this url will be opened in default browser.
+You may like to change xdg-open to any other program you need.</p>
 
 
   </div>
-
 </article>
+
 
       </div>
     </div>

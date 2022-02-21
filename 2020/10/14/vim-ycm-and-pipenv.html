@@ -7,12 +7,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>About</title>
-  <meta name="description" content="In this blog I will describe situations that I meet in my life when working with a variety of technologies. This includes any kind of computer technologies, Open Software, Linux and many more.
-">
+  <title>VIM: YCM and Pipenv</title>
+  <meta name="description" content="While writing another python script under pipenv I have met a problem that YCM autocomplete worked only for built in functions.That was annoying because with...">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://undying.github.io/about/">
+  <link rel="canonical" href="http://undying.github.io/2020/10/14/vim-ycm-and-pipenv.html">
   <link rel="alternate" type="application/rss+xml" title="Blog abount Linux, Technologies and Life" href="http://undying.github.io/feed.xml">
 
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
@@ -77,19 +76,49 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <article class="post">
+        
+<link rel="stylesheet" href="/css/comments.css">
+<link rel="stylesheet" href="/css/common.css">
+
+
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title">About</h1>
+    
+<h1 class="post-title" itemprop="name headline">VIM: YCM and Pipenv</h1>
+<p class="post-meta"><time datetime="2020-10-14T23:03:02+03:00" itemprop="datePublished">Oct 14, 2020</time></p>
+
+
   </header>
 
-  <div class="post-content">
-    <p>I have decided to begin this blog, because very often I`m meeting very specific situations concerning technologies which I am using every day. So I want to save and share the solutions I have found for me and everybody who may need them too.</p>
+  <div class="post-content" itemprop="articleBody">
+    <p>While writing another python script under pipenv I have met a problem that YCM autocomplete worked only for built in functions.
+That was annoying because without autocomplete YCM looses it’s sense.</p>
+
+<h2 id="solution">Solution</h2>
+
+<p>Let’s create module for filetype plugin.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat</span> ~/.vim/after/ftplugin/python.vim
+
+<span class="k">if</span> <span class="o">!</span>empty<span class="o">(</span><span class="nv">$VIRTUAL_ENV</span><span class="o">)</span>
+  <span class="nb">let </span>g:ycm_server_python_interpreter <span class="o">=</span> <span class="nv">$VIRTUAL_ENV</span> <span class="nb">.</span> <span class="s1">'/bin/python'</span>
+  <span class="nb">let</span> <span class="nv">$PYTHONPATH</span> <span class="o">=</span> finddir<span class="o">(</span><span class="s1">'site-packages'</span>, <span class="nv">$VIRTUAL_ENV</span> <span class="nb">.</span> <span class="s1">'/lib/*'</span><span class="o">)</span>
+endif
+
+</code></pre></div></div>
+
+<p>Then you can simply run command</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pipenv run vim some/script.py
+</code></pre></div></div>
+
+<p>And now YCM works correctly :3</p>
 
 
   </div>
-
 </article>
+
 
       </div>
     </div>

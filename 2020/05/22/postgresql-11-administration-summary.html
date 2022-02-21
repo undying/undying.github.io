@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>PostgreSQL 11 Administration Summary</title>
-  <meta name="description" content="IntroNot so long ago I read a beautiful book about PostgreSQL 11 Administration and decided to make a summary of interesting for my point of view details.">
+  <meta name="description" content="">
 
   <link rel="stylesheet" href="/css/main.css">
   <link rel="canonical" href="http://undying.github.io/2020/05/22/postgresql-11-administration-summary.html">
@@ -66,6 +66,8 @@
         
           
         
+          
+        
       </div>
     </nav>
   </div>
@@ -90,12 +92,475 @@
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <h2 id="intro">Intro</h2>
-<p>Not so long ago I read a beautiful <a href="https://www.labirint.ru/books/685536/">book about PostgreSQL 11 Administration</a> and decided to make a summary of interesting for my point of view details.</p>
+    <!-- vim-markdown-toc Marked -->
 
-<hr />
+<ul>
+  <li><a href="#postgresql-administration-cheatsheet">PostgreSQL Administration Cheatsheet</a>
+    <ul>
+      <li><a href="#intro">Intro</a></li>
+      <li><a href="#new-in-postgresql-11">New In PostgreSQL 11</a>
+        <ul>
+          <li><a href="#wal-size">WAL Size</a></li>
+          <li><a href="#create-statistics">CREATE STATISTICS</a></li>
+          <li><a href="#include-indexes">INCLUDE indexes</a></li>
+          <li><a href="#create-index-in-parallel">CREATE INDEX in parallel</a></li>
+          <li><a href="#pg_prewarm">pg_prewarm</a></li>
+          <li><a href="#updated-window-functions">Updated WINDOW Functions</a></li>
+          <li><a href="#jit-compilation">JIT Compilation</a></li>
+          <li><a href="#better-partitioning">Better Partitioning</a>
+            <ul>
+              <li><a href="#default-partition">Default Partition</a></li>
+              <li><a href="#partition-key-updating">Partition Key Updating</a></li>
+              <li><a href="#hash-partitioning">Hash Partitioning</a></li>
+              <li><a href="#index-created-on-parent-table">Index Created on Parent Table</a></li>
+            </ul>
+          </li>
+          <li><a href="#better-support-of-stored-procedures">Better Support Of Stored Procedures</a></li>
+          <li><a href="#faster-alter-table">Faster ALTER TABLE</a></li>
+        </ul>
+      </li>
+      <li><a href="#locks-and-transactions">Locks and Transactions</a>
+        <ul>
+          <li><a href="#now()-function">now() function</a></li>
+          <li><a href="#savepoint">SAVEPOINT</a></li>
+          <li><a href="#ddl-commands-are-transaction-safe">DDL commands are transaction safe</a></li>
+          <li><a href="#explicit-locking">Explicit Locking</a></li>
+          <li><a href="#for-share-and-for-update">FOR SHARE and FOR UPDATE</a>
+            <ul>
+              <li><a href="#skip-locked">SKIP LOCKED</a></li>
+            </ul>
+          </li>
+          <li><a href="#using-cte-with-returning">Using CTE with RETURNING</a></li>
+          <li><a href="#for-share-and-for-update">FOR SHARE and FOR UPDATE</a>
+            <ul>
+              <li><a href="#for-...-clauses-by-locking-strength">FOR … clauses by locking strength</a></li>
+              <li><a href="#for-update-skip-locked">FOR UPDATE SKIP LOCKED</a></li>
+            </ul>
+          </li>
+          <li><a href="#recommended-locks">Recommended Locks</a></li>
+        </ul>
+      </li>
+      <li><a href="#vacuum">VACUUM</a>
+        <ul>
+          <li><a href="#autovacuum">autovacuum</a></li>
+          <li><a href="#transaction-id-wraparound">Transaction ID Wraparound</a></li>
+          <li><a href="#transaction-duration">Transaction Duration</a></li>
+        </ul>
+      </li>
+      <li><a href="#indexing">Indexing</a>
+        <ul>
+          <li><a href="#costs-model">Costs Model</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
 
-<h2 id="locks">Locks</h2>
+<!-- vim-markdown-toc -->
+
+<h1 id="postgresql-administration-cheatsheet">PostgreSQL Administration Cheatsheet</h1>
+
+<h2 id="intro">Intro</h2>
+
+<p>This cheatsheet is based on the great
+<a href="https://www.packtpub.com/product/mastering-postgresql-11-second-edition/9781789537819">book about PostgreSQL 11 Administration</a></p>
+
+<p>Big thanks to it’s author - Hans-Jürgen Schönig.</p>
+
+<h2 id="new-in-postgresql-11">New In PostgreSQL 11</h2>
+
+<h3 id="wal-size">WAL Size</h3>
+
+<p>Default WAL size is: <strong>16M</strong></p>
+
+<p>To change size during setup: <code class="language-plaintext highlighter-rouge">initdb -D /pgdata --wal-segsize=32</code></p>
+
+<h3 id="create-statistics">CREATE STATISTICS</h3>
+
+<p><strong>Note:</strong> <em>This actually from PostgreSQL 10.</em></p>
+
+<p><em>CREATE STATISTICS will create a new extended statistics object tracking data about the specified table, foreign table or materialized view. The statistics object will be created in the current database and will be owned by the user issuing the command.</em></p>
+
+<p>The great thing is that statistics collected by every column you need.</p>
+
+<p>References:</p>
+
+<ul>
+  <li><a href="https://www.postgresql.org/docs/10/sql-createstatistics.html">CREATE STATISTICS</a></li>
+  <li><a href="https://www.citusdata.com/blog/2018/03/06/postgres-planner-and-its-usage-of-statistics/">The Postgres 10 feature you didn’t know about: CREATE STATISTICS </a></li>
+</ul>
+
+<h3 id="include-indexes">INCLUDE indexes</h3>
+
+<p>In addition to the indexed column, the index can contain an additional column.
+This can be useful to avoid table scan and use only index scan.</p>
+
+<p><code class="language-plaintext highlighter-rouge">CREATE UNIQUE INDEX some_name ON person USING btree (id) INCLUDE (name);</code></p>
+
+<p>Note: Always select only those columns you need. When using <code class="language-plaintext highlighter-rouge">SELECT *</code> you gathering all data from table and that hurts your performance.</p>
+
+<h3 id="create-index-in-parallel">CREATE INDEX in parallel</h3>
+
+<p>PostgreSQL can build indexes while leveraging multiple CPUs in order to process the table rows faster. This feature is known as parallel index build. For index methods that support building indexes in parallel (currently, only B-tree), <a href="https://www.postgresql.org/docs/11/runtime-config-resource.html#GUC-MAINTENANCE-WORK-MEM">maintenance_work_mem</a> specifies the maximum amount of memory that can be used by each index build operation as a whole, regardless of how many worker processes were started. Generally, a cost model automatically determines how many worker processes should be requested, if any.</p>
+
+<p>Parallel index builds may benefit from increasing maintenance_work_mem where an equivalent serial index build will see little or no benefit. Note that maintenance_work_mem may influence the number of worker processes requested, since parallel workers must have at least a 32MB share of the total maintenance_work_mem budget. There must also be a remaining 32MB share for the leader process. Increasing <a href="https://www.postgresql.org/docs/11/runtime-config-resource.html#GUC-MAX-PARALLEL-WORKERS-MAINTENANCE">max_parallel_maintenance_workers</a> may allow more workers to be used, which will reduce the time needed for index creation, so long as the index build is not already I/O bound. Of course, there should also be sufficient CPU capacity that would otherwise lie idle.</p>
+
+<p>References:</p>
+
+<ul>
+  <li><a href="https://www.postgresql.org/docs/11/sql-createindex.html">CREATE INDEX</a></li>
+  <li><a href="https://www.cybertec-postgresql.com/en/postgresql-parallel-create-index-for-better-performance/">PostgreSQL: Parallel CREATE INDEX for better performance</a></li>
+</ul>
+
+<h3 id="pg_prewarm">pg_prewarm</h3>
+
+<pre><code class="language-SQL">CREATE EXTENSION pg_prewarm;
+SELECT pg_prewarm('tablename');
+</code></pre>
+
+<p>References:</p>
+
+<ul>
+  <li><a href="https://www.cybertec-postgresql.com/en/prewarming-postgresql-i-o-caches/">Prewarming PostgreSQL I/O caches</a></li>
+</ul>
+
+<h3 id="updated-window-functions">Updated WINDOW Functions</h3>
+
+<ul>
+  <li><a href="https://www.postgresqltutorial.com/postgresql-between/">RANGE BETWEEN</a></li>
+  <li>EXCLUDE
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">EXCLUDE CURRENT ROW</code></li>
+      <li><code class="language-plaintext highlighter-rouge">EXCLUDE TIES</code></li>
+    </ul>
+  </li>
+</ul>
+
+<p>References:</p>
+
+<ul>
+  <li><a href="https://www.cybertec-postgresql.com/en/timeseries-exclude-ties-current-row-and-group/">Timeseries: EXCLUDE TIES, CURRENT ROW and GROUP</a></li>
+  <li><a href="https://www.postgresql.org/docs/11/tutorial-window.html">Window Functions</a></li>
+</ul>
+
+<h3 id="jit-compilation">JIT Compilation</h3>
+
+<p>Just-in-Time (JIT) compilation is the process of turning some form of interpreted program evaluation into a native program, and doing so at run time. For example, instead of using general-purpose code that can evaluate arbitrary SQL expressions to evaluate a particular SQL predicate like WHERE a.col = 3, it is possible to generate a function that is specific to that expression and can be natively executed by the CPU, yielding a speedup.</p>
+
+<p>PostgreSQL has builtin support to perform JIT compilation using LLVM when PostgreSQL is built with –with-llvm.</p>
+
+<p>References:</p>
+
+<ul>
+  <li><a href="https://www.postgresql.org/docs/11/jit-reason.html">JIT Reason</a></li>
+</ul>
+
+<h3 id="better-partitioning">Better Partitioning</h3>
+
+<h4 id="default-partition">Default Partition</h4>
+
+<p>If row does not match any partition already created, it’s now can be moved to the default partition.</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">default_part</span> <span class="n">PARTITION</span> <span class="k">OF</span> <span class="n">another_table</span> <span class="k">DEFAULT</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h4 id="partition-key-updating">Partition Key Updating</h4>
+
+<p>Now when updating the value of partition key, row is moved to another partition by PostgreSQL automatically.</p>
+
+<h4 id="hash-partitioning">Hash Partitioning</h4>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">tab</span><span class="p">(</span><span class="n">i</span> <span class="nb">int</span><span class="p">,</span> <span class="n">i</span> <span class="nb">text</span><span class="p">)</span> <span class="n">PARTITION</span> <span class="k">BY</span> <span class="n">HASH</span> <span class="p">(</span><span class="n">i</span><span class="p">);</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">tab_0</span> <span class="n">PARTITION</span> <span class="k">OF</span> <span class="n">tab</span> <span class="k">FOR</span> <span class="k">VALUES</span> <span class="k">WITH</span> <span class="p">(</span><span class="n">MODULUS</span> <span class="mi">4</span><span class="p">,</span> <span class="n">REMAINDER</span> <span class="mi">0</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h4 id="index-created-on-parent-table">Index Created on Parent Table</h4>
+
+<p>Now when creating index on parent table it automatically created on all child`s tables.
+Also, creating “global” unique index on parent table creates unique index on all child`s table.</p>
+
+<p>References:</p>
+
+<ul>
+  <li><a href="https://severalnines.com/database-blog/guide-partitioning-data-postgresql">A Guide to Partitioning Data In PostgreSQL</a></li>
+  <li><a href="https://severalnines.com/database-blog/how-take-advantage-new-partitioning-features-postgresql-11">How to Take Advantage of the New Partitioning Features in PostgreSQL 11</a></li>
+  <li><a href="https://www.postgresql.org/docs/11/ddl-partitioning.html">Table Partitioning</a></li>
+</ul>
+
+<h3 id="better-support-of-stored-procedures">Better Support Of Stored Procedures</h3>
+
+<p>Main difference between functions ans procedures in PostgreSQL is that function is a part of transaction.
+But procedure may contain multiple transactions.</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">PROCEDURE</span> <span class="n">test_proc</span><span class="p">()</span>
+  <span class="k">LANGUAGE</span> <span class="n">plpgsql</span>
+  <span class="k">AS</span> <span class="err">$$</span>
+    <span class="k">BEGIN</span>
+      <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">a</span> <span class="p">(</span><span class="n">aid</span> <span class="nb">int</span><span class="p">);</span>
+      <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">b</span> <span class="p">(</span><span class="n">bid</span> <span class="nb">int</span><span class="p">);</span>
+      <span class="k">COMMIT</span><span class="p">;</span>
+      <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="k">c</span> <span class="p">(</span><span class="n">cid</span> <span class="nb">int</span><span class="p">);</span>
+      <span class="k">ROLLBACK</span><span class="p">;</span>
+    <span class="k">END</span><span class="p">;</span>
+  <span class="err">$$</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h3 id="faster-alter-table">Faster ALTER TABLE</h3>
+
+<p>To add a column to the table we can use such command:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">x</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">y</span> <span class="nb">int</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">x</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="n">z</span> <span class="nb">int</span> <span class="k">DEFAULT</span> <span class="mi">57</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>First command will work fast always, because it simply updates system catalog.
+Second command will work fast only in PostgreSQL 11 and newer versions.
+In the PG10 this will lead table to be rewritten which may be slow.</p>
+
+<h2 id="locks-and-transactions">Locks and Transactions</h2>
+
+<h3 id="now-function">now() function</h3>
+
+<p><code class="language-plaintext highlighter-rouge">now()</code> function returns time of the transaction beginning. So calling it twice in one transaction will return the same data. If you need the real time, you have to use function <code class="language-plaintext highlighter-rouge">clock_timestamp()</code></p>
+
+<h3 id="savepoint"><a href="https://www.postgresql.org/docs/11/sql-savepoint.html">SAVEPOINT</a></h3>
+
+<p>In long transaction which may fail in the middle of process it’s possible to use savepoint and rollback to it saving the job that already completed successfully.</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">postgres</span><span class="o">=#</span> <span class="k">BEGIN</span><span class="p">;</span>
+<span class="k">BEGIN</span>
+<span class="n">postgres</span><span class="o">=#</span> <span class="k">SELECT</span> <span class="mi">1</span><span class="p">;</span>
+ <span class="o">?</span><span class="k">column</span><span class="o">?</span>
+<span class="c1">----------</span>
+        <span class="mi">1</span>
+<span class="p">(</span><span class="mi">1</span> <span class="k">row</span><span class="p">)</span>
+
+<span class="n">postgres</span><span class="o">=#</span> <span class="n">SAVEPOINT</span> <span class="n">a</span><span class="p">;</span>
+<span class="n">SAVEPOINT</span>
+<span class="n">postgres</span><span class="o">=#</span> <span class="k">SELECT</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">ERROR</span><span class="p">:</span>  <span class="n">division</span> <span class="k">by</span> <span class="n">zero</span>
+<span class="n">postgres</span><span class="o">=#</span> <span class="k">SELECT</span> <span class="mi">2</span><span class="p">;</span>
+<span class="n">ERROR</span><span class="p">:</span>  <span class="k">current</span> <span class="n">transaction</span> <span class="k">is</span> <span class="n">aborted</span><span class="p">,</span> <span class="n">commands</span> <span class="n">ignored</span> <span class="k">until</span> <span class="k">end</span> <span class="k">of</span> <span class="n">transaction</span> <span class="n">block</span>
+<span class="n">postgres</span><span class="o">=#</span> <span class="k">ROLLBACK</span> <span class="k">TO</span> <span class="n">SAVEPOINT</span> <span class="n">a</span><span class="p">;</span>
+<span class="k">ROLLBACK</span>
+<span class="n">postgres</span><span class="o">=#</span> <span class="k">SELECT</span> <span class="mi">3</span><span class="p">;</span>
+ <span class="o">?</span><span class="k">column</span><span class="o">?</span>
+<span class="c1">----------</span>
+        <span class="mi">3</span>
+<span class="p">(</span><span class="mi">1</span> <span class="k">row</span><span class="p">)</span>
+
+<span class="n">postgres</span><span class="o">=#</span> <span class="k">COMMIT</span><span class="p">;</span>
+<span class="k">COMMIT</span>
+</code></pre></div></div>
+
+<h3 id="ddl-commands-are-transaction-safe">DDL commands are transaction safe</h3>
+
+<p>It’s possible to create and modify tables in transaction then rollback all changes during error.</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">postgres</span><span class="o">=#</span> <span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="n">test</span><span class="p">;</span>
+<span class="k">CREATE</span> <span class="k">DATABASE</span>
+<span class="n">postgres</span><span class="o">=#</span> <span class="err">\</span><span class="k">c</span> <span class="n">test</span>
+<span class="n">You</span> <span class="k">are</span> <span class="n">now</span> <span class="n">connected</span> <span class="k">to</span> <span class="k">database</span> <span class="nv">"test"</span> <span class="k">as</span> <span class="k">user</span> <span class="nv">"postgres"</span><span class="p">.</span>
+<span class="n">test</span><span class="o">=#</span> <span class="err">\</span><span class="n">d</span>
+<span class="n">Did</span> <span class="k">not</span> <span class="n">find</span> <span class="k">any</span> <span class="n">relations</span><span class="p">.</span>
+<span class="n">test</span><span class="o">=#</span> <span class="k">BEGIN</span><span class="p">;</span>
+<span class="k">BEGIN</span>
+<span class="n">test</span><span class="o">=#</span> <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t_test</span> <span class="p">(</span><span class="n">id</span> <span class="nb">int</span><span class="p">);</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span>
+<span class="n">test</span><span class="o">=#</span> <span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">t_test</span> <span class="k">ALTER</span> <span class="k">COLUMN</span> <span class="n">id</span> <span class="k">TYPE</span> <span class="n">int8</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span>
+<span class="n">test</span><span class="o">=#</span> <span class="err">\</span><span class="n">d</span> <span class="n">t_test</span><span class="p">;</span>
+              <span class="k">Table</span> <span class="nv">"public.t_test"</span>
+ <span class="k">Column</span> <span class="o">|</span>  <span class="k">Type</span>  <span class="o">|</span> <span class="k">Collation</span> <span class="o">|</span> <span class="k">Nullable</span> <span class="o">|</span> <span class="k">Default</span>
+<span class="c1">--------+--------+-----------+----------+---------</span>
+ <span class="n">id</span>     <span class="o">|</span> <span class="nb">bigint</span> <span class="o">|</span>           <span class="o">|</span>          <span class="o">|</span>
+
+<span class="n">test</span><span class="o">=#</span> <span class="k">ROLLBACK</span><span class="p">;</span>
+<span class="k">ROLLBACK</span>
+<span class="n">test</span><span class="o">=#</span> <span class="err">\</span><span class="n">d</span>
+<span class="n">Did</span> <span class="k">not</span> <span class="n">find</span> <span class="k">any</span> <span class="n">relations</span><span class="p">.</span>
+</code></pre></div></div>
+
+<h3 id="explicit-locking">Explicit Locking</h3>
+
+<p>Sometime it’s needed to use locks to fix this kind of errors:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Transaction 1</th>
+      <th>Transaction 2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BEGIN;</td>
+      <td>BEGIN;</td>
+    </tr>
+    <tr>
+      <td>SELECT max(id) FROM product;</td>
+      <td>SELECT max(id) FROM product;</td>
+    </tr>
+    <tr>
+      <td>– query returned 17</td>
+      <td>– query returned 17</td>
+    </tr>
+    <tr>
+      <td>– user added product 18</td>
+      <td>– user added product 18</td>
+    </tr>
+    <tr>
+      <td>INSERT INTO product … VALUES (18, …)</td>
+      <td>INSERT INTO product … VALUES (18, …)</td>
+    </tr>
+    <tr>
+      <td>COMMIT;</td>
+      <td>COMMIT;</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>This error can be avoided this way:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">BEGIN</span><span class="p">;</span>
+<span class="k">LOCK</span> <span class="k">TABLE</span> <span class="n">product</span> <span class="k">in</span> <span class="k">ACCESS</span> <span class="k">EXCLUSIVE</span> <span class="k">MODE</span><span class="p">;</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">product</span> <span class="k">SELECT</span> <span class="k">max</span><span class="p">(</span><span class="n">id</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">...</span> <span class="k">FROM</span> <span class="n">product</span><span class="p">;</span>
+<span class="k">COMMIT</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>But this is very bad for performance reasons.
+Alternative solutions is to separate tables in this way:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t_invoice</span> <span class="p">(</span><span class="n">id</span> <span class="nb">int</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">);</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t_watermark</span> <span class="p">(</span><span class="n">id</span> <span class="nb">int</span><span class="p">);</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">t_watermark</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="k">WITH</span> <span class="n">x</span> <span class="k">AS</span> <span class="p">(</span><span class="k">UPDATE</span> <span class="n">t_watermark</span> <span class="k">SET</span> <span class="n">id</span> <span class="o">=</span> <span class="n">id</span> <span class="o">+</span> <span class="mi">1</span> <span class="n">RETURNING</span> <span class="n">id</span><span class="p">)</span>
+  <span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">t_invoice</span>
+  <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">x</span> <span class="n">RETURNING</span> <span class="n">id</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Only one UPDATE can be occurred at once but this does not blocks SELECT queries.</p>
+
+<p>References:</p>
+
+<ul>
+  <li><a href="https://www.postgresql.org/docs/11/explicit-locking.html">Explicit Locking</a></li>
+</ul>
+
+<h3 id="for-share-and-for-update">FOR SHARE and FOR UPDATE</h3>
+
+<p>This is <strong>wrong</strong>:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">BEGIN</span><span class="p">;</span>
+<span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">invoice</span> <span class="k">WHERE</span> <span class="n">processed</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+<span class="c1">-- now make some work with returned data</span>
+<span class="k">UPDATE</span> <span class="n">invoice</span> <span class="k">SET</span> <span class="n">processed</span> <span class="o">=</span> <span class="k">true</span> <span class="p">...</span>
+<span class="k">COMMIT</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Multiple requests can select the same data and then try to insert updated data.
+<code class="language-plaintext highlighter-rouge">SELECT FOR UPDATE</code> for the rescue.</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">BEGIN</span><span class="p">;</span>
+<span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">invoice</span> <span class="k">WHERE</span> <span class="n">processed</span> <span class="o">=</span> <span class="k">false</span> <span class="k">FOR</span> <span class="k">UPDATE</span><span class="p">;</span>
+<span class="c1">-- now processing data with modifications</span>
+<span class="k">UPDATE</span> <span class="n">invoice</span> <span class="k">SET</span> <span class="n">processed</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+<span class="k">COMMIT</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>When running multiple transactions on the same rows the second one will wait until the first one will end. But we can skip them with <code class="language-plaintext highlighter-rouge">NOWAIT</code>.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Transaction 1</th>
+      <th>Transaction 2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BEGIN;</td>
+      <td>BEGIN;</td>
+    </tr>
+    <tr>
+      <td>SELECT … FROM table WHERE … FOR UPDATE NOWAIT;</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>– processing</td>
+      <td>SELECT … FROM tab WHERE … FOR UPDATE NOWAIT;</td>
+    </tr>
+    <tr>
+      <td>– still processing</td>
+      <td>ERROR: could not obtain lock on row in relation “table”</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>There is also parameter <code class="language-plaintext highlighter-rouge">lock_timeout</code> to set how long we are ready to wait lock.</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SET</span> <span class="n">lock_timeout</span> <span class="k">TO</span> <span class="mi">5000</span><span class="p">;</span> <span class="c1">-- set timeout to 5 seconds</span>
+</code></pre></div></div>
+
+<h4 id="skip-locked">SKIP LOCKED</h4>
+
+<p><code class="language-plaintext highlighter-rouge">SELECT FOR UDATE</code> can block others requests for UPDATE</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Transaction 1</th>
+      <th>Transaction 2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BEING;</td>
+      <td>BEING;</td>
+    </tr>
+    <tr>
+      <td>SELECT … FROM table LIMIT 1 FOR UPDATE;</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>– waiting for user action</td>
+      <td>SELECT … FROM table LIMIT 1 FOR UPDATE;</td>
+    </tr>
+    <tr>
+      <td>– waiting for user action</td>
+      <td>– waiting Transaction 1</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>To fix that we can use <code class="language-plaintext highlighter-rouge">SKIP LOCKED</code>.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Transaction 1</th>
+      <th>Transaction 2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BEGIN;</td>
+      <td>BEGIN;</td>
+    </tr>
+    <tr>
+      <td>SELECT * FROM table LIMIT 2 FOR UPDATE SKIP LOCKED;</td>
+      <td>SELECT * FROM table LIMIT 2 FOR UPDATE SKIP LOCKED;</td>
+    </tr>
+    <tr>
+      <td>– returns first pair of not locked rows</td>
+      <td>– returns second pair of not locked rows</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Note</strong>:
+When using <code class="language-plaintext highlighter-rouge">FOR UPDATE</code> on table with <code class="language-plaintext highlighter-rouge">FOREIGN KEY</code>, both tables will be blocked.</p>
+
 <h3 id="using-cte-with-returning">Using CTE with RETURNING</h3>
 
 <p>When you need to update record and use result value and don’t want to use explicit blocking or long transaction, it’s possible to use CTE and UPDATE with RETURNING statement.</p>
@@ -121,7 +586,7 @@
 
 <hr />
 
-<h3 id="for-share-and-for-update">FOR SHARE and FOR UPDATE</h3>
+<h3 id="for-share-and-for-update-1">FOR SHARE and FOR UPDATE</h3>
 
 <p>To select some data for database, process it and then update this data in database there is a SELECT FOR UPDATE  statement for that.</p>
 
@@ -274,14 +739,17 @@ In this case you lock not rows but numbers instead.</p>
 <p>Beyond the threshold, old data may be vacuumed away. This can help prevent bloat in the face of snapshots which remain in use for a long time. To prevent incorrect results due to cleanup of data which would otherwise be visible to the snapshot, an error is generated when the snapshot is older than this threshold and the snapshot is used to read a page which has been modified since the snapshot was built. <a href="https://www.postgresql.org/docs/11/runtime-config-resource.html#GUC-OLD-SNAPSHOT-THRESHOLD">More details</a>.</p>
 
 <h2 id="indexing">Indexing</h2>
+
 <h3 id="costs-model">Costs Model</h3>
 
 <p>Costs formula for <code class="language-plaintext highlighter-rouge">Seq Scan</code>:</p>
+
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(blocks to read * seq_page_cost) \
   + (rows scanned * cpu_tuple_cost + rows scanned * cpu_operator_cost)
 </code></pre></div></div>
 
 <p>To get sum of block per table:</p>
+
 <div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="n">pg_relation_size</span><span class="p">(</span><span class="s1">'table_name'</span><span class="p">)</span> <span class="o">/</span> <span class="mi">8192</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
 </code></pre></div></div>
 
@@ -300,6 +768,7 @@ In this case you lock not rows but numbers instead.</p>
 </ul>
 
 <p>References:</p>
+
 <ul>
   <li>https://www.postgresql.org/docs/11/runtime-config-query.html</li>
   <li>https://www.postgresql.org/docs/11/index-cost-estimation.html</li>

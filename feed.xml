@@ -6,9 +6,135 @@
 </description>
     <link>http://undying.github.io/</link>
     <atom:link href="http://undying.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 21 Feb 2022 10:19:56 +0300</pubDate>
-    <lastBuildDate>Mon, 21 Feb 2022 10:19:56 +0300</lastBuildDate>
+    <pubDate>Mon, 21 Feb 2022 10:23:39 +0300</pubDate>
+    <lastBuildDate>Mon, 21 Feb 2022 10:23:39 +0300</lastBuildDate>
     <generator>Jekyll v3.9.0</generator>
+    
+      <item>
+        <title>VIM: Handle Urls</title>
+        <description>&lt;h1 id=&quot;making-a-shortcut-to-open-urls-under-cursor&quot;&gt;Making a shortcut to open urls under cursor&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: &lt;em&gt;There is also available &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gx&lt;/code&gt; shortcut that uses netrw plugin.
+But I’ve decided to use own little solution instead of big plugin for one function.&lt;/em&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-vimscript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;&quot;&quot;&quot; open urls using \u shortcut&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; HandleURL&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;uri &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;matchstr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;getline&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;.&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'[a-z]*:\/\/[^ &amp;gt;,;)]*'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;uri &lt;span class=&quot;p&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;silent&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;call&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;system&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;xdg-open &quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;shellescape&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;uri&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+    echo &lt;span class=&quot;s2&quot;&gt;&quot;No URI found in line.&quot;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;endif&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;endfunction&lt;/span&gt;
+
+nnoremap &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;leader&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;u&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;call&lt;/span&gt; HandleURL&lt;span class=&quot;p&quot;&gt;()&amp;lt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;cr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;&quot;&quot;&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now if we hit &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\u&lt;/code&gt; shortcut while our cursor is on the url line, this url will be opened in default browser.
+You may like to change xdg-open to any other program you need.&lt;/p&gt;
+
+</description>
+        <pubDate>Thu, 15 Oct 2020 22:32:39 +0300</pubDate>
+        <link>http://undying.github.io/2020/10/15/vim-handle-urls.html</link>
+        <guid isPermaLink="true">http://undying.github.io/2020/10/15/vim-handle-urls.html</guid>
+        
+        <category>vim</category>
+        
+        <category>url</category>
+        
+        <category>http</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>VIM: Making Markdown Checklist Shortcut</title>
+        <description>&lt;p&gt;Interesting exercise to implement shortcut in vim.
+Often while writing markdown files in vim I’m writing a lot of checkboxes.
+It’s a bit annoying to do by hand so let’s make a script and bind it to shortcut.&lt;/p&gt;
+
+&lt;div class=&quot;language-vimscript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;&quot;&quot;&quot; markdown shortcuts&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; MarkdownCheckboxInsert&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;line&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;line&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'.'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;str &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;getline&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;line&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;matchlist&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;str&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'^\([ ]*\)\?\([-+*]\)\? \?\(.*\)$'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;empty&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;match&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;list_syn &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'-'&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;list_syn &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;match&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;endif&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;buf &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;match&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;list_syn &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;' [ ] - '&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;match&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;call&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;setline&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;line&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;buf&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;endfunction&lt;/span&gt;
+
+nnoremap &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;Leader&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;mc &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;call&lt;/span&gt; MarkdownCheckboxInsert&lt;span class=&quot;p&quot;&gt;()&amp;lt;&lt;/span&gt;CR&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;$
+&lt;span class=&quot;c&quot;&gt;&quot;&quot;&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now we can use shortcut &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\mc&lt;/code&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;m&lt;/code&gt; - Markdown&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;c&lt;/code&gt; - checkbox&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;You can also point to already existing line or list and this will transform your line to checkbox.&lt;/p&gt;
+</description>
+        <pubDate>Wed, 14 Oct 2020 23:45:53 +0300</pubDate>
+        <link>http://undying.github.io/2020/10/14/vim-making-markdown-checklist-shortcut.html</link>
+        <guid isPermaLink="true">http://undying.github.io/2020/10/14/vim-making-markdown-checklist-shortcut.html</guid>
+        
+        <category>vim</category>
+        
+        <category>markdown</category>
+        
+        <category>vimscript</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>VIM: YCM and Pipenv</title>
+        <description>&lt;p&gt;While writing another python script under pipenv I have met a problem that YCM autocomplete worked only for built in functions.
+That was annoying because without autocomplete YCM looses it’s sense.&lt;/p&gt;
+
+&lt;h2 id=&quot;solution&quot;&gt;Solution&lt;/h2&gt;
+
+&lt;p&gt;Let’s create module for filetype plugin.&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cat&lt;/span&gt; ~/.vim/after/ftplugin/python.vim
+
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;empty&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$VIRTUAL_ENV&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;let &lt;/span&gt;g:ycm_server_python_interpreter &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$VIRTUAL_ENV&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/bin/python'&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$PYTHONPATH&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; finddir&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'site-packages'&lt;/span&gt;, &lt;span class=&quot;nv&quot;&gt;$VIRTUAL_ENV&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/lib/*'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+endif
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Then you can simply run command&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pipenv run vim some/script.py
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;And now YCM works correctly :3&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 14 Oct 2020 23:03:02 +0300</pubDate>
+        <link>http://undying.github.io/2020/10/14/vim-ycm-and-pipenv.html</link>
+        <guid isPermaLink="true">http://undying.github.io/2020/10/14/vim-ycm-and-pipenv.html</guid>
+        
+        <category>vim</category>
+        
+        <category>ycm</category>
+        
+        <category>pipenv</category>
+        
+        
+      </item>
     
       <item>
         <title>ZSH: auto git config.user</title>
@@ -312,12 +438,475 @@ And if there is no rules for CNAME requests will go to the internet resolvers.&l
     
       <item>
         <title>PostgreSQL 11 Administration Summary</title>
-        <description>&lt;h2 id=&quot;intro&quot;&gt;Intro&lt;/h2&gt;
-&lt;p&gt;Not so long ago I read a beautiful &lt;a href=&quot;https://www.labirint.ru/books/685536/&quot;&gt;book about PostgreSQL 11 Administration&lt;/a&gt; and decided to make a summary of interesting for my point of view details.&lt;/p&gt;
+        <description>&lt;!-- vim-markdown-toc Marked --&gt;
 
-&lt;hr /&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;#postgresql-administration-cheatsheet&quot;&gt;PostgreSQL Administration Cheatsheet&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#intro&quot;&gt;Intro&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#new-in-postgresql-11&quot;&gt;New In PostgreSQL 11&lt;/a&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#wal-size&quot;&gt;WAL Size&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#create-statistics&quot;&gt;CREATE STATISTICS&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#include-indexes&quot;&gt;INCLUDE indexes&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#create-index-in-parallel&quot;&gt;CREATE INDEX in parallel&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#pg_prewarm&quot;&gt;pg_prewarm&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#updated-window-functions&quot;&gt;Updated WINDOW Functions&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#jit-compilation&quot;&gt;JIT Compilation&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#better-partitioning&quot;&gt;Better Partitioning&lt;/a&gt;
+            &lt;ul&gt;
+              &lt;li&gt;&lt;a href=&quot;#default-partition&quot;&gt;Default Partition&lt;/a&gt;&lt;/li&gt;
+              &lt;li&gt;&lt;a href=&quot;#partition-key-updating&quot;&gt;Partition Key Updating&lt;/a&gt;&lt;/li&gt;
+              &lt;li&gt;&lt;a href=&quot;#hash-partitioning&quot;&gt;Hash Partitioning&lt;/a&gt;&lt;/li&gt;
+              &lt;li&gt;&lt;a href=&quot;#index-created-on-parent-table&quot;&gt;Index Created on Parent Table&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#better-support-of-stored-procedures&quot;&gt;Better Support Of Stored Procedures&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#faster-alter-table&quot;&gt;Faster ALTER TABLE&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#locks-and-transactions&quot;&gt;Locks and Transactions&lt;/a&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#now()-function&quot;&gt;now() function&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#savepoint&quot;&gt;SAVEPOINT&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#ddl-commands-are-transaction-safe&quot;&gt;DDL commands are transaction safe&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#explicit-locking&quot;&gt;Explicit Locking&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#for-share-and-for-update&quot;&gt;FOR SHARE and FOR UPDATE&lt;/a&gt;
+            &lt;ul&gt;
+              &lt;li&gt;&lt;a href=&quot;#skip-locked&quot;&gt;SKIP LOCKED&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#using-cte-with-returning&quot;&gt;Using CTE with RETURNING&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#for-share-and-for-update&quot;&gt;FOR SHARE and FOR UPDATE&lt;/a&gt;
+            &lt;ul&gt;
+              &lt;li&gt;&lt;a href=&quot;#for-...-clauses-by-locking-strength&quot;&gt;FOR … clauses by locking strength&lt;/a&gt;&lt;/li&gt;
+              &lt;li&gt;&lt;a href=&quot;#for-update-skip-locked&quot;&gt;FOR UPDATE SKIP LOCKED&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#recommended-locks&quot;&gt;Recommended Locks&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#vacuum&quot;&gt;VACUUM&lt;/a&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#autovacuum&quot;&gt;autovacuum&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#transaction-id-wraparound&quot;&gt;Transaction ID Wraparound&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#transaction-duration&quot;&gt;Transaction Duration&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#indexing&quot;&gt;Indexing&lt;/a&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#costs-model&quot;&gt;Costs Model&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;h2 id=&quot;locks&quot;&gt;Locks&lt;/h2&gt;
+&lt;!-- vim-markdown-toc --&gt;
+
+&lt;h1 id=&quot;postgresql-administration-cheatsheet&quot;&gt;PostgreSQL Administration Cheatsheet&lt;/h1&gt;
+
+&lt;h2 id=&quot;intro&quot;&gt;Intro&lt;/h2&gt;
+
+&lt;p&gt;This cheatsheet is based on the great
+&lt;a href=&quot;https://www.packtpub.com/product/mastering-postgresql-11-second-edition/9781789537819&quot;&gt;book about PostgreSQL 11 Administration&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Big thanks to it’s author - Hans-Jürgen Schönig.&lt;/p&gt;
+
+&lt;h2 id=&quot;new-in-postgresql-11&quot;&gt;New In PostgreSQL 11&lt;/h2&gt;
+
+&lt;h3 id=&quot;wal-size&quot;&gt;WAL Size&lt;/h3&gt;
+
+&lt;p&gt;Default WAL size is: &lt;strong&gt;16M&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;To change size during setup: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;initdb -D /pgdata --wal-segsize=32&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;create-statistics&quot;&gt;CREATE STATISTICS&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; &lt;em&gt;This actually from PostgreSQL 10.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;CREATE STATISTICS will create a new extended statistics object tracking data about the specified table, foreign table or materialized view. The statistics object will be created in the current database and will be owned by the user issuing the command.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;The great thing is that statistics collected by every column you need.&lt;/p&gt;
+
+&lt;p&gt;References:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.postgresql.org/docs/10/sql-createstatistics.html&quot;&gt;CREATE STATISTICS&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.citusdata.com/blog/2018/03/06/postgres-planner-and-its-usage-of-statistics/&quot;&gt;The Postgres 10 feature you didn’t know about: CREATE STATISTICS &lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;include-indexes&quot;&gt;INCLUDE indexes&lt;/h3&gt;
+
+&lt;p&gt;In addition to the indexed column, the index can contain an additional column.
+This can be useful to avoid table scan and use only index scan.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CREATE UNIQUE INDEX some_name ON person USING btree (id) INCLUDE (name);&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Note: Always select only those columns you need. When using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SELECT *&lt;/code&gt; you gathering all data from table and that hurts your performance.&lt;/p&gt;
+
+&lt;h3 id=&quot;create-index-in-parallel&quot;&gt;CREATE INDEX in parallel&lt;/h3&gt;
+
+&lt;p&gt;PostgreSQL can build indexes while leveraging multiple CPUs in order to process the table rows faster. This feature is known as parallel index build. For index methods that support building indexes in parallel (currently, only B-tree), &lt;a href=&quot;https://www.postgresql.org/docs/11/runtime-config-resource.html#GUC-MAINTENANCE-WORK-MEM&quot;&gt;maintenance_work_mem&lt;/a&gt; specifies the maximum amount of memory that can be used by each index build operation as a whole, regardless of how many worker processes were started. Generally, a cost model automatically determines how many worker processes should be requested, if any.&lt;/p&gt;
+
+&lt;p&gt;Parallel index builds may benefit from increasing maintenance_work_mem where an equivalent serial index build will see little or no benefit. Note that maintenance_work_mem may influence the number of worker processes requested, since parallel workers must have at least a 32MB share of the total maintenance_work_mem budget. There must also be a remaining 32MB share for the leader process. Increasing &lt;a href=&quot;https://www.postgresql.org/docs/11/runtime-config-resource.html#GUC-MAX-PARALLEL-WORKERS-MAINTENANCE&quot;&gt;max_parallel_maintenance_workers&lt;/a&gt; may allow more workers to be used, which will reduce the time needed for index creation, so long as the index build is not already I/O bound. Of course, there should also be sufficient CPU capacity that would otherwise lie idle.&lt;/p&gt;
+
+&lt;p&gt;References:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.postgresql.org/docs/11/sql-createindex.html&quot;&gt;CREATE INDEX&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.cybertec-postgresql.com/en/postgresql-parallel-create-index-for-better-performance/&quot;&gt;PostgreSQL: Parallel CREATE INDEX for better performance&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;pg_prewarm&quot;&gt;pg_prewarm&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-SQL&quot;&gt;CREATE EXTENSION pg_prewarm;
+SELECT pg_prewarm('tablename');
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;References:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.cybertec-postgresql.com/en/prewarming-postgresql-i-o-caches/&quot;&gt;Prewarming PostgreSQL I/O caches&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;updated-window-functions&quot;&gt;Updated WINDOW Functions&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.postgresqltutorial.com/postgresql-between/&quot;&gt;RANGE BETWEEN&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;EXCLUDE
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;EXCLUDE CURRENT ROW&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;EXCLUDE TIES&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;References:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.cybertec-postgresql.com/en/timeseries-exclude-ties-current-row-and-group/&quot;&gt;Timeseries: EXCLUDE TIES, CURRENT ROW and GROUP&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.postgresql.org/docs/11/tutorial-window.html&quot;&gt;Window Functions&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;jit-compilation&quot;&gt;JIT Compilation&lt;/h3&gt;
+
+&lt;p&gt;Just-in-Time (JIT) compilation is the process of turning some form of interpreted program evaluation into a native program, and doing so at run time. For example, instead of using general-purpose code that can evaluate arbitrary SQL expressions to evaluate a particular SQL predicate like WHERE a.col = 3, it is possible to generate a function that is specific to that expression and can be natively executed by the CPU, yielding a speedup.&lt;/p&gt;
+
+&lt;p&gt;PostgreSQL has builtin support to perform JIT compilation using LLVM when PostgreSQL is built with –with-llvm.&lt;/p&gt;
+
+&lt;p&gt;References:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.postgresql.org/docs/11/jit-reason.html&quot;&gt;JIT Reason&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;better-partitioning&quot;&gt;Better Partitioning&lt;/h3&gt;
+
+&lt;h4 id=&quot;default-partition&quot;&gt;Default Partition&lt;/h4&gt;
+
+&lt;p&gt;If row does not match any partition already created, it’s now can be moved to the default partition.&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;default_part&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OF&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;another_table&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DEFAULT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;partition-key-updating&quot;&gt;Partition Key Updating&lt;/h4&gt;
+
+&lt;p&gt;Now when updating the value of partition key, row is moved to another partition by PostgreSQL automatically.&lt;/p&gt;
+
+&lt;h4 id=&quot;hash-partitioning&quot;&gt;Hash Partitioning&lt;/h4&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tab&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HASH&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tab_0&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;OF&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tab&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FOR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WITH&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MODULUS&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;REMAINDER&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;index-created-on-parent-table&quot;&gt;Index Created on Parent Table&lt;/h4&gt;
+
+&lt;p&gt;Now when creating index on parent table it automatically created on all child`s tables.
+Also, creating “global” unique index on parent table creates unique index on all child`s table.&lt;/p&gt;
+
+&lt;p&gt;References:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://severalnines.com/database-blog/guide-partitioning-data-postgresql&quot;&gt;A Guide to Partitioning Data In PostgreSQL&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://severalnines.com/database-blog/how-take-advantage-new-partitioning-features-postgresql-11&quot;&gt;How to Take Advantage of the New Partitioning Features in PostgreSQL 11&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.postgresql.org/docs/11/ddl-partitioning.html&quot;&gt;Table Partitioning&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;better-support-of-stored-procedures&quot;&gt;Better Support Of Stored Procedures&lt;/h3&gt;
+
+&lt;p&gt;Main difference between functions ans procedures in PostgreSQL is that function is a part of transaction.
+But procedure may contain multiple transactions.&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;PROCEDURE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test_proc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;LANGUAGE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;plpgsql&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$$&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;BEGIN&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;aid&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bid&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;COMMIT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cid&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;ROLLBACK&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;END&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;err&quot;&gt;$$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;faster-alter-table&quot;&gt;Faster ALTER TABLE&lt;/h3&gt;
+
+&lt;p&gt;To add a column to the table we can use such command:&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ADD&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;COLUMN&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ADD&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;COLUMN&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;z&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DEFAULT&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;57&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;First command will work fast always, because it simply updates system catalog.
+Second command will work fast only in PostgreSQL 11 and newer versions.
+In the PG10 this will lead table to be rewritten which may be slow.&lt;/p&gt;
+
+&lt;h2 id=&quot;locks-and-transactions&quot;&gt;Locks and Transactions&lt;/h2&gt;
+
+&lt;h3 id=&quot;now-function&quot;&gt;now() function&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;now()&lt;/code&gt; function returns time of the transaction beginning. So calling it twice in one transaction will return the same data. If you need the real time, you have to use function &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;clock_timestamp()&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;savepoint&quot;&gt;&lt;a href=&quot;https://www.postgresql.org/docs/11/sql-savepoint.html&quot;&gt;SAVEPOINT&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;In long transaction which may fail in the middle of process it’s possible to use savepoint and rollback to it saving the job that already completed successfully.&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;postgres&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BEGIN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;BEGIN&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;postgres&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;column&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;----------&lt;/span&gt;
+        &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;row&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;postgres&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SAVEPOINT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;SAVEPOINT&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;postgres&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;ERROR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;division&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;by&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;zero&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;postgres&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;ERROR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;  &lt;span class=&quot;k&quot;&gt;current&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;transaction&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;aborted&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;commands&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ignored&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;until&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;of&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;transaction&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;postgres&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ROLLBACK&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SAVEPOINT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;ROLLBACK&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;postgres&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;column&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;----------&lt;/span&gt;
+        &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;row&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;postgres&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;COMMIT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;COMMIT&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;ddl-commands-are-transaction-safe&quot;&gt;DDL commands are transaction safe&lt;/h3&gt;
+
+&lt;p&gt;It’s possible to create and modify tables in transaction then rollback all changes during error.&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;postgres&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DATABASE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DATABASE&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;postgres&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;You&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;are&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;now&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;connected&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;database&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;&quot;test&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;&quot;postgres&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Did&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;find&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;any&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;relations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BEGIN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;BEGIN&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t_test&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t_test&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;COLUMN&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TYPE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;int8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t_test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+              &lt;span class=&quot;k&quot;&gt;Table&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;&quot;public.t_test&quot;&lt;/span&gt;
+ &lt;span class=&quot;k&quot;&gt;Column&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  &lt;span class=&quot;k&quot;&gt;Type&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;Collation&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;Nullable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;Default&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;--------+--------+-----------+----------+---------&lt;/span&gt;
+ &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;     &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;bigint&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;           &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;          &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ROLLBACK&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;ROLLBACK&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Did&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;find&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;any&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;relations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;explicit-locking&quot;&gt;Explicit Locking&lt;/h3&gt;
+
+&lt;p&gt;Sometime it’s needed to use locks to fix this kind of errors:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Transaction 1&lt;/th&gt;
+      &lt;th&gt;Transaction 2&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;BEGIN;&lt;/td&gt;
+      &lt;td&gt;BEGIN;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;SELECT max(id) FROM product;&lt;/td&gt;
+      &lt;td&gt;SELECT max(id) FROM product;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;– query returned 17&lt;/td&gt;
+      &lt;td&gt;– query returned 17&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;– user added product 18&lt;/td&gt;
+      &lt;td&gt;– user added product 18&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;INSERT INTO product … VALUES (18, …)&lt;/td&gt;
+      &lt;td&gt;INSERT INTO product … VALUES (18, …)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;COMMIT;&lt;/td&gt;
+      &lt;td&gt;COMMIT;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;This error can be avoided this way:&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;BEGIN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;LOCK&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;product&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ACCESS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;EXCLUSIVE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;MODE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;product&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;...&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;product&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;COMMIT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;But this is very bad for performance reasons.
+Alternative solutions is to separate tables in this way:&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t_invoice&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;PRIMARY&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;KEY&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t_watermark&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t_watermark&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;WITH&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;AS&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;UPDATE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t_watermark&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RETURNING&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t_invoice&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RETURNING&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Only one UPDATE can be occurred at once but this does not blocks SELECT queries.&lt;/p&gt;
+
+&lt;p&gt;References:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.postgresql.org/docs/11/explicit-locking.html&quot;&gt;Explicit Locking&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;for-share-and-for-update&quot;&gt;FOR SHARE and FOR UPDATE&lt;/h3&gt;
+
+&lt;p&gt;This is &lt;strong&gt;wrong&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;BEGIN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;invoice&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;processed&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;-- now make some work with returned data&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;UPDATE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;invoice&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;processed&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;true&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;COMMIT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Multiple requests can select the same data and then try to insert updated data.
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SELECT FOR UPDATE&lt;/code&gt; for the rescue.&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;BEGIN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;invoice&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;processed&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;false&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FOR&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;UPDATE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;-- now processing data with modifications&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;UPDATE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;invoice&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;processed&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;COMMIT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;When running multiple transactions on the same rows the second one will wait until the first one will end. But we can skip them with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NOWAIT&lt;/code&gt;.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Transaction 1&lt;/th&gt;
+      &lt;th&gt;Transaction 2&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;BEGIN;&lt;/td&gt;
+      &lt;td&gt;BEGIN;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;SELECT … FROM table WHERE … FOR UPDATE NOWAIT;&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;– processing&lt;/td&gt;
+      &lt;td&gt;SELECT … FROM tab WHERE … FOR UPDATE NOWAIT;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;– still processing&lt;/td&gt;
+      &lt;td&gt;ERROR: could not obtain lock on row in relation “table”&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;There is also parameter &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lock_timeout&lt;/code&gt; to set how long we are ready to wait lock.&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lock_timeout&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TO&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;-- set timeout to 5 seconds&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;skip-locked&quot;&gt;SKIP LOCKED&lt;/h4&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SELECT FOR UDATE&lt;/code&gt; can block others requests for UPDATE&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Transaction 1&lt;/th&gt;
+      &lt;th&gt;Transaction 2&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;BEING;&lt;/td&gt;
+      &lt;td&gt;BEING;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;SELECT … FROM table LIMIT 1 FOR UPDATE;&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;– waiting for user action&lt;/td&gt;
+      &lt;td&gt;SELECT … FROM table LIMIT 1 FOR UPDATE;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;– waiting for user action&lt;/td&gt;
+      &lt;td&gt;– waiting Transaction 1&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;To fix that we can use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SKIP LOCKED&lt;/code&gt;.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Transaction 1&lt;/th&gt;
+      &lt;th&gt;Transaction 2&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;BEGIN;&lt;/td&gt;
+      &lt;td&gt;BEGIN;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;SELECT * FROM table LIMIT 2 FOR UPDATE SKIP LOCKED;&lt;/td&gt;
+      &lt;td&gt;SELECT * FROM table LIMIT 2 FOR UPDATE SKIP LOCKED;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;– returns first pair of not locked rows&lt;/td&gt;
+      &lt;td&gt;– returns second pair of not locked rows&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;:
+When using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;FOR UPDATE&lt;/code&gt; on table with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;FOREIGN KEY&lt;/code&gt;, both tables will be blocked.&lt;/p&gt;
+
 &lt;h3 id=&quot;using-cte-with-returning&quot;&gt;Using CTE with RETURNING&lt;/h3&gt;
 
 &lt;p&gt;When you need to update record and use result value and don’t want to use explicit blocking or long transaction, it’s possible to use CTE and UPDATE with RETURNING statement.&lt;/p&gt;
@@ -343,7 +932,7 @@ And if there is no rules for CNAME requests will go to the internet resolvers.&l
 
 &lt;hr /&gt;
 
-&lt;h3 id=&quot;for-share-and-for-update&quot;&gt;FOR SHARE and FOR UPDATE&lt;/h3&gt;
+&lt;h3 id=&quot;for-share-and-for-update-1&quot;&gt;FOR SHARE and FOR UPDATE&lt;/h3&gt;
 
 &lt;p&gt;To select some data for database, process it and then update this data in database there is a SELECT FOR UPDATE  statement for that.&lt;/p&gt;
 
@@ -496,14 +1085,17 @@ In this case you lock not rows but numbers instead.&lt;/p&gt;
 &lt;p&gt;Beyond the threshold, old data may be vacuumed away. This can help prevent bloat in the face of snapshots which remain in use for a long time. To prevent incorrect results due to cleanup of data which would otherwise be visible to the snapshot, an error is generated when the snapshot is older than this threshold and the snapshot is used to read a page which has been modified since the snapshot was built. &lt;a href=&quot;https://www.postgresql.org/docs/11/runtime-config-resource.html#GUC-OLD-SNAPSHOT-THRESHOLD&quot;&gt;More details&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h2 id=&quot;indexing&quot;&gt;Indexing&lt;/h2&gt;
+
 &lt;h3 id=&quot;costs-model&quot;&gt;Costs Model&lt;/h3&gt;
 
 &lt;p&gt;Costs formula for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Seq Scan&lt;/code&gt;:&lt;/p&gt;
+
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(blocks to read * seq_page_cost) \
   + (rows scanned * cpu_tuple_cost + rows scanned * cpu_operator_cost)
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;To get sum of block per table:&lt;/p&gt;
+
 &lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pg_relation_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'table_name'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8192&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
@@ -522,6 +1114,7 @@ In this case you lock not rows but numbers instead.&lt;/p&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;References:&lt;/p&gt;
+
 &lt;ul&gt;
   &lt;li&gt;https://www.postgresql.org/docs/11/runtime-config-query.html&lt;/li&gt;
   &lt;li&gt;https://www.postgresql.org/docs/11/index-cost-estimation.html&lt;/li&gt;
@@ -598,125 +1191,6 @@ td{
         <category>konsole</category>
         
         <category>terminal</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>command not found: ck-unlock-session</title>
-        <description>&lt;p&gt;This evening I was updating my Gentoo laptop. While updating, my session were locked with the message, that to unlock it I have to use ck-unlock-session. Unfortunately shell told me that there is no such command on my laptop:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;  └&amp;gt; ck-unlock-session
-  zsh: &lt;span class=&quot;nb&quot;&gt;command &lt;/span&gt;not found: ck-unlock-session&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;In the vastness of the Internet found the solution, but it’s too long to remember:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;  dbus-send &lt;span class=&quot;nt&quot;&gt;--system&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--print-reply&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--dest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;org.freedesktop.ConsoleKit&quot;&lt;/span&gt; /org/freedesktop/ConsoleKit/Session1 org.freedesktop.ConsoleKit.Session.Unlock&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Session1&lt;/code&gt; - session name and it may differs. Name can be found by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ck-list-sessions&lt;/code&gt;&lt;/p&gt;
-
-</description>
-        <pubDate>Thu, 25 Jul 2019 17:27:00 +0300</pubDate>
-        <link>http://undying.github.io/2019/07/25/ck-unlock-session-alias.html</link>
-        <guid isPermaLink="true">http://undying.github.io/2019/07/25/ck-unlock-session-alias.html</guid>
-        
-        <category>gentoo</category>
-        
-        <category>kde</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Docker: Mounting block devices into container</title>
-        <description>&lt;p&gt;Today was curious is it possible to mount block device into a docker container without mounting it on system.
-It’s not well documented but found one interesting &lt;a href=&quot;https://github.com/moby/moby/issues/37893#issuecomment-424535343&quot;&gt;comment &lt;/a&gt; in github.&lt;/p&gt;
-
-&lt;p&gt;So, if –mount option in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker run&lt;/code&gt; command is “magic” on top of “mount” system call, we can use it.
-After experimenting a bit here is an example mounting lvm volumes.&lt;/p&gt;
-
-&lt;p&gt;First, let’s create loop device for LVM:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;  &lt;span class=&quot;nb&quot;&gt;dd &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/dev/zero &lt;span class=&quot;nv&quot;&gt;of&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/tmp/loop &lt;span class=&quot;nv&quot;&gt;bs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1M &lt;span class=&quot;nv&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;100
-  losetup /dev/loop0 /tmp/loop&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Then, making an LVM device:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;  pvcreate /dev/loop0
-  vgcreate vg1 /dev/loop0
-  lvcreate &lt;span class=&quot;nt&quot;&gt;--size&lt;/span&gt; 90M &lt;span class=&quot;nt&quot;&gt;--name&lt;/span&gt; lv1 vg1
-  mkfs.xfs /dev/vg1/lv1&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;And finally let’s run container and mount block device:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;docker run &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;--rm&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-it&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;--mount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'type=volume,dst=/opt,volume-driver=local,volume-opt=type=xfs,volume-opt=device=/dev/vg1/lv1'&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  ubuntu:18.04 bash&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;That’s it.&lt;/p&gt;
-
-</description>
-        <pubDate>Thu, 25 Jul 2019 17:27:00 +0300</pubDate>
-        <link>http://undying.github.io/2019/07/25/mounting_block_devices_into_docker.html</link>
-        <guid isPermaLink="true">http://undying.github.io/2019/07/25/mounting_block_devices_into_docker.html</guid>
-        
-        <category>mount</category>
-        
-        <category>block</category>
-        
-        <category>lvm</category>
-        
-        <category>docker</category>
-        
-        <category>container</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Gentoo: Building FireFox 63.0.3</title>
-        <description>&lt;p&gt;Today I was trying to update FireFox on my Gentoo box and failed with error:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;  0:06.75 checking rustc version... 1.30.1
-  0:06.75 ERROR: Cargo package manager not found.
-  0:06.75 To compile Rust language sources, you must have &lt;span class=&quot;s1&quot;&gt;'cargo'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;your path.
-  0:06.75 See https://www.rust-lang.org/ &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;more information.
-  0:06.75
-  0:06.75 You can &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;cargo by running &lt;span class=&quot;s1&quot;&gt;'./mach bootstrap'&lt;/span&gt;
-  0:06.75 or by directly running the installer from https://rustup.rs/
-  0:06.75
-  0:06.79 &lt;span class=&quot;k&quot;&gt;***&lt;/span&gt; Fix above errors and &lt;span class=&quot;k&quot;&gt;then &lt;/span&gt;restart with&lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  0:06.79                &lt;span class=&quot;s2&quot;&gt;&quot;/usr/bin/gmake -f client.mk build&quot;&lt;/span&gt;
-  0:06.79 gmake: &lt;span class=&quot;k&quot;&gt;***&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;client.mk:127: configure] Error 1&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;I have already installed virtual/cargo and dev-lang/rust.
-Also I found where cargo was already installed:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;  equery f dev-lang/rust|grep cargo
-  /usr/bin/cargo-1.30.1&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;So the solution was simple:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;  &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;eselect rust update&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;This creates link required for build:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;  &lt;span class=&quot;nb&quot;&gt;ls&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-l&lt;/span&gt; &lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;which cargo&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-  lrwxrwxrwx 1 root root 21 Nov 21 08:03 /usr/bin/cargo -&amp;gt; /usr/bin/cargo-1.30.1&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-</description>
-        <pubDate>Wed, 21 Nov 2018 08:10:00 +0300</pubDate>
-        <link>http://undying.github.io/2018/11/21/building_firefox_on_gentoo.html</link>
-        <guid isPermaLink="true">http://undying.github.io/2018/11/21/building_firefox_on_gentoo.html</guid>
-        
-        <category>gentoo</category>
-        
-        <category>building</category>
-        
-        <category>firefox</category>
-        
-        <category>cargo</category>
         
         
       </item>

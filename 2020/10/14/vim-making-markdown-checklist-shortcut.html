@@ -7,12 +7,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>About</title>
-  <meta name="description" content="In this blog I will describe situations that I meet in my life when working with a variety of technologies. This includes any kind of computer technologies, Open Software, Linux and many more.
-">
+  <title>VIM: Making Markdown Checklist Shortcut</title>
+  <meta name="description" content="Interesting exercise to implement shortcut in vim.Often while writing markdown files in vim I’m writing a lot of checkboxes.It’s a bit annoying to do by hand...">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://undying.github.io/about/">
+  <link rel="canonical" href="http://undying.github.io/2020/10/14/vim-making-markdown-checklist-shortcut.html">
   <link rel="alternate" type="application/rss+xml" title="Blog abount Linux, Technologies and Life" href="http://undying.github.io/feed.xml">
 
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
@@ -77,19 +76,59 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <article class="post">
+        
+<link rel="stylesheet" href="/css/comments.css">
+<link rel="stylesheet" href="/css/common.css">
+
+
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title">About</h1>
+    
+<h1 class="post-title" itemprop="name headline">VIM: Making Markdown Checklist Shortcut</h1>
+<p class="post-meta"><time datetime="2020-10-14T23:45:53+03:00" itemprop="datePublished">Oct 14, 2020</time></p>
+
+
   </header>
 
-  <div class="post-content">
-    <p>I have decided to begin this blog, because very often I`m meeting very specific situations concerning technologies which I am using every day. So I want to save and share the solutions I have found for me and everybody who may need them too.</p>
+  <div class="post-content" itemprop="articleBody">
+    <p>Interesting exercise to implement shortcut in vim.
+Often while writing markdown files in vim I’m writing a lot of checkboxes.
+It’s a bit annoying to do by hand so let’s make a script and bind it to shortcut.</p>
 
+<div class="language-vimscript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">""" markdown shortcuts</span>
+<span class="k">function</span> MarkdownCheckboxInsert<span class="p">()</span>
+  <span class="k">let</span> <span class="k">l</span><span class="p">:</span><span class="nb">line</span> <span class="p">=</span> <span class="nb">line</span><span class="p">(</span><span class="s1">'.'</span><span class="p">)</span>
+  <span class="k">let</span> <span class="k">l</span><span class="p">:</span>str <span class="p">=</span> <span class="nb">getline</span><span class="p">(</span><span class="k">l</span><span class="p">:</span><span class="nb">line</span><span class="p">)</span>
+
+  <span class="k">let</span> <span class="k">l</span><span class="p">:</span><span class="k">match</span> <span class="p">=</span> <span class="nb">matchlist</span><span class="p">(</span><span class="k">l</span><span class="p">:</span>str<span class="p">,</span> <span class="s1">'^\([ ]*\)\?\([-+*]\)\? \?\(.*\)$'</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="nb">empty</span><span class="p">(</span><span class="k">l</span><span class="p">:</span><span class="k">match</span><span class="p">[</span><span class="m">2</span><span class="p">])</span>
+    <span class="k">let</span> <span class="k">l</span><span class="p">:</span>list_syn <span class="p">=</span> <span class="s1">'-'</span>
+  <span class="k">else</span>
+    <span class="k">let</span> <span class="k">l</span><span class="p">:</span>list_syn <span class="p">=</span> <span class="k">l</span><span class="p">:</span><span class="k">match</span><span class="p">[</span><span class="m">2</span><span class="p">]</span>
+  <span class="k">endif</span>
+
+  <span class="k">let</span> <span class="k">l</span><span class="p">:</span>buf <span class="p">=</span> <span class="k">l</span><span class="p">:</span><span class="k">match</span><span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="p">.</span> <span class="k">l</span><span class="p">:</span>list_syn <span class="p">.</span> <span class="s1">' [ ] - '</span> <span class="p">.</span> <span class="k">l</span><span class="p">:</span><span class="k">match</span><span class="p">[</span><span class="m">3</span><span class="p">]</span>
+  <span class="k">call</span> <span class="nb">setline</span><span class="p">(</span><span class="k">l</span><span class="p">:</span><span class="nb">line</span><span class="p">,</span> <span class="k">l</span><span class="p">:</span>buf<span class="p">)</span>
+<span class="k">endfunction</span>
+
+nnoremap <span class="p">&lt;</span>Leader<span class="p">&gt;</span>mc <span class="p">:</span><span class="k">call</span> MarkdownCheckboxInsert<span class="p">()&lt;</span>CR<span class="p">&gt;</span>$
+<span class="c">"""</span>
+</code></pre></div></div>
+
+<p>Now we can use shortcut <code class="language-plaintext highlighter-rouge">\mc</code></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">m</code> - Markdown</li>
+  <li><code class="language-plaintext highlighter-rouge">c</code> - checkbox</li>
+</ul>
+
+<p>You can also point to already existing line or list and this will transform your line to checkbox.</p>
 
   </div>
-
 </article>
+
 
       </div>
     </div>

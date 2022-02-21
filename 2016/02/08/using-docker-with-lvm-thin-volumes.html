@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Using docker with LVM Thin Pool</title>
+  <title>Docker: Using docker with LVM Thin Pool</title>
   <meta name="description" content="Docker is the nice tool for almost every use case in my sphere. It’s easy to use, it’s fast to build and deploy. Docker can be used with miscellaneous storag...">
 
   <link rel="stylesheet" href="/css/main.css">
@@ -66,6 +66,8 @@
         
           
         
+          
+        
       </div>
     </nav>
   </div>
@@ -83,7 +85,7 @@
 
   <header class="post-header">
     
-<h1 class="post-title" itemprop="name headline">Using docker with LVM Thin Pool</h1>
+<h1 class="post-title" itemprop="name headline">Docker: Using docker with LVM Thin Pool</h1>
 <p class="post-meta"><time datetime="2016-02-08T00:21:00+03:00" itemprop="datePublished">Feb 8, 2016</time></p>
 
 
@@ -121,7 +123,7 @@ vgcreate docker /dev/sdb</code></pre></figure>
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">lvcreate <span class="nt">-n</span> docker-pool-meta <span class="nt">-L</span> 744M docker
   Logical volume <span class="s2">"docker-pool-meta"</span> created.</code></pre></figure>
 
-<p class="border_solid_red"><i>Beware that this metadata size may not be enough for your needs. In my case it was to small, so I was using metadata size about 16GiB. This is the maximum supported size for now, and at this time I'm testing how does it works.</i></p>
+<p class="border_solid_red"><i>Beware that this metadata size may not be enough for your needs. In my case it was too small, so I was using metadata size about 16GiB. This is the maximum supported size for now, and at this time I'm testing how does it works.</i></p>
 
 <p>Next, we need to create a volume for data. In my situations I just use the rest size of virtual group. First, I was trying to create volume this way:</p>
 
