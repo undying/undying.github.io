@@ -6,9 +6,9 @@
 </description>
     <link>http://undying.github.io/</link>
     <atom:link href="http://undying.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 25 Jun 2020 23:57:47 +0300</pubDate>
-    <lastBuildDate>Thu, 25 Jun 2020 23:57:47 +0300</lastBuildDate>
-    <generator>Jekyll v3.8.7</generator>
+    <pubDate>Mon, 21 Feb 2022 10:16:08 +0300</pubDate>
+    <lastBuildDate>Mon, 21 Feb 2022 10:16:08 +0300</lastBuildDate>
+    <generator>Jekyll v3.9.0</generator>
     
       <item>
         <title>ZSH: auto git config.user</title>
@@ -27,7 +27,7 @@ git config user.email &lt;span class=&quot;s2&quot;&gt;&quot;0xff@matr.ix&quot;&
 &lt;p&gt;But there is an headache to not forget configure every repository to be corporate or personal after cloning.
 I’m using zsh and I have found easy solution for this.&lt;/p&gt;
 
-&lt;p&gt;On file system I keep corporate repositories in special folder like &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;company&amp;gt;/repos&lt;/code&gt;.
+&lt;p&gt;On file system I keep corporate repositories in special folder like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;company&amp;gt;/repos&lt;/code&gt;.
 So I decided to make my default configuration to be personal, and change it in corporate repositories on demand.&lt;/p&gt;
 
 &lt;p&gt;Zsh have a &lt;a href=&quot;http://zsh.sourceforge.net/Doc/Release/Functions.html&quot;&gt;hook system&lt;/a&gt;. You can create a function and specify in which hook you want to call it. There is a hook named chdir, it’s called when you changing your directory.&lt;/p&gt;
@@ -59,11 +59,11 @@ __git_cd_functions_set&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;
 chpwd_functions+&lt;span class=&quot;o&quot;&gt;=(&lt;/span&gt; __git_cd_functions_set &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Last string appends function &lt;code class=&quot;highlighter-rouge&quot;&gt;__git_cd_functions_set&lt;/code&gt; to chpwd hooks chain:&lt;/p&gt;
+&lt;p&gt;Last string appends function &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;__git_cd_functions_set&lt;/code&gt; to chpwd hooks chain:&lt;/p&gt;
 &lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;chpwd_functions+&lt;span class=&quot;o&quot;&gt;=(&lt;/span&gt; __git_cd_functions_set &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Now any repository placed in directory which path contains &lt;code class=&quot;highlighter-rouge&quot;&gt;mycompany/repos&lt;/code&gt; will be configured to have corporate name and email.&lt;/p&gt;
+&lt;p&gt;Now any repository placed in directory which path contains &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;mycompany/repos&lt;/code&gt; will be configured to have corporate name and email.&lt;/p&gt;
 </description>
         <pubDate>Thu, 25 Jun 2020 22:36:59 +0300</pubDate>
         <link>http://undying.github.io/2020/06/25/zsh-auto-git-config.user.html</link>
@@ -166,7 +166,7 @@ TIME     PID    LADDR:LPORT          &lt;span class=&quot;nt&quot;&gt;--&lt;/spa
 &lt;span class=&quot;c&quot;&gt;# vi:syntax=markdown&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;I wanted to make a hotkey to add information about its type to the end of the file. So I wrote a short function for this and mapped key &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;F2&amp;gt;&lt;/code&gt; for it.&lt;/p&gt;
+&lt;p&gt;I wanted to make a hotkey to add information about its type to the end of the file. So I wrote a short function for this and mapped key &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;F2&amp;gt;&lt;/code&gt; for it.&lt;/p&gt;
 
 &lt;div class=&quot;language-vim highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;&quot;&quot;&quot; insert current filetype at the end of a file&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; FileWriteSyntax&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
@@ -383,12 +383,12 @@ And if there is no rules for CNAME requests will go to the internet resolvers.&l
   &lt;/thead&gt;
   &lt;tbody&gt;
     &lt;tr&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;BEGIN;&lt;/code&gt;&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;BEGIN;&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BEGIN;&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BEGIN;&lt;/code&gt;&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SELECT * FROM t_room LIMIT 2 FOR UPDATE SKIP LOCKED;&lt;/code&gt;&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SELECT * FROM t_room LIMIT 2 FOR UPDATE SKIP LOCKED;&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SELECT * FROM t_room LIMIT 2 FOR UPDATE SKIP LOCKED;&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SELECT * FROM t_room LIMIT 2 FOR UPDATE SKIP LOCKED;&lt;/code&gt;&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
       &lt;td&gt;# &lt;strong&gt;returns 1, 2&lt;/strong&gt;&lt;/td&gt;
@@ -415,31 +415,31 @@ In this case you lock not rows but numbers instead.&lt;/p&gt;
   &lt;/thead&gt;
   &lt;tbody&gt;
     &lt;tr&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;BEGIN;&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BEGIN;&lt;/code&gt;&lt;/td&gt;
       &lt;td&gt; &lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SELECT pg_advisory_lock(15);&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SELECT pg_advisory_lock(15);&lt;/code&gt;&lt;/td&gt;
       &lt;td&gt; &lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
       &lt;td&gt; &lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SELECT pg_advisory_lock(15);&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt; &lt;/td&gt;
-      &lt;td&gt;waiting for lock…&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SELECT pg_advisory_lock(15);&lt;/code&gt;&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
       &lt;td&gt; &lt;/td&gt;
       &lt;td&gt;waiting for lock…&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;COMMIT;&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
       &lt;td&gt;waiting for lock…&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SELECT pg_advisory_unlock(15);&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;COMMIT;&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;waiting for lock…&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SELECT pg_advisory_unlock(15);&lt;/code&gt;&lt;/td&gt;
       &lt;td&gt;waiting for lock…&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
@@ -451,8 +451,8 @@ In this case you lock not rows but numbers instead.&lt;/p&gt;
 
 &lt;p&gt;Handy functions:&lt;/p&gt;
 &lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pg_advisory_unlock_all()&lt;/code&gt; - unlock all previous locks&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pg_try_advisory_lock()&lt;/code&gt; - get lock if possible&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pg_advisory_unlock_all()&lt;/code&gt; - unlock all previous locks&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pg_try_advisory_lock()&lt;/code&gt; - get lock if possible&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;More details in &lt;a href=&quot;https://www.postgresql.org/docs/11/functions-admin.html&quot;&gt;documentation&lt;/a&gt;&lt;/p&gt;
@@ -498,8 +498,8 @@ In this case you lock not rows but numbers instead.&lt;/p&gt;
 &lt;h2 id=&quot;indexing&quot;&gt;Indexing&lt;/h2&gt;
 &lt;h3 id=&quot;costs-model&quot;&gt;Costs Model&lt;/h3&gt;
 
-&lt;p&gt;Costs formula for &lt;code class=&quot;highlighter-rouge&quot;&gt;Seq Scan&lt;/code&gt;:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(blocks to read * seq_page_cost) \
+&lt;p&gt;Costs formula for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Seq Scan&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(blocks to read * seq_page_cost) \
   + (rows scanned * cpu_tuple_cost + rows scanned * cpu_operator_cost)
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
@@ -561,7 +561,7 @@ td{
 Что характерно, в виртуальных терминалах (tty1-7) с кодировкой проблем не было, а значит системные шрифты были настроены верно.&lt;/p&gt;
 
 &lt;p&gt;Знатно покопавшись в сетях нашел &lt;a href=&quot;https://gentoo.ru/node/29037#comment-215877&quot;&gt;древний пост&lt;/a&gt; на эту тему.
-Попробовал выставить &lt;code class=&quot;highlighter-rouge&quot;&gt;LC_ALL=en_US.utf8&lt;/code&gt; и запустить konsole, чудо произошло. Осталось сделать это красиво.&lt;/p&gt;
+Попробовал выставить &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LC_ALL=en_US.utf8&lt;/code&gt; и запустить konsole, чудо произошло. Осталось сделать это красиво.&lt;/p&gt;
 
 &lt;p&gt;А красиво можно запилить двумя путями:&lt;/p&gt;
 &lt;ul&gt;
@@ -613,7 +613,7 @@ td{
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;  dbus-send &lt;span class=&quot;nt&quot;&gt;--system&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--print-reply&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--dest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;org.freedesktop.ConsoleKit&quot;&lt;/span&gt; /org/freedesktop/ConsoleKit/Session1 org.freedesktop.ConsoleKit.Session.Unlock&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Session1&lt;/code&gt; - session name and it may differs. Name can be found by &lt;code class=&quot;highlighter-rouge&quot;&gt;ck-list-sessions&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Session1&lt;/code&gt; - session name and it may differs. Name can be found by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ck-list-sessions&lt;/code&gt;&lt;/p&gt;
 
 </description>
         <pubDate>Thu, 25 Jul 2019 17:27:00 +0300</pubDate>
@@ -632,7 +632,7 @@ td{
         <description>&lt;p&gt;Today was curious is it possible to mount block device into a docker container without mounting it on system.
 It’s not well documented but found one interesting &lt;a href=&quot;https://github.com/moby/moby/issues/37893#issuecomment-424535343&quot;&gt;comment &lt;/a&gt; in github.&lt;/p&gt;
 
-&lt;p&gt;So, if –mount option in &lt;code class=&quot;highlighter-rouge&quot;&gt;docker run&lt;/code&gt; command is “magic” on top of “mount” system call, we can use it.
+&lt;p&gt;So, if –mount option in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker run&lt;/code&gt; command is “magic” on top of “mount” system call, we can use it.
 After experimenting a bit here is an example mounting lvm volumes.&lt;/p&gt;
 
 &lt;p&gt;First, let’s create loop device for LVM:&lt;/p&gt;
