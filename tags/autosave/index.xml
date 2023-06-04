@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>autosave on My Digital Chronicle</title>
+    <link>http://undying.github.io/tags/autosave/</link>
+    <description>Recent content in autosave on My Digital Chronicle</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 02 Jun 2020 00:10:12 +0300</lastBuildDate><atom:link href="http://undying.github.io/tags/autosave/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>VIM: File Autosave</title>
+      <link>http://undying.github.io/posts/2020-06-02-vim-file-autosave/</link>
+      <pubDate>Tue, 02 Jun 2020 00:10:12 +0300</pubDate>
+      
+      <guid>http://undying.github.io/posts/2020-06-02-vim-file-autosave/</guid>
+      <description>I was wondering how to save file in VIM automatically. Found some solutions in internet but decided to do it my way. So I wrote this small solution:
+&amp;#34;&amp;#34;&amp;#34; Save file on each edit exit function FileAutoSave() if exists(&amp;#39;g:file_autosave_async&amp;#39;) return endif if @% == &amp;#34;&amp;#34; return elseif !filewritable(@%) return endif let g:file_autosave_async = 1 call timer_start(500, &amp;#39;FileAutoSaveAsync&amp;#39;, {&amp;#39;repeat&amp;#39;: 1}) endfunction function FileAutoSaveAsync(timer) update unlet g:file_autosave_async endfunction :autocmd InsertLeave,TextChanged * call FileAutoSave() &amp;#34;&amp;#34;&amp;#34; It updates file in two cases:</description>
+    </item>
+    
+  </channel>
+</rss>

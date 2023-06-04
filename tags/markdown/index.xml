@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>markdown on My Digital Chronicle</title>
+    <link>http://undying.github.io/tags/markdown/</link>
+    <description>Recent content in markdown on My Digital Chronicle</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 14 Oct 2020 23:45:53 +0300</lastBuildDate><atom:link href="http://undying.github.io/tags/markdown/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>VIM: Making Markdown Checklist Shortcut</title>
+      <link>http://undying.github.io/posts/2020-10-14-vim--making-markdown-checklist-shortcut/</link>
+      <pubDate>Wed, 14 Oct 2020 23:45:53 +0300</pubDate>
+      
+      <guid>http://undying.github.io/posts/2020-10-14-vim--making-markdown-checklist-shortcut/</guid>
+      <description>Interesting exercise to implement shortcut in vim. Often while writing markdown files in vim I&amp;rsquo;m writing a lot of checkboxes. It&amp;rsquo;s a bit annoying to do by hand so let&amp;rsquo;s make a script and bind it to shortcut.
+&amp;#34;&amp;#34;&amp;#34; markdown shortcuts function MarkdownCheckboxInsert() let l:line = line(&amp;#39;.&amp;#39;) let l:str = getline(l:line) let l:match = matchlist(l:str, &amp;#39;^\([ ]*\)\?\([-+*]\)\? \?\(.*\)$&amp;#39;) if empty(l:match[2]) let l:list_syn = &amp;#39;-&amp;#39; else let l:list_syn = l:match[2] endif let l:buf = l:match[1] .</description>
+    </item>
+    
+  </channel>
+</rss>

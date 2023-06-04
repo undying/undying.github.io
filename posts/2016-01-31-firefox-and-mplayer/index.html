@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Using FireFox to play video with Mplayer on Windows | My Digital Chronicle</title>
+<meta name="keywords" content="firefox, mplayer, youtube, mpv, video">
+<meta name="description" content="Some time ago I was visiting at my mom. We live a far away from each other so frequently visits is not so easy. She using a pretty old computer which I were overclocking a long time ago. It&rsquo;s a AMD Barton 3200&#43; with 2GB DDR RAM and Geforce 6600 GT.
+It was a great PC a long time ago. Even now it works fine, except when you are want to watch video online.">
+<meta name="author" content="">
+<link rel="canonical" href="http://undying.github.io/posts/2016-01-31-firefox-and-mplayer/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.3613efbd0b1772781e8f49935e973cae632a7f61471c05b17be155505ccf87b5.css" integrity="sha256-NhPvvQsXcngej0mTXpc8rmMqf2FHHAWxe&#43;FVUFzPh7U=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://undying.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://undying.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://undying.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://undying.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://undying.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Using FireFox to play video with Mplayer on Windows" />
+<meta property="og:description" content="Some time ago I was visiting at my mom. We live a far away from each other so frequently visits is not so easy. She using a pretty old computer which I were overclocking a long time ago. It&rsquo;s a AMD Barton 3200&#43; with 2GB DDR RAM and Geforce 6600 GT.
+It was a great PC a long time ago. Even now it works fine, except when you are want to watch video online." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://undying.github.io/posts/2016-01-31-firefox-and-mplayer/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2016-01-31T16:30:00+03:00" />
+<meta property="article:modified_time" content="2016-01-31T16:30:00+03:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Using FireFox to play video with Mplayer on Windows"/>
+<meta name="twitter:description" content="Some time ago I was visiting at my mom. We live a far away from each other so frequently visits is not so easy. She using a pretty old computer which I were overclocking a long time ago. It&rsquo;s a AMD Barton 3200&#43; with 2GB DDR RAM and Geforce 6600 GT.
+It was a great PC a long time ago. Even now it works fine, except when you are want to watch video online."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Posts",
+      "item": "http://undying.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "Using FireFox to play video with Mplayer on Windows",
+      "item": "http://undying.github.io/posts/2016-01-31-firefox-and-mplayer/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Using FireFox to play video with Mplayer on Windows",
+  "name": "Using FireFox to play video with Mplayer on Windows",
+  "description": "Some time ago I was visiting at my mom. We live a far away from each other so frequently visits is not so easy. She using a pretty old computer which I were overclocking a long time ago. It\u0026rsquo;s a AMD Barton 3200+ with 2GB DDR RAM and Geforce 6600 GT.\nIt was a great PC a long time ago. Even now it works fine, except when you are want to watch video online.",
+  "keywords": [
+    "firefox", "mplayer", "youtube", "mpv", "video"
+  ],
+  "articleBody": "Some time ago I was visiting at my mom. We live a far away from each other so frequently visits is not so easy. She using a pretty old computer which I were overclocking a long time ago. It’s a AMD Barton 3200+ with 2GB DDR RAM and Geforce 6600 GT.\nIt was a great PC a long time ago. Even now it works fine, except when you are want to watch video online. You can surf the internet, work with documents but when you want to watch some new series of your favorite serial, computer is getting really slow.\nWell, my mom loves serials so I have to do something. I’m not able to buy new PC right now, because this economic situation in country is not quite comfortable for buying something, I need some time to save money for new computer but serials can’t wait.\nThe main problem is a Flash. If I only could play videos with other media player, the situation might be much better. A bit searching in internet gives me information that I can do so. The main limitation is to use Firefox browser. Well, for Barton 3200 it’s not the limitation, it’s the only way, because Chrome is not supporting such old hardware =(.\nWhat we will need:\nI will omit how to install FireFox browser, but I’ll share the link to download it.\nFirst, download Mplayer and unpack it. Then you will need a codecs, you can find them here. Check this link for latest codecs versions. Just unpack them to codecs directory under mplayer directory. Now we have to install FlashGot plugin for FireFox. And configure it.\nAnd that’s all!\nLets try to open page that contains the video we want to watch. We can see the FlashGot icon at the Firefox address bar. Click on it with right mouse button and the menu will appear. In this menu you can see multiple different quality variants for out video. FlashGot will run mplayer with address of video with quality you chose in this menu.\nMplayer shortcats you may want to know: {% highlight bash %} keyboard control LEFT and RIGHT Seek backward/forward 10 seconds. UP and DOWN Seek forward/backward 1 minute. PGUP and PGDWN Seek forward/backward 10 minutes. [ and ] Decrease/increase current playback speed by 10%. { and } Halve/double current playback speed. BACKSPACE Reset playback speed to normal. p / SPACE Pause (pressing again unpauses). . Step forward. Pressing once will pause movie, every consecutive press will play one frame and then go into pause mode again (any other key unpauses). q / ESC Stop playing and quit. + and - Adjust audio delay by +/- 0.1 seconds. / and * Decrease/increase volume. 9 and 0 Decrease/increase volume. m Mute sound. f Toggle fullscreen (also see -fs). T Toggle stay-on-top (also see -ontop). {% endhighlight %}\nWell done! Now we can watch our favorite serials with mplayer and even with higher quality than it was with Flash player, because mplayer works much faster then the last one.\nI really liked this solution, so I decided to make the same configuration on my linux box. The main difference is that I’m using Mpv player instead of mplayer, in the rest it works the same way.\n",
+  "wordCount" : "545",
+  "inLanguage": "en",
+  "datePublished": "2016-01-31T16:30:00+03:00",
+  "dateModified": "2016-01-31T16:30:00+03:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://undying.github.io/posts/2016-01-31-firefox-and-mplayer/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "My Digital Chronicle",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://undying.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://undying.github.io" accesskey="h" title="My Digital Chronicle (Alt + H)">My Digital Chronicle</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title">
+      Using FireFox to play video with Mplayer on Windows
+    </h1>
+    <div class="post-meta"><span title='2016-01-31 16:30:00 +0300 MSK'>January 31, 2016</span>
+
+</div>
+  </header> 
+  <div class="post-content"><p>Some time ago I was visiting at my mom. We live a far away from each other so frequently visits is not so easy. She using a pretty old computer which I were overclocking a long time ago. It&rsquo;s a <!-- raw HTML omitted -->AMD Barton 3200+<!-- raw HTML omitted --> with 2GB DDR RAM and <!-- raw HTML omitted -->Geforce 6600 GT<!-- raw HTML omitted -->.</p>
+<p>It was a great PC a long time ago. Even now it works fine, except when you are want to watch video online. You can surf the internet, work with documents but when you want to watch some new series of your favorite serial, computer is getting really slow.</p>
+<p>Well, my mom loves serials so I have to do something. I&rsquo;m not able to buy new PC right now, because this economic situation in country is not quite comfortable for buying something, I need some time to save money for new computer but serials can&rsquo;t wait.</p>
+<p>The main problem is a Flash. If I only could play videos with other media player, the situation might be much better. A bit searching in internet gives me information that I can do so. The main limitation is to use Firefox browser. Well, for Barton 3200 it&rsquo;s not the limitation, it&rsquo;s the only way, because Chrome is not supporting such old hardware =(.</p>
+<p>What we will need:</p>
+<!-- raw HTML omitted -->
+<p>I will omit how to install FireFox browser, but I&rsquo;ll share the <!-- raw HTML omitted -->link<!-- raw HTML omitted --> to download it.</p>
+<!-- raw HTML omitted -->
+<p>First, download <!-- raw HTML omitted -->Mplayer<!-- raw HTML omitted --> and unpack it.
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<p>Then you will need a codecs, you can find them <!-- raw HTML omitted -->here<!-- raw HTML omitted -->. Check <!-- raw HTML omitted -->this link<!-- raw HTML omitted --> for latest codecs versions.
+Just unpack them to <!-- raw HTML omitted -->codecs<!-- raw HTML omitted --> directory under mplayer directory.
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted --><!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<!-- raw HTML omitted -->
+<p>Now we have to install <!-- raw HTML omitted -->FlashGot<!-- raw HTML omitted --> plugin for FireFox.
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<p>And configure it.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>And that&rsquo;s all!</p>
+<!-- raw HTML omitted -->
+<p>Lets try to open page that contains the video we want to watch.
+<!-- raw HTML omitted -->
+We can see the FlashGot icon at the Firefox address bar.
+Click on it with right mouse button and the menu will appear. In this menu you can see multiple different quality variants for out video. FlashGot will run mplayer with address of video with quality you chose in this menu.</p>
+<!-- raw HTML omitted -->
+<p>Mplayer shortcats you may want to know:
+{% highlight bash %}
+keyboard control
+LEFT and RIGHT
+Seek backward/forward 10 seconds.
+UP and DOWN
+Seek forward/backward 1 minute.
+PGUP and PGDWN
+Seek forward/backward 10 minutes.
+[ and ]
+Decrease/increase current playback speed by 10%.
+{ and }
+Halve/double current playback speed.
+BACKSPACE
+Reset playback speed to normal.
+p / SPACE
+Pause (pressing again unpauses).
+.
+Step forward.  Pressing once will pause movie, every consecutive press will play one frame and then go into pause mode again (any other key unpauses).
+q / ESC
+Stop playing and quit.
++ and -
+Adjust audio delay by +/- 0.1 seconds.
+/ and *
+Decrease/increase volume.
+9 and 0
+Decrease/increase volume.
+m
+Mute sound.
+f
+Toggle fullscreen (also see -fs).
+T
+Toggle stay-on-top (also see -ontop).
+{% endhighlight %}</p>
+<p>Well done!
+Now we can watch our favorite serials with mplayer and even with higher quality than it was with Flash player, because mplayer works much faster then the last one.</p>
+<p>I really liked this solution, so I decided to make the same configuration on my linux box. The main difference is that I&rsquo;m using <!-- raw HTML omitted -->Mpv<!-- raw HTML omitted --> player instead of mplayer, in the rest it works the same way.</p>
+<!-- raw HTML omitted -->
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://undying.github.io/tags/firefox/">firefox</a></li>
+      <li><a href="http://undying.github.io/tags/mplayer/">mplayer</a></li>
+      <li><a href="http://undying.github.io/tags/youtube/">youtube</a></li>
+      <li><a href="http://undying.github.io/tags/mpv/">mpv</a></li>
+      <li><a href="http://undying.github.io/tags/video/">video</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="http://undying.github.io">My Digital Chronicle</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

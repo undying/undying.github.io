@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>gcc on My Digital Chronicle</title>
+    <link>http://undying.github.io/tags/gcc/</link>
+    <description>Recent content in gcc on My Digital Chronicle</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 29 Apr 2016 02:04:00 +0300</lastBuildDate><atom:link href="http://undying.github.io/tags/gcc/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>libgcc_s.so: cannot open shared object file</title>
+      <link>http://undying.github.io/posts/2016-04-29-lib_gcc_s_so-cannot_open_shared_object_file/</link>
+      <pubDate>Fri, 29 Apr 2016 02:04:00 +0300</pubDate>
+      
+      <guid>http://undying.github.io/posts/2016-04-29-lib_gcc_s_so-cannot_open_shared_object_file/</guid>
+      <description>Как то вечером, я решил, что стоит лечь по-раньше спать. Подумал, что надо бы выспаться, все дела, но перед этим просто загляну в ноутбук, и тут началось. Для чего то я одновременно запустил rtorrent + emerge -vuDN @world. Стоит ли говорить, что система установлена на шпиндельном hdd, поверх которого работает ssd cache (Bcache). Видимо из-за нагрузки, ноутбук завис и ни на какие действия не реагировал. &amp;ldquo;Семь бед - один ресет&amp;rdquo;, подумал я и перезагрузил ноутбук.</description>
+    </item>
+    
+  </channel>
+</rss>

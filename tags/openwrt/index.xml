@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>openwrt on My Digital Chronicle</title>
+    <link>http://undying.github.io/tags/openwrt/</link>
+    <description>Recent content in openwrt on My Digital Chronicle</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 31 Dec 2015 12:41:17 +0300</lastBuildDate><atom:link href="http://undying.github.io/tags/openwrt/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Выжимаем максимум интернета из деревенских сот</title>
+      <link>http://undying.github.io/posts/2015-12-31-maximizing-village-internet/</link>
+      <pubDate>Thu, 31 Dec 2015 12:41:17 +0300</pubDate>
+      
+      <guid>http://undying.github.io/posts/2015-12-31-maximizing-village-internet/</guid>
+      <description>На кануне новогодних праздников понадобилось пораньше покинуть столицу, покинуть ее в направлении таких мест, в которых интернет бывает довольно редко. На период отсутствия на работе я обещал напарникам быть на связи. А так как мой род деятельности напрямую связан с web, то я решил поэкспериментировать с доступностью интернетов в планируемом месте пребывания.
+Суть задачи сводился к следующему:
+Из небходимого у меня было:
+В качестве хаба использовал старый добрый D-Link Dub-104 (красивый компактный хаб с невероятно здоровенным блоком питания).</description>
+    </item>
+    
+  </channel>
+</rss>

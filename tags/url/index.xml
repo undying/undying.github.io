@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>url on My Digital Chronicle</title>
+    <link>http://undying.github.io/tags/url/</link>
+    <description>Recent content in url on My Digital Chronicle</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 15 Oct 2020 22:32:39 +0300</lastBuildDate><atom:link href="http://undying.github.io/tags/url/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>VIM: Handle Urls</title>
+      <link>http://undying.github.io/posts/2020-10-15-vim--handle-urls/</link>
+      <pubDate>Thu, 15 Oct 2020 22:32:39 +0300</pubDate>
+      
+      <guid>http://undying.github.io/posts/2020-10-15-vim--handle-urls/</guid>
+      <description>Making a shortcut to open urls under cursor Note: There is also available gx shortcut that uses netrw plugin. But I&amp;rsquo;ve decided to use own little solution instead of big plugin for one function.
+&amp;#34;&amp;#34;&amp;#34; open urls using \u shortcut function HandleURL() let l:uri = matchstr(getline(&amp;#34;.&amp;#34;), &amp;#39;[a-z]*:\/\/[^ &amp;gt;,;)]*&amp;#39;) if l:uri != &amp;#34;&amp;#34; silent call system(&amp;#34;xdg-open &amp;#34; . shellescape(l:uri, 1)) else echo &amp;#34;No URI found in line.&amp;#34; endif endfunction nnoremap &amp;lt;leader&amp;gt;u :call HandleURL()&amp;lt;cr&amp;gt; &amp;#34;&amp;#34;&amp;#34; Now if we hit \u shortcut while our cursor is on the url line, this url will be opened in default browser.</description>
+    </item>
+    
+  </channel>
+</rss>

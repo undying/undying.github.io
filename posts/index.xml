@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Posts on My Digital Chronicle</title>
+    <link>http://undying.github.io/posts/</link>
+    <description>Recent content in Posts on My Digital Chronicle</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 15 Oct 2020 22:32:39 +0300</lastBuildDate><atom:link href="http://undying.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>VIM: Handle Urls</title>
+      <link>http://undying.github.io/posts/2020-10-15-vim--handle-urls/</link>
+      <pubDate>Thu, 15 Oct 2020 22:32:39 +0300</pubDate>
+      
+      <guid>http://undying.github.io/posts/2020-10-15-vim--handle-urls/</guid>
+      <description>Making a shortcut to open urls under cursor Note: There is also available gx shortcut that uses netrw plugin. But I&amp;rsquo;ve decided to use own little solution instead of big plugin for one function.
+&amp;#34;&amp;#34;&amp;#34; open urls using \u shortcut function HandleURL() let l:uri = matchstr(getline(&amp;#34;.&amp;#34;), &amp;#39;[a-z]*:\/\/[^ &amp;gt;,;)]*&amp;#39;) if l:uri != &amp;#34;&amp;#34; silent call system(&amp;#34;xdg-open &amp;#34; . shellescape(l:uri, 1)) else echo &amp;#34;No URI found in line.&amp;#34; endif endfunction nnoremap &amp;lt;leader&amp;gt;u :call HandleURL()&amp;lt;cr&amp;gt; &amp;#34;&amp;#34;&amp;#34; Now if we hit \u shortcut while our cursor is on the url line, this url will be opened in default browser.</description>
+    </item>
+    
+    <item>
+      <title>VIM: Making Markdown Checklist Shortcut</title>
+      <link>http://undying.github.io/posts/2020-10-14-vim--making-markdown-checklist-shortcut/</link>
+      <pubDate>Wed, 14 Oct 2020 23:45:53 +0300</pubDate>
+      
+      <guid>http://undying.github.io/posts/2020-10-14-vim--making-markdown-checklist-shortcut/</guid>
+      <description>Interesting exercise to implement shortcut in vim. Often while writing markdown files in vim I&amp;rsquo;m writing a lot of checkboxes. It&amp;rsquo;s a bit annoying to do by hand so let&amp;rsquo;s make a script and bind it to shortcut.
+&amp;#34;&amp;#34;&amp;#34; markdown shortcuts function MarkdownCheckboxInsert() let l:line = line(&amp;#39;.&amp;#39;) let l:str = getline(l:line) let l:match = matchlist(l:str, &amp;#39;^\([ ]*\)\?\([-+*]\)\? \?\(.*\)$&amp;#39;) if empty(l:match[2]) let l:list_syn = &amp;#39;-&amp;#39; else let l:list_syn = l:match[2] endif let l:buf = l:match[1] .</description>
+    </item>
+    
+    <item>
+      <title>VIM: YCM and Pipenv</title>
+      <link>http://undying.github.io/posts/2020-10-14-vim-ycm-and-pipenv/</link>
+      <pubDate>Wed, 14 Oct 2020 23:03:02 +0300</pubDate>
+      
+      <guid>http://undying.github.io/posts/2020-10-14-vim-ycm-and-pipenv/</guid>
+      <description>While writing another python script under pipenv I have met a problem that YCM autocomplete worked only for built in functions. That was annoying because without autocomplete YCM looses it&amp;rsquo;s sense.
+Solution Let&amp;rsquo;s create module for filetype plugin.
+cat ~/.vim/after/ftplugin/python.vim if !empty($VIRTUAL_ENV) let g:ycm_server_python_interpreter = $VIRTUAL_ENV . &amp;#39;/bin/python&amp;#39; let $PYTHONPATH = finddir(&amp;#39;site-packages&amp;#39;, $VIRTUAL_ENV . &amp;#39;/lib/*&amp;#39;) endif Then you can simply run command
+pipenv run vim some/script.py And now YCM works correctly :3</description>
+    </item>
+    
+    <item>
+      <title>ZSH: auto git config.user</title>
+      <link>http://undying.github.io/posts/2020-06-25-zsh--auto-git-config.user/</link>
+      <pubDate>Thu, 25 Jun 2020 22:36:59 +0300</pubDate>
+      
+      <guid>http://undying.github.io/posts/2020-06-25-zsh--auto-git-config.user/</guid>
+      <description>On my laptop and desktop I usually have many git repositories. Some of them are personal and some of them are from my main job. In companies it&amp;rsquo;s common practice to have corporate email that used in repository configuration.
+git config user.name &amp;#34;Mr Anderson&amp;#34; git config user.email &amp;#34;anderson@corp.in&amp;#34; In personal repository you may use some cool nickname and personal email.
+git config user.name &amp;#34;Neo&amp;#34; git config user.email &amp;#34;0xff@matr.ix&amp;#34; But there is an headache to not forget configure every repository to be corporate or personal after cloning.</description>
+    </item>
+    
+    <item>
+      <title>Network: Capturing TCP Retransmissions</title>
+      <link>http://undying.github.io/posts/2020-06-20-capturing-tcp-retransmissions/</link>
+      <pubDate>Sat, 20 Jun 2020 16:04:35 +0300</pubDate>
+      
+      <guid>http://undying.github.io/posts/2020-06-20-capturing-tcp-retransmissions/</guid>
+      <description>When server have a lot network connections it&amp;rsquo;s not rare to see tcp retransmissions. The permanent background retransmissions it&amp;rsquo;s even normal situation if it&amp;rsquo;s not abnormally high.
+But when the charts shows abnormally jump of retransmissions it&amp;rsquo;s good to find the reason.
+The reason is may be:
+server is overloaded remote server is overloaded network where servers is based is degraded network of remote endpoint is degraded When servers is not overloaded the next step is to find which endpoint causes the retransmissions.</description>
+    </item>
+    
+    <item>
+      <title>VIM: Append Filetype</title>
+      <link>http://undying.github.io/posts/2020-06-06-vim-append-filetype/</link>
+      <pubDate>Sat, 06 Jun 2020 22:47:03 +0300</pubDate>
+      
+      <guid>http://undying.github.io/posts/2020-06-06-vim-append-filetype/</guid>
+      <description>If you open a file with a non-standard extension, syntax highlighting will not work. This is easily solved by installing filetype manually.
+:set filetype=markdown You can add a hint for VIM about the file type to the file so that you don&amp;rsquo;t have to set the type manually the next time.
+~ cat Readme # vi:syntax=markdown I wanted to make a hotkey to add information about its type to the end of the file.</description>
+    </item>
+    
+    <item>
+      <title>VIM: File Autosave</title>
+      <link>http://undying.github.io/posts/2020-06-02-vim-file-autosave/</link>
+      <pubDate>Tue, 02 Jun 2020 00:10:12 +0300</pubDate>
+      
+      <guid>http://undying.github.io/posts/2020-06-02-vim-file-autosave/</guid>
+      <description>I was wondering how to save file in VIM automatically. Found some solutions in internet but decided to do it my way. So I wrote this small solution:
+&amp;#34;&amp;#34;&amp;#34; Save file on each edit exit function FileAutoSave() if exists(&amp;#39;g:file_autosave_async&amp;#39;) return endif if @% == &amp;#34;&amp;#34; return elseif !filewritable(@%) return endif let g:file_autosave_async = 1 call timer_start(500, &amp;#39;FileAutoSaveAsync&amp;#39;, {&amp;#39;repeat&amp;#39;: 1}) endfunction function FileAutoSaveAsync(timer) update unlet g:file_autosave_async endfunction :autocmd InsertLeave,TextChanged * call FileAutoSave() &amp;#34;&amp;#34;&amp;#34; It updates file in two cases:</description>
+    </item>
+    
+    <item>
+      <title>Route 53 Resolver: NXDOMAIN|SERVFAIL</title>
+      <link>http://undying.github.io/posts/2020-05-29-route-53-resolver-servfail/</link>
+      <pubDate>Fri, 29 May 2020 11:24:01 +0300</pubDate>
+      
+      <guid>http://undying.github.io/posts/2020-05-29-route-53-resolver-servfail/</guid>
+      <description>What we have:
+On premises data center with own domain zone (domain.local) and dns servers AWS VPC with it&amp;rsquo;s own domain zone (domain.r53) and using Route 53 as DNS Server What we need:
+Ability to resolve domain zone hosted on premises DNS Servers from AWS VPC {% mermaid %} graph LR A[EC2 Instance] &amp;ndash;&amp;gt;|a.domain.local| B[Route 53 Forward] &amp;ndash;&amp;gt;|a.domain.local| C[DNS On Premises] {% endmermaid %}
+The configuration is straightforward and well described in official documentation.</description>
+    </item>
+    
+    <item>
+      <title>PostgreSQL 11 Administration Summary</title>
+      <link>http://undying.github.io/posts/2020-05-22-postgresql-11-administration-summary/</link>
+      <pubDate>Fri, 22 May 2020 09:48:49 +0300</pubDate>
+      
+      <guid>http://undying.github.io/posts/2020-05-22-postgresql-11-administration-summary/</guid>
+      <description>PostgreSQL Administration Cheatsheet Intro New In PostgreSQL 11 WAL Size CREATE STATISTICS INCLUDE indexes CREATE INDEX in parallel pg_prewarm Updated WINDOW Functions JIT Compilation Better Partitioning Default Partition Partition Key Updating Hash Partitioning Index Created on Parent Table Better Support Of Stored Procedures Faster ALTER TABLE Locks and Transactions now() function SAVEPOINT DDL commands are transaction safe Explicit Locking FOR SHARE and FOR UPDATE SKIP LOCKED Using CTE with RETURNING FOR SHARE and FOR UPDATE FOR &amp;hellip; clauses by locking strength FOR UPDATE SKIP LOCKED Recommended Locks VACUUM autovacuum Transaction ID Wraparound Transaction Duration Indexing Costs Model PostgreSQL Administration Cheatsheet Intro This cheatsheet is based on the great book about PostgreSQL 11 Administration</description>
+    </item>
+    
+    <item>
+      <title>command not found: ck-unlock-session</title>
+      <link>http://undying.github.io/posts/2019-12-29-ck-unlock-session-alias/</link>
+      <pubDate>Thu, 25 Jul 2019 14:27:00 +0000</pubDate>
+      
+      <guid>http://undying.github.io/posts/2019-12-29-ck-unlock-session-alias/</guid>
+      <description>This evening I was updating my Gentoo laptop. While updating, my session were locked with the message, that to unlock it I have to use ck-unlock-session. Unfortunately shell told me that there is no such command on my laptop:
+{% highlight bash %} └&amp;gt; ck-unlock-session zsh: command not found: ck-unlock-session {% endhighlight %}
+In the vastness of the Internet found the solution, but it&amp;rsquo;s too long to remember:
+{% highlight bash %} dbus-send &amp;ndash;system &amp;ndash;print-reply &amp;ndash;dest=&amp;ldquo;org.</description>
+    </item>
+    
+    <item>
+      <title>Docker: Mounting block devices into container</title>
+      <link>http://undying.github.io/posts/2019-07-25-mounting_block_devices_into_docker/</link>
+      <pubDate>Thu, 25 Jul 2019 14:27:00 +0000</pubDate>
+      
+      <guid>http://undying.github.io/posts/2019-07-25-mounting_block_devices_into_docker/</guid>
+      <description>Today was curious is it possible to mount block device into a docker container without mounting it on system. It&amp;rsquo;s not well documented but found one interesting comment in github.
+So, if &amp;ndash;mount option in docker run command is &amp;ldquo;magic&amp;rdquo; on top of &amp;ldquo;mount&amp;rdquo; system call, we can use it. After experimenting a bit here is an example mounting lvm volumes.
+First, let&amp;rsquo;s create loop device for LVM:
+{% highlight bash %} dd if=/dev/zero of=/tmp/loop bs=1M count=100 losetup /dev/loop0 /tmp/loop {% endhighlight %}</description>
+    </item>
+    
+    <item>
+      <title>Gentoo: Building FireFox 63.0.3</title>
+      <link>http://undying.github.io/posts/2018-11-21-building_firefox_on_gentoo/</link>
+      <pubDate>Wed, 21 Nov 2018 05:10:00 +0000</pubDate>
+      
+      <guid>http://undying.github.io/posts/2018-11-21-building_firefox_on_gentoo/</guid>
+      <description>Today I was trying to update FireFox on my Gentoo box and failed with error:
+{% highlight bash %} 0:06.75 checking rustc version&amp;hellip; 1.30.1 0:06.75 ERROR: Cargo package manager not found. 0:06.75 To compile Rust language sources, you must have &amp;lsquo;cargo&amp;rsquo; in your path. 0:06.75 See https://www.rust-lang.org/ for more information. 0:06.75 0:06.75 You can install cargo by running &amp;lsquo;./mach bootstrap&amp;rsquo; 0:06.75 or by directly running the installer from https://rustup.rs/ 0:06.75 0:06.</description>
+    </item>
+    
+    <item>
+      <title>Gentoo: Backslash as Yen char</title>
+      <link>http://undying.github.io/posts/2017-02-19-backslash_as_yen/</link>
+      <pubDate>Sun, 19 Feb 2017 15:47:00 +0300</pubDate>
+      
+      <guid>http://undying.github.io/posts/2017-02-19-backslash_as_yen/</guid>
+      <description>If while browsing the internet you have a problem with backslash character which displayed as yen sign you can fix it this way.
+First, let&amp;rsquo;s install the appropriate fonts.
+{% highlight bash %} emerge -av media-fonts/droid {% endhighlight %}
+Then we have to enable them for wide system.
+{% highlight bash %} eselect fontconfig enable 59-google-droid-sans.conf eselect fontconfig enable 59-google-droid-sans-mono.conf eselect fontconfig enable 59-google-droid-serif.conf {% endhighlight %}
+Next step is to clean fonts cache.</description>
+    </item>
+    
+    <item>
+      <title>Pure Bash script for IO usage monitoring</title>
+      <link>http://undying.github.io/posts/2016-09-13-pure_bash_io_usage_monitoring/</link>
+      <pubDate>Tue, 13 Sep 2016 02:39:00 +0300</pubDate>
+      
+      <guid>http://undying.github.io/posts/2016-09-13-pure_bash_io_usage_monitoring/</guid>
+      <description>I had the need to implement pure bash solution for IO usage monitoring without any tools installed on OS, do this fast and accurately. After little reaserching about /sys/ filesystem the next script was born:
+{% highlight bash %} #! /bin/bash
+SLEEP=0.01 declare -A ops=()
+for dev in /sys/block/;do dev=${dev##/} ops+=( [${dev}]=0 ) done
+for i in $(seq 1 100);do while read _ _ drive _ _ _ _ _ _ _ _ tasks _ _;do [ -n &amp;ldquo;${drive}&amp;rdquo; ] || continue case ${tasks} in 0|[!</description>
+    </item>
+    
+    <item>
+      <title>libgcc_s.so: cannot open shared object file</title>
+      <link>http://undying.github.io/posts/2016-04-29-lib_gcc_s_so-cannot_open_shared_object_file/</link>
+      <pubDate>Fri, 29 Apr 2016 02:04:00 +0300</pubDate>
+      
+      <guid>http://undying.github.io/posts/2016-04-29-lib_gcc_s_so-cannot_open_shared_object_file/</guid>
+      <description>Как то вечером, я решил, что стоит лечь по-раньше спать. Подумал, что надо бы выспаться, все дела, но перед этим просто загляну в ноутбук, и тут началось. Для чего то я одновременно запустил rtorrent + emerge -vuDN @world. Стоит ли говорить, что система установлена на шпиндельном hdd, поверх которого работает ssd cache (Bcache). Видимо из-за нагрузки, ноутбук завис и ни на какие действия не реагировал. &amp;ldquo;Семь бед - один ресет&amp;rdquo;, подумал я и перезагрузил ноутбук.</description>
+    </item>
+    
+    <item>
+      <title>Docker: Using docker with LVM Thin Pool</title>
+      <link>http://undying.github.io/posts/2016-02-08-using-docker-with-lvm-thin-volumes/</link>
+      <pubDate>Mon, 08 Feb 2016 00:21:00 +0300</pubDate>
+      
+      <guid>http://undying.github.io/posts/2016-02-08-using-docker-with-lvm-thin-volumes/</guid>
+      <description>Docker is the nice tool for almost every use case in my sphere. It&amp;rsquo;s easy to use, it&amp;rsquo;s fast to build and deploy. Docker can be used with miscellaneous storage drivers such as btrfs, datamapper, overlayfs, aufs. A long time I was using docker with btrfs backend and everything seems to be nice, but when load on this server increased, corrupted layers are began to appear.
+It looks like build process in the next RUN step unable to find files from previous step.</description>
+    </item>
+    
+    <item>
+      <title>Using FireFox to play video with Mplayer on Windows</title>
+      <link>http://undying.github.io/posts/2016-01-31-firefox-and-mplayer/</link>
+      <pubDate>Sun, 31 Jan 2016 16:30:00 +0300</pubDate>
+      
+      <guid>http://undying.github.io/posts/2016-01-31-firefox-and-mplayer/</guid>
+      <description>Some time ago I was visiting at my mom. We live a far away from each other so frequently visits is not so easy. She using a pretty old computer which I were overclocking a long time ago. It&amp;rsquo;s a AMD Barton 3200+ with 2GB DDR RAM and Geforce 6600 GT.
+It was a great PC a long time ago. Even now it works fine, except when you are want to watch video online.</description>
+    </item>
+    
+    <item>
+      <title>How to cleanup FS metadata from partition</title>
+      <link>http://undying.github.io/posts/2016-01-18-cleaning-up-metadata-from-disk/</link>
+      <pubDate>Thu, 28 Jan 2016 02:58:00 +0300</pubDate>
+      
+      <guid>http://undying.github.io/posts/2016-01-18-cleaning-up-metadata-from-disk/</guid>
+      <description>Sometimes you I&amp;rsquo;m need to create new FS on partition, which was already used for something else (another FS, RAID, LVM). I was wondering about most usable ways to clear metadata. Here is some I liked the most.
+first {% highlight bash %} wipefs -a ${DEVICE} {% endhighlight %}
+second {% highlight bash %} dd if=/dev/zero of=${DEVICE} bs=512 seek=$(( $(blockdev &amp;ndash;getsz ${DEVICE}) - 1024 )) count=1024 {% endhighlight %}
+third {% highlight bash %} dmraid -r -E ${DEVICE} {% endhighlight %}</description>
+    </item>
+    
+    <item>
+      <title>Enabling HTTP/2.0 support with Haproxy -&gt; Amazon ELB -&gt; Nginx</title>
+      <link>http://undying.github.io/posts/2016-01-12-haproxy-elb-nginx-http2/</link>
+      <pubDate>Tue, 12 Jan 2016 20:35:00 +0300</pubDate>
+      
+      <guid>http://undying.github.io/posts/2016-01-12-haproxy-elb-nginx-http2/</guid>
+      <description>I have a Haproxy balancer that routes traffic for multiple projects with different host names and now, I need to enable HTTP/2.0 support for couple or all of them. The problem is that current version of Haproxy not supporting HTTP/2.0 protocol. Also, In my case I have multiple backends. To some of them I need to send http/1.1 traffic and to some of them http/2.0.
+The main problem is the mix of tcp/http modes in Haproxy.</description>
+    </item>
+    
+    <item>
+      <title>Выжимаем максимум интернета из деревенских сот</title>
+      <link>http://undying.github.io/posts/2015-12-31-maximizing-village-internet/</link>
+      <pubDate>Thu, 31 Dec 2015 12:41:17 +0300</pubDate>
+      
+      <guid>http://undying.github.io/posts/2015-12-31-maximizing-village-internet/</guid>
+      <description>На кануне новогодних праздников понадобилось пораньше покинуть столицу, покинуть ее в направлении таких мест, в которых интернет бывает довольно редко. На период отсутствия на работе я обещал напарникам быть на связи. А так как мой род деятельности напрямую связан с web, то я решил поэкспериментировать с доступностью интернетов в планируемом месте пребывания.
+Суть задачи сводился к следующему:
+Из небходимого у меня было:
+В качестве хаба использовал старый добрый D-Link Dub-104 (красивый компактный хаб с невероятно здоровенным блоком питания).</description>
+    </item>
+    
+    <item>
+      <title>Fixing cyrillic symbols in KDE Konsole</title>
+      <link>http://undying.github.io/posts/2020-05-08-cyrillic-symbols-in-konsole/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://undying.github.io/posts/2020-05-08-cyrillic-symbols-in-konsole/</guid>
+      <description>После очередной переустановки системы, вернее после установки ради интереса новой системы, в терминале Konsole возникли проблемы с кириллицей. Что характерно, в виртуальных терминалах (tty1-7) с кодировкой проблем не было, а значит системные шрифты были настроены верно.
+Знатно покопавшись в сетях нашел древний пост на эту тему. Попробовал выставить LC_ALL=en_US.utf8 и запустить konsole, чудо произошло. Осталось сделать это красиво.
+А красиво можно запилить двумя путями:
+глобально закинув определение переменной куда-нибудь сюда /etc/profile.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,99 +1,245 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url>
-<loc>http://undying.github.io/2015/12/31/maximizing-village-internet.html</loc>
-<lastmod>2015-12-31T12:41:17+03:00</lastmod>
-</url>
-<url>
-<loc>http://undying.github.io/2016/01/12/haproxy-elb-nginx-http2.html</loc>
-<lastmod>2016-01-12T20:35:00+03:00</lastmod>
-</url>
-<url>
-<loc>http://undying.github.io/2016/01/28/cleaning-up-metadata-from-disk.html</loc>
-<lastmod>2016-01-28T02:58:00+03:00</lastmod>
-</url>
-<url>
-<loc>http://undying.github.io/2016/01/31/firefox-and-mplayer.html</loc>
-<lastmod>2016-01-31T16:30:00+03:00</lastmod>
-</url>
-<url>
-<loc>http://undying.github.io/2016/02/08/using-docker-with-lvm-thin-volumes.html</loc>
-<lastmod>2016-02-08T00:21:00+03:00</lastmod>
-</url>
-<url>
-<loc>http://undying.github.io/2016/04/29/lib_gcc_s_so-cannot_open_shared_object_file.html</loc>
-<lastmod>2016-04-29T02:04:00+03:00</lastmod>
-</url>
-<url>
-<loc>http://undying.github.io/2016/09/13/pure_bash_io_usage_monitoring.html</loc>
-<lastmod>2016-09-13T02:39:00+03:00</lastmod>
-</url>
-<url>
-<loc>http://undying.github.io/2017/02/19/backslash_as_yen.html</loc>
-<lastmod>2017-02-19T15:47:00+03:00</lastmod>
-</url>
-<url>
-<loc>http://undying.github.io/2018/11/21/building_firefox_on_gentoo.html</loc>
-<lastmod>2018-11-21T08:10:00+03:00</lastmod>
-</url>
-<url>
-<loc>http://undying.github.io/2019/07/25/mounting_block_devices_into_docker.html</loc>
-<lastmod>2019-07-25T17:27:00+03:00</lastmod>
-</url>
-<url>
-<loc>http://undying.github.io/2019/07/25/ck-unlock-session-alias.html</loc>
-<lastmod>2019-07-25T17:27:00+03:00</lastmod>
-</url>
-<url>
-<loc>http://undying.github.io/2020/05/08/cyrillic-symbols-in-konsole.html</loc>
-<lastmod>2020-05-08T19:19:00+03:00</lastmod>
-</url>
-<url>
-<loc>http://undying.github.io/2020/05/22/postgresql-11-administration-summary.html</loc>
-<lastmod>2020-05-22T09:48:49+03:00</lastmod>
-</url>
-<url>
-<loc>http://undying.github.io/2020/05/29/route-53-resolver-servfail.html</loc>
-<lastmod>2020-05-29T11:24:01+03:00</lastmod>
-</url>
-<url>
-<loc>http://undying.github.io/2020/06/02/vim-file-autosave.html</loc>
-<lastmod>2020-06-02T00:10:12+03:00</lastmod>
-</url>
-<url>
-<loc>http://undying.github.io/2020/06/06/vim-append-filetype.html</loc>
-<lastmod>2020-06-06T22:47:03+03:00</lastmod>
-</url>
-<url>
-<loc>http://undying.github.io/2020/06/20/capturing-tcp-retransmissions.html</loc>
-<lastmod>2020-06-20T16:04:35+03:00</lastmod>
-</url>
-<url>
-<loc>http://undying.github.io/2020/06/25/zsh-auto-git-config.user.html</loc>
-<lastmod>2020-06-25T22:36:59+03:00</lastmod>
-</url>
-<url>
-<loc>http://undying.github.io/2020/10/14/vim-ycm-and-pipenv.html</loc>
-<lastmod>2020-10-14T23:03:02+03:00</lastmod>
-</url>
-<url>
-<loc>http://undying.github.io/2020/10/14/vim-making-markdown-checklist-shortcut.html</loc>
-<lastmod>2020-10-14T23:45:53+03:00</lastmod>
-</url>
-<url>
-<loc>http://undying.github.io/2020/10/15/vim-handle-urls.html</loc>
-<lastmod>2020-10-15T22:32:39+03:00</lastmod>
-</url>
-<url>
-<loc>http://undying.github.io/about/</loc>
-</url>
-<url>
-<loc>http://undying.github.io/</loc>
-</url>
-<url>
-<loc>http://undying.github.io/page2/</loc>
-</url>
-<url>
-<loc>http://undying.github.io/page3/</loc>
-</url>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>http://undying.github.io/tags/http/</loc>
+    <lastmod>2020-10-15T22:32:39+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/</loc>
+    <lastmod>2020-10-15T22:32:39+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/posts/</loc>
+    <lastmod>2020-10-15T22:32:39+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/</loc>
+    <lastmod>2020-10-15T22:32:39+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/url/</loc>
+    <lastmod>2020-10-15T22:32:39+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/vim/</loc>
+    <lastmod>2020-10-15T22:32:39+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/posts/2020-10-15-vim--handle-urls/</loc>
+    <lastmod>2020-10-15T22:32:39+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/markdown/</loc>
+    <lastmod>2020-10-14T23:45:53+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/posts/2020-10-14-vim--making-markdown-checklist-shortcut/</loc>
+    <lastmod>2020-10-14T23:45:53+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/vimscript/</loc>
+    <lastmod>2020-10-14T23:45:53+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/pipenv/</loc>
+    <lastmod>2020-10-14T23:03:02+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/posts/2020-10-14-vim-ycm-and-pipenv/</loc>
+    <lastmod>2020-10-14T23:03:02+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/ycm/</loc>
+    <lastmod>2020-10-14T23:03:02+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/git/</loc>
+    <lastmod>2020-06-25T22:36:59+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/zsh/</loc>
+    <lastmod>2020-06-25T22:36:59+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/posts/2020-06-25-zsh--auto-git-config.user/</loc>
+    <lastmod>2020-06-25T22:36:59+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/linux/</loc>
+    <lastmod>2020-06-20T16:04:35+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/network/</loc>
+    <lastmod>2020-06-20T16:04:35+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/posts/2020-06-20-capturing-tcp-retransmissions/</loc>
+    <lastmod>2020-06-20T16:04:35+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/tcp/</loc>
+    <lastmod>2020-06-20T16:04:35+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/filetype/</loc>
+    <lastmod>2020-06-06T22:47:03+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/posts/2020-06-06-vim-append-filetype/</loc>
+    <lastmod>2020-06-06T22:47:03+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/autosave/</loc>
+    <lastmod>2020-06-02T00:10:12+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/posts/2020-06-02-vim-file-autosave/</loc>
+    <lastmod>2020-06-02T00:10:12+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/aws/</loc>
+    <lastmod>2020-05-29T11:24:01+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/dns/</loc>
+    <lastmod>2020-05-29T11:24:01+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/posts/2020-05-29-route-53-resolver-servfail/</loc>
+    <lastmod>2020-05-29T11:24:01+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/cheatsheet/</loc>
+    <lastmod>2020-05-22T09:48:49+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/postgresql/</loc>
+    <lastmod>2020-05-22T09:48:49+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/posts/2020-05-22-postgresql-11-administration-summary/</loc>
+    <lastmod>2020-05-22T09:48:49+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/block/</loc>
+    <lastmod>2019-07-25T14:27:00+00:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/posts/2019-12-29-ck-unlock-session-alias/</loc>
+    <lastmod>2019-07-25T14:27:00+00:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/container/</loc>
+    <lastmod>2019-07-25T14:27:00+00:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/docker/</loc>
+    <lastmod>2019-07-25T14:27:00+00:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/posts/2019-07-25-mounting_block_devices_into_docker/</loc>
+    <lastmod>2019-07-25T14:27:00+00:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/gentoo/</loc>
+    <lastmod>2019-07-25T14:27:00+00:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/kde/</loc>
+    <lastmod>2019-07-25T14:27:00+00:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/lvm/</loc>
+    <lastmod>2019-07-25T14:27:00+00:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/mount/</loc>
+    <lastmod>2019-07-25T14:27:00+00:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/building/</loc>
+    <lastmod>2018-11-21T05:10:00+00:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/cargo/</loc>
+    <lastmod>2018-11-21T05:10:00+00:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/firefox/</loc>
+    <lastmod>2018-11-21T05:10:00+00:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/posts/2018-11-21-building_firefox_on_gentoo/</loc>
+    <lastmod>2018-11-21T05:10:00+00:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/backslash/</loc>
+    <lastmod>2017-02-19T15:47:00+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/posts/2017-02-19-backslash_as_yen/</loc>
+    <lastmod>2017-02-19T15:47:00+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/yen/</loc>
+    <lastmod>2017-02-19T15:47:00+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/bash/</loc>
+    <lastmod>2016-09-13T02:39:00+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/io/</loc>
+    <lastmod>2016-09-13T02:39:00+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/monitoring/</loc>
+    <lastmod>2016-09-13T02:39:00+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/posts/2016-09-13-pure_bash_io_usage_monitoring/</loc>
+    <lastmod>2016-09-13T02:39:00+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/gcc/</loc>
+    <lastmod>2016-04-29T02:04:00+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/posts/2016-04-29-lib_gcc_s_so-cannot_open_shared_object_file/</loc>
+    <lastmod>2016-04-29T02:04:00+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/datamapper/</loc>
+    <lastmod>2016-02-08T00:21:00+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/posts/2016-02-08-using-docker-with-lvm-thin-volumes/</loc>
+    <lastmod>2016-02-08T00:21:00+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/thin/</loc>
+    <lastmod>2016-02-08T00:21:00+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/mplayer/</loc>
+    <lastmod>2016-01-31T16:30:00+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/mpv/</loc>
+    <lastmod>2016-01-31T16:30:00+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/posts/2016-01-31-firefox-and-mplayer/</loc>
+    <lastmod>2016-01-31T16:30:00+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/video/</loc>
+    <lastmod>2016-01-31T16:30:00+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/youtube/</loc>
+    <lastmod>2016-01-31T16:30:00+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/fs/</loc>
+    <lastmod>2016-01-28T02:58:00+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/hdd/</loc>
+    <lastmod>2016-01-28T02:58:00+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/posts/2016-01-18-cleaning-up-metadata-from-disk/</loc>
+    <lastmod>2016-01-28T02:58:00+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/raid/</loc>
+    <lastmod>2016-01-28T02:58:00+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/elb/</loc>
+    <lastmod>2016-01-12T20:35:00+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/posts/2016-01-12-haproxy-elb-nginx-http2/</loc>
+    <lastmod>2016-01-12T20:35:00+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/haproxy/</loc>
+    <lastmod>2016-01-12T20:35:00+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/nginx/</loc>
+    <lastmod>2016-01-12T20:35:00+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/3g/</loc>
+    <lastmod>2015-12-31T12:41:17+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/gprs/</loc>
+    <lastmod>2015-12-31T12:41:17+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/gsm/</loc>
+    <lastmod>2015-12-31T12:41:17+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/openwrt/</loc>
+    <lastmod>2015-12-31T12:41:17+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/wifi/</loc>
+    <lastmod>2015-12-31T12:41:17+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/posts/2015-12-31-maximizing-village-internet/</loc>
+    <lastmod>2015-12-31T12:41:17+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/categories/</loc>
+  </url><url>
+    <loc>http://undying.github.io/tags/cyrillic/</loc>
+  </url><url>
+    <loc>http://undying.github.io/tags/encoding/</loc>
+  </url><url>
+    <loc>http://undying.github.io/posts/2020-05-08-cyrillic-symbols-in-konsole/</loc>
+  </url><url>
+    <loc>http://undying.github.io/tags/http/2/</loc>
+  </url><url>
+    <loc>http://undying.github.io/tags/konsole/</loc>
+  </url><url>
+    <loc>http://undying.github.io/tags/locale/</loc>
+  </url><url>
+    <loc>http://undying.github.io/tags/plasma/</loc>
+  </url><url>
+    <loc>http://undying.github.io/tags/terminal/</loc>
+  </url>
 </urlset>

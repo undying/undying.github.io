@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>linux on My Digital Chronicle</title>
+    <link>http://undying.github.io/tags/linux/</link>
+    <description>Recent content in linux on My Digital Chronicle</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 20 Jun 2020 16:04:35 +0300</lastBuildDate><atom:link href="http://undying.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Network: Capturing TCP Retransmissions</title>
+      <link>http://undying.github.io/posts/2020-06-20-capturing-tcp-retransmissions/</link>
+      <pubDate>Sat, 20 Jun 2020 16:04:35 +0300</pubDate>
+      
+      <guid>http://undying.github.io/posts/2020-06-20-capturing-tcp-retransmissions/</guid>
+      <description>When server have a lot network connections it&amp;rsquo;s not rare to see tcp retransmissions. The permanent background retransmissions it&amp;rsquo;s even normal situation if it&amp;rsquo;s not abnormally high.
+But when the charts shows abnormally jump of retransmissions it&amp;rsquo;s good to find the reason.
+The reason is may be:
+server is overloaded remote server is overloaded network where servers is based is degraded network of remote endpoint is degraded When servers is not overloaded the next step is to find which endpoint causes the retransmissions.</description>
+    </item>
+    
+  </channel>
+</rss>

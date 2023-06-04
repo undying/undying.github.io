@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>PostgreSQL 11 Administration Summary | My Digital Chronicle</title>
+<meta name="keywords" content="postgresql, cheatsheet">
+<meta name="description" content="PostgreSQL Administration Cheatsheet Intro New In PostgreSQL 11 WAL Size CREATE STATISTICS INCLUDE indexes CREATE INDEX in parallel pg_prewarm Updated WINDOW Functions JIT Compilation Better Partitioning Default Partition Partition Key Updating Hash Partitioning Index Created on Parent Table Better Support Of Stored Procedures Faster ALTER TABLE Locks and Transactions now() function SAVEPOINT DDL commands are transaction safe Explicit Locking FOR SHARE and FOR UPDATE SKIP LOCKED Using CTE with RETURNING FOR SHARE and FOR UPDATE FOR &hellip; clauses by locking strength FOR UPDATE SKIP LOCKED Recommended Locks VACUUM autovacuum Transaction ID Wraparound Transaction Duration Indexing Costs Model PostgreSQL Administration Cheatsheet Intro This cheatsheet is based on the great book about PostgreSQL 11 Administration">
+<meta name="author" content="">
+<link rel="canonical" href="http://undying.github.io/posts/2020-05-22-postgresql-11-administration-summary/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.3613efbd0b1772781e8f49935e973cae632a7f61471c05b17be155505ccf87b5.css" integrity="sha256-NhPvvQsXcngej0mTXpc8rmMqf2FHHAWxe&#43;FVUFzPh7U=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://undying.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://undying.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://undying.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://undying.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://undying.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="PostgreSQL 11 Administration Summary" />
+<meta property="og:description" content="PostgreSQL Administration Cheatsheet Intro New In PostgreSQL 11 WAL Size CREATE STATISTICS INCLUDE indexes CREATE INDEX in parallel pg_prewarm Updated WINDOW Functions JIT Compilation Better Partitioning Default Partition Partition Key Updating Hash Partitioning Index Created on Parent Table Better Support Of Stored Procedures Faster ALTER TABLE Locks and Transactions now() function SAVEPOINT DDL commands are transaction safe Explicit Locking FOR SHARE and FOR UPDATE SKIP LOCKED Using CTE with RETURNING FOR SHARE and FOR UPDATE FOR &hellip; clauses by locking strength FOR UPDATE SKIP LOCKED Recommended Locks VACUUM autovacuum Transaction ID Wraparound Transaction Duration Indexing Costs Model PostgreSQL Administration Cheatsheet Intro This cheatsheet is based on the great book about PostgreSQL 11 Administration" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://undying.github.io/posts/2020-05-22-postgresql-11-administration-summary/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-05-22T09:48:49+03:00" />
+<meta property="article:modified_time" content="2020-05-22T09:48:49+03:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="PostgreSQL 11 Administration Summary"/>
+<meta name="twitter:description" content="PostgreSQL Administration Cheatsheet Intro New In PostgreSQL 11 WAL Size CREATE STATISTICS INCLUDE indexes CREATE INDEX in parallel pg_prewarm Updated WINDOW Functions JIT Compilation Better Partitioning Default Partition Partition Key Updating Hash Partitioning Index Created on Parent Table Better Support Of Stored Procedures Faster ALTER TABLE Locks and Transactions now() function SAVEPOINT DDL commands are transaction safe Explicit Locking FOR SHARE and FOR UPDATE SKIP LOCKED Using CTE with RETURNING FOR SHARE and FOR UPDATE FOR &hellip; clauses by locking strength FOR UPDATE SKIP LOCKED Recommended Locks VACUUM autovacuum Transaction ID Wraparound Transaction Duration Indexing Costs Model PostgreSQL Administration Cheatsheet Intro This cheatsheet is based on the great book about PostgreSQL 11 Administration"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Posts",
+      "item": "http://undying.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "PostgreSQL 11 Administration Summary",
+      "item": "http://undying.github.io/posts/2020-05-22-postgresql-11-administration-summary/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "PostgreSQL 11 Administration Summary",
+  "name": "PostgreSQL 11 Administration Summary",
+  "description": "PostgreSQL Administration Cheatsheet Intro New In PostgreSQL 11 WAL Size CREATE STATISTICS INCLUDE indexes CREATE INDEX in parallel pg_prewarm Updated WINDOW Functions JIT Compilation Better Partitioning Default Partition Partition Key Updating Hash Partitioning Index Created on Parent Table Better Support Of Stored Procedures Faster ALTER TABLE Locks and Transactions now() function SAVEPOINT DDL commands are transaction safe Explicit Locking FOR SHARE and FOR UPDATE SKIP LOCKED Using CTE with RETURNING FOR SHARE and FOR UPDATE FOR \u0026hellip; clauses by locking strength FOR UPDATE SKIP LOCKED Recommended Locks VACUUM autovacuum Transaction ID Wraparound Transaction Duration Indexing Costs Model PostgreSQL Administration Cheatsheet Intro This cheatsheet is based on the great book about PostgreSQL 11 Administration",
+  "keywords": [
+    "postgresql", "cheatsheet"
+  ],
+  "articleBody": " PostgreSQL Administration Cheatsheet Intro New In PostgreSQL 11 WAL Size CREATE STATISTICS INCLUDE indexes CREATE INDEX in parallel pg_prewarm Updated WINDOW Functions JIT Compilation Better Partitioning Default Partition Partition Key Updating Hash Partitioning Index Created on Parent Table Better Support Of Stored Procedures Faster ALTER TABLE Locks and Transactions now() function SAVEPOINT DDL commands are transaction safe Explicit Locking FOR SHARE and FOR UPDATE SKIP LOCKED Using CTE with RETURNING FOR SHARE and FOR UPDATE FOR … clauses by locking strength FOR UPDATE SKIP LOCKED Recommended Locks VACUUM autovacuum Transaction ID Wraparound Transaction Duration Indexing Costs Model PostgreSQL Administration Cheatsheet Intro This cheatsheet is based on the great book about PostgreSQL 11 Administration\nBig thanks to it’s author - Hans-Jürgen Schönig.\nNew In PostgreSQL 11 WAL Size Default WAL size is: 16M\nTo change size during setup: initdb -D /pgdata --wal-segsize=32\nCREATE STATISTICS Note: This actually from PostgreSQL 10.\nCREATE STATISTICS will create a new extended statistics object tracking data about the specified table, foreign table or materialized view. The statistics object will be created in the current database and will be owned by the user issuing the command.\nThe great thing is that statistics collected by every column you need.\nReferences:\nCREATE STATISTICS The Postgres 10 feature you didn’t know about: CREATE STATISTICS INCLUDE indexes In addition to the indexed column, the index can contain an additional column. This can be useful to avoid table scan and use only index scan.\nCREATE UNIQUE INDEX some_name ON person USING btree (id) INCLUDE (name);\nNote: Always select only those columns you need. When using SELECT * you gathering all data from table and that hurts your performance.\nCREATE INDEX in parallel PostgreSQL can build indexes while leveraging multiple CPUs in order to process the table rows faster. This feature is known as parallel index build. For index methods that support building indexes in parallel (currently, only B-tree), maintenance_work_mem specifies the maximum amount of memory that can be used by each index build operation as a whole, regardless of how many worker processes were started. Generally, a cost model automatically determines how many worker processes should be requested, if any.\nParallel index builds may benefit from increasing maintenance_work_mem where an equivalent serial index build will see little or no benefit. Note that maintenance_work_mem may influence the number of worker processes requested, since parallel workers must have at least a 32MB share of the total maintenance_work_mem budget. There must also be a remaining 32MB share for the leader process. Increasing max_parallel_maintenance_workers may allow more workers to be used, which will reduce the time needed for index creation, so long as the index build is not already I/O bound. Of course, there should also be sufficient CPU capacity that would otherwise lie idle.\nReferences:\nCREATE INDEX PostgreSQL: Parallel CREATE INDEX for better performance pg_prewarm CREATE EXTENSION pg_prewarm; SELECT pg_prewarm('tablename'); References:\nPrewarming PostgreSQL I/O caches Updated WINDOW Functions RANGE BETWEEN EXCLUDE EXCLUDE CURRENT ROW EXCLUDE TIES References:\nTimeseries: EXCLUDE TIES, CURRENT ROW and GROUP Window Functions JIT Compilation Just-in-Time (JIT) compilation is the process of turning some form of interpreted program evaluation into a native program, and doing so at run time. For example, instead of using general-purpose code that can evaluate arbitrary SQL expressions to evaluate a particular SQL predicate like WHERE a.col = 3, it is possible to generate a function that is specific to that expression and can be natively executed by the CPU, yielding a speedup.\nPostgreSQL has builtin support to perform JIT compilation using LLVM when PostgreSQL is built with –with-llvm.\nReferences:\nJIT Reason Better Partitioning Default Partition If row does not match any partition already created, it’s now can be moved to the default partition.\nCREATE TABLE default_part PARTITION OF another_table DEFAULT; Partition Key Updating Now when updating the value of partition key, row is moved to another partition by PostgreSQL automatically.\nHash Partitioning CREATE TABLE tab(i int, i text) PARTITION BY HASH (i); CREATE TABLE tab_0 PARTITION OF tab FOR VALUES WITH (MODULUS 4, REMAINDER 0); Index Created on Parent Table Now when creating index on parent table it automatically created on all child`s tables. Also, creating “global” unique index on parent table creates unique index on all child`s table.\nReferences:\nA Guide to Partitioning Data In PostgreSQL How to Take Advantage of the New Partitioning Features in PostgreSQL 11 Table Partitioning Better Support Of Stored Procedures Main difference between functions ans procedures in PostgreSQL is that function is a part of transaction. But procedure may contain multiple transactions.\nCREATE PROCEDURE test_proc() LANGUAGE plpgsql AS $$ BEGIN CREATE TABLE a (aid int); CREATE TABLE b (bid int); COMMIT; CREATE TABLE c (cid int); ROLLBACK; END; $$; Faster ALTER TABLE To add a column to the table we can use such command:\nALTER TABLE x ADD COLUMN y int; ALTER TABLE x ADD COLUMN z int DEFAULT 57; First command will work fast always, because it simply updates system catalog. Second command will work fast only in PostgreSQL 11 and newer versions. In the PG10 this will lead table to be rewritten which may be slow.\nLocks and Transactions now() function now() function returns time of the transaction beginning. So calling it twice in one transaction will return the same data. If you need the real time, you have to use function clock_timestamp()\nSAVEPOINT In long transaction which may fail in the middle of process it’s possible to use savepoint and rollback to it saving the job that already completed successfully.\npostgres=# BEGIN; BEGIN postgres=# SELECT 1; ?column? ---------- 1 (1 row) postgres=# SAVEPOINT a; SAVEPOINT postgres=# SELECT 1 / 0; ERROR: division by zero postgres=# SELECT 2; ERROR: current transaction is aborted, commands ignored until end of transaction block postgres=# ROLLBACK TO SAVEPOINT a; ROLLBACK postgres=# SELECT 3; ?column? ---------- 3 (1 row) postgres=# COMMIT; COMMIT DDL commands are transaction safe It’s possible to create and modify tables in transaction then rollback all changes during error.\npostgres=# CREATE DATABASE test; CREATE DATABASE postgres=# \\c test You are now connected to database \"test\" as user \"postgres\". test=# \\d Did not find any relations. test=# BEGIN; BEGIN test=# CREATE TABLE t_test (id int); CREATE TABLE test=# ALTER TABLE t_test ALTER COLUMN id TYPE int8; ALTER TABLE test=# \\d t_test; Table \"public.t_test\" Column | Type | Collation | Nullable | Default --------+--------+-----------+----------+--------- id | bigint | | | test=# ROLLBACK; ROLLBACK test=# \\d Did not find any relations. Explicit Locking Sometime it’s needed to use locks to fix this kind of errors:\nTransaction 1 Transaction 2 BEGIN; BEGIN; SELECT max(id) FROM product; SELECT max(id) FROM product; – query returned 17 – query returned 17 – user added product 18 – user added product 18 INSERT INTO product … VALUES (18, …) INSERT INTO product … VALUES (18, …) COMMIT; COMMIT; This error can be avoided this way:\nBEGIN; LOCK TABLE product in ACCESS EXCLUSIVE MODE; INSERT INTO product SELECT max(id) + 1, ... FROM product; COMMIT; But this is very bad for performance reasons. Alternative solutions is to separate tables in this way:\nCREATE TABLE t_invoice (id int PRIMARY KEY); CREATE TABLE t_watermark (id int); INSERT INTO t_watermark VALUES (0); WITH x AS (UPDATE t_watermark SET id = id + 1 RETURNING id) INSERT INTO t_invoice SELECT * FROM x RETURNING id; Only one UPDATE can be occurred at once but this does not blocks SELECT queries.\nReferences:\nExplicit Locking FOR SHARE and FOR UPDATE This is wrong:\nBEGIN; SELECT * FROM invoice WHERE processed = false; -- now make some work with returned data UPDATE invoice SET processed = true ... COMMIT; Multiple requests can select the same data and then try to insert updated data. SELECT FOR UPDATE for the rescue.\nBEGIN; SELECT * FROM invoice WHERE processed = false FOR UPDATE; -- now processing data with modifications UPDATE invoice SET processed = true; COMMIT; When running multiple transactions on the same rows the second one will wait until the first one will end. But we can skip them with NOWAIT.\nTransaction 1 Transaction 2 BEGIN; BEGIN; SELECT … FROM table WHERE … FOR UPDATE NOWAIT; – processing SELECT … FROM tab WHERE … FOR UPDATE NOWAIT; – still processing ERROR: could not obtain lock on row in relation “table” There is also parameter lock_timeout to set how long we are ready to wait lock.\nSET lock_timeout TO 5000; -- set timeout to 5 seconds SKIP LOCKED SELECT FOR UDATE can block others requests for UPDATE\nTransaction 1 Transaction 2 BEING; BEING; SELECT … FROM table LIMIT 1 FOR UPDATE; – waiting for user action SELECT … FROM table LIMIT 1 FOR UPDATE; – waiting for user action – waiting Transaction 1 To fix that we can use SKIP LOCKED.\nTransaction 1 Transaction 2 BEGIN; BEGIN; SELECT * FROM table LIMIT 2 FOR UPDATE SKIP LOCKED; SELECT * FROM table LIMIT 2 FOR UPDATE SKIP LOCKED; – returns first pair of not locked rows – returns second pair of not locked rows Note: When using FOR UPDATE on table with FOREIGN KEY, both tables will be blocked.\nUsing CTE with RETURNING When you need to update record and use result value and don’t want to use explicit blocking or long transaction, it’s possible to use CTE and UPDATE with RETURNING statement.\nExample:\ntest=# CREATE TABLE t_order (id int PRIMARY KEY); CREATE TABLE test=# CREATE TABLE t_room (id int); CREATE TABLE test=# INSERT INTO t_room VALUES (0); INSERT 0 test=# WITH x AS (UPDATE t_room SET id = id + 1 RETURNING *) INSERT INTO t_order SELECT * FROM x RETURNING *; id ____ 1 FOR SHARE and FOR UPDATE To select some data for database, process it and then update this data in database there is a SELECT FOR UPDATE statement for that.\nFOR … clauses by locking strength The locking clause has general form:\nFOR [lock_strength] [ OF table_name [, ...] ] [ NOWAIT | SKIP LOCKED ] where lock_strength can be one of:\nUPDATE (when we definitely want to update record, most strong lock) NO KEY UPDATE (the lock is weaker and can coexist with SELECT FOR SHARE) SHARE (this type lock can be handled by multiple transactions) KEY SHARE (like SHARE lock but weaker. this lock conflicts with FOR UPDATE but can coexist with FOR NO KEY UPDATE) See more details here\nFOR UPDATE SKIP LOCKED test=# CREATE TABLE t_room AS SELECT * FROM generate_series(1, 200) AS id; SELECT 200 Transaction 1 Transaction 2 BEGIN; BEGIN; SELECT * FROM t_room LIMIT 2 FOR UPDATE SKIP LOCKED; SELECT * FROM t_room LIMIT 2 FOR UPDATE SKIP LOCKED; # returns 1, 2 # returns 3, 4 This only works well if there is no REFERENCES in the table. If table have REFERENCES second transaction with UPDATE will be blocked till first transaction will end.\nRecommended Locks It’s possible to use locks for applications synchronization. In this case you lock not rows but numbers instead.\nTransaction 1 Transaction 2 BEGIN; SELECT pg_advisory_lock(15); SELECT pg_advisory_lock(15); waiting for lock… waiting for lock… COMMIT; waiting for lock… SELECT pg_advisory_unlock(15); waiting for lock… lock granted! Handy functions:\npg_advisory_unlock_all() - unlock all previous locks pg_try_advisory_lock() - get lock if possible More details in documentation\nVACUUM autovacuum Options:\nautovacuum_naptime: Specifies the minimum delay between autovacuum runs on any given database. The delay is measured in seconds, and the default is one minute (1min). autovacuum_vacuum_threshold: Specifies the minimum number of updated or deleted tuples needed to trigger a VACUUM in any one table. The default is 50 tuples. autovacuum_analyze_threshold: Specifies the minimum number of inserted, updated or deleted tuples needed to trigger an ANALYZE in any one table. The default is 50 tuples. autovacuum_vacuum_scale_factor: Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a VACUUM. The default is 0.2 (20% of table size). autovacuum_analyze_scale_factor: Specifies a fraction of the table size to add to autovacuum_analyze_threshold when deciding whether to trigger an ANALYZE. The default is 0.1 (10% of table size). Transaction ID Wraparound Options:\nautovacuum_freeze_max_age: Specifies the maximum age (in transactions) that a table’s pg_class.relfrozenxid field can attain before a VACUUM operation is forced to prevent transaction ID wraparound within the table. Note that the system will launch autovacuum processes to prevent wraparound even when autovacuum is otherwise disabled. autovacuum_multixact_freeze_max_age: Specifies the maximum age (in multixacts) that a table’s pg_class.relminmxid field can attain before a VACUUM operation is forced to prevent multixact ID wraparound within the table. Note that the system will launch autovacuum processes to prevent wraparound even when autovacuum is otherwise disabled. Wraparound References:\nhttps://www.postgresql.org/docs/11/routine-vacuuming.html#VACUUM-FOR-WRAPAROUND https://www.cybertec-postgresql.com/en/autovacuum-wraparound-protection-in-postgresql/ Transaction Duration old_snapshot_threshold: Sets the minimum time that a snapshot can be used without risk of a snapshot too old error occurring when using the snapshot. This parameter can only be set at server start.\nBeyond the threshold, old data may be vacuumed away. This can help prevent bloat in the face of snapshots which remain in use for a long time. To prevent incorrect results due to cleanup of data which would otherwise be visible to the snapshot, an error is generated when the snapshot is older than this threshold and the snapshot is used to read a page which has been modified since the snapshot was built. More details.\nIndexing Costs Model Costs formula for Seq Scan:\n(blocks to read * seq_page_cost) \\ + (rows scanned * cpu_tuple_cost + rows scanned * cpu_operator_cost) To get sum of block per table:\nSELECT pg_relation_size('table_name') / 8192.0; Useful options:\nrandom_page_cost: Sets the planner’s estimate of the cost of a non-sequentially-fetched disk page. The default is 4.0. cpu_index_tuple_cost: Sets the planner’s estimate of the cost of processing each index entry during an index scan. The default is 0.005. For parallel jobs:\nparallel_tuple_cost: Sets the planner’s estimate of the cost of transferring one tuple from a parallel worker process to another process. The default is 0.1. parallel_setup_cost: Sets the planner’s estimate of the cost of launching parallel worker processes. The default is 1000. min_parallel_table_scan_size: Sets the minimum amount of table data that must be scanned in order for a parallel scan to be considered. The default is 8 megabytes (8MB). min_parallel_index_scan_size: Sets the minimum amount of index data that must be scanned in order for a parallel scan to be considered. The default is 512 kilobytes (512kB). References:\nhttps://www.postgresql.org/docs/11/runtime-config-query.html https://www.postgresql.org/docs/11/index-cost-estimation.html ",
+  "wordCount" : "2376",
+  "inLanguage": "en",
+  "datePublished": "2020-05-22T09:48:49+03:00",
+  "dateModified": "2020-05-22T09:48:49+03:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://undying.github.io/posts/2020-05-22-postgresql-11-administration-summary/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "My Digital Chronicle",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://undying.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://undying.github.io" accesskey="h" title="My Digital Chronicle (Alt + H)">My Digital Chronicle</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title">
+      PostgreSQL 11 Administration Summary
+    </h1>
+    <div class="post-meta"><span title='2020-05-22 09:48:49 +0300 MSK'>May 22, 2020</span>
+
+</div>
+  </header> 
+  <div class="post-content"><!-- raw HTML omitted -->
+<ul>
+<li><a href="#postgresql-administration-cheatsheet">PostgreSQL Administration Cheatsheet</a>
+<ul>
+<li><a href="#intro">Intro</a></li>
+<li><a href="#new-in-postgresql-11">New In PostgreSQL 11</a>
+<ul>
+<li><a href="#wal-size">WAL Size</a></li>
+<li><a href="#create-statistics">CREATE STATISTICS</a></li>
+<li><a href="#include-indexes">INCLUDE indexes</a></li>
+<li><a href="#create-index-in-parallel">CREATE INDEX in parallel</a></li>
+<li><a href="#pg_prewarm">pg_prewarm</a></li>
+<li><a href="#updated-window-functions">Updated WINDOW Functions</a></li>
+<li><a href="#jit-compilation">JIT Compilation</a></li>
+<li><a href="#better-partitioning">Better Partitioning</a>
+<ul>
+<li><a href="#default-partition">Default Partition</a></li>
+<li><a href="#partition-key-updating">Partition Key Updating</a></li>
+<li><a href="#hash-partitioning">Hash Partitioning</a></li>
+<li><a href="#index-created-on-parent-table">Index Created on Parent Table</a></li>
+</ul>
+</li>
+<li><a href="#better-support-of-stored-procedures">Better Support Of Stored Procedures</a></li>
+<li><a href="#faster-alter-table">Faster ALTER TABLE</a></li>
+</ul>
+</li>
+<li><a href="#locks-and-transactions">Locks and Transactions</a>
+<ul>
+<li><a href="#now()-function">now() function</a></li>
+<li><a href="#savepoint">SAVEPOINT</a></li>
+<li><a href="#ddl-commands-are-transaction-safe">DDL commands are transaction safe</a></li>
+<li><a href="#explicit-locking">Explicit Locking</a></li>
+<li><a href="#for-share-and-for-update">FOR SHARE and FOR UPDATE</a>
+<ul>
+<li><a href="#skip-locked">SKIP LOCKED</a></li>
+</ul>
+</li>
+<li><a href="#using-cte-with-returning">Using CTE with RETURNING</a></li>
+<li><a href="#for-share-and-for-update">FOR SHARE and FOR UPDATE</a>
+<ul>
+<li><a href="#for-...-clauses-by-locking-strength">FOR &hellip; clauses by locking strength</a></li>
+<li><a href="#for-update-skip-locked">FOR UPDATE SKIP LOCKED</a></li>
+</ul>
+</li>
+<li><a href="#recommended-locks">Recommended Locks</a></li>
+</ul>
+</li>
+<li><a href="#vacuum">VACUUM</a>
+<ul>
+<li><a href="#autovacuum">autovacuum</a></li>
+<li><a href="#transaction-id-wraparound">Transaction ID Wraparound</a></li>
+<li><a href="#transaction-duration">Transaction Duration</a></li>
+</ul>
+</li>
+<li><a href="#indexing">Indexing</a>
+<ul>
+<li><a href="#costs-model">Costs Model</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<!-- raw HTML omitted -->
+<h1 id="postgresql-administration-cheatsheet">PostgreSQL Administration Cheatsheet<a hidden class="anchor" aria-hidden="true" href="#postgresql-administration-cheatsheet">#</a></h1>
+<h2 id="intro">Intro<a hidden class="anchor" aria-hidden="true" href="#intro">#</a></h2>
+<p>This cheatsheet is based on the great
+<a href="https://www.packtpub.com/product/mastering-postgresql-11-second-edition/9781789537819">book about PostgreSQL 11 Administration</a></p>
+<p>Big thanks to it&rsquo;s author - Hans-Jürgen Schönig.</p>
+<h2 id="new-in-postgresql-11">New In PostgreSQL 11<a hidden class="anchor" aria-hidden="true" href="#new-in-postgresql-11">#</a></h2>
+<h3 id="wal-size">WAL Size<a hidden class="anchor" aria-hidden="true" href="#wal-size">#</a></h3>
+<p>Default WAL size is: <strong>16M</strong></p>
+<p>To change size during setup: <code>initdb -D /pgdata --wal-segsize=32</code></p>
+<h3 id="create-statistics">CREATE STATISTICS<a hidden class="anchor" aria-hidden="true" href="#create-statistics">#</a></h3>
+<p><strong>Note:</strong> <em>This actually from PostgreSQL 10.</em></p>
+<p><em>CREATE STATISTICS will create a new extended statistics object tracking data about the specified table, foreign table or materialized view. The statistics object will be created in the current database and will be owned by the user issuing the command.</em></p>
+<p>The great thing is that statistics collected by every column you need.</p>
+<p>References:</p>
+<ul>
+<li><a href="https://www.postgresql.org/docs/10/sql-createstatistics.html">CREATE STATISTICS</a></li>
+<li><a href="https://www.citusdata.com/blog/2018/03/06/postgres-planner-and-its-usage-of-statistics/">The Postgres 10 feature you didn&rsquo;t know about: CREATE STATISTICS </a></li>
+</ul>
+<h3 id="include-indexes">INCLUDE indexes<a hidden class="anchor" aria-hidden="true" href="#include-indexes">#</a></h3>
+<p>In addition to the indexed column, the index can contain an additional column.
+This can be useful to avoid table scan and use only index scan.</p>
+<p><code>CREATE UNIQUE INDEX some_name ON person USING btree (id) INCLUDE (name);</code></p>
+<p>Note: Always select only those columns you need. When using <code>SELECT *</code> you gathering all data from table and that hurts your performance.</p>
+<h3 id="create-index-in-parallel">CREATE INDEX in parallel<a hidden class="anchor" aria-hidden="true" href="#create-index-in-parallel">#</a></h3>
+<p>PostgreSQL can build indexes while leveraging multiple CPUs in order to process the table rows faster. This feature is known as parallel index build. For index methods that support building indexes in parallel (currently, only B-tree), <a href="https://www.postgresql.org/docs/11/runtime-config-resource.html#GUC-MAINTENANCE-WORK-MEM">maintenance_work_mem</a> specifies the maximum amount of memory that can be used by each index build operation as a whole, regardless of how many worker processes were started. Generally, a cost model automatically determines how many worker processes should be requested, if any.</p>
+<p>Parallel index builds may benefit from increasing maintenance_work_mem where an equivalent serial index build will see little or no benefit. Note that maintenance_work_mem may influence the number of worker processes requested, since parallel workers must have at least a 32MB share of the total maintenance_work_mem budget. There must also be a remaining 32MB share for the leader process. Increasing <a href="https://www.postgresql.org/docs/11/runtime-config-resource.html#GUC-MAX-PARALLEL-WORKERS-MAINTENANCE">max_parallel_maintenance_workers</a> may allow more workers to be used, which will reduce the time needed for index creation, so long as the index build is not already I/O bound. Of course, there should also be sufficient CPU capacity that would otherwise lie idle.</p>
+<p>References:</p>
+<ul>
+<li><a href="https://www.postgresql.org/docs/11/sql-createindex.html">CREATE INDEX</a></li>
+<li><a href="https://www.cybertec-postgresql.com/en/postgresql-parallel-create-index-for-better-performance/">PostgreSQL: Parallel CREATE INDEX for better performance</a></li>
+</ul>
+<h3 id="pg_prewarm">pg_prewarm<a hidden class="anchor" aria-hidden="true" href="#pg_prewarm">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-SQL" data-lang="SQL"><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> EXTENSION pg_prewarm;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> pg_prewarm(<span style="color:#e6db74">&#39;tablename&#39;</span>);
+</span></span></code></pre></div><p>References:</p>
+<ul>
+<li><a href="https://www.cybertec-postgresql.com/en/prewarming-postgresql-i-o-caches/">Prewarming PostgreSQL I/O caches</a></li>
+</ul>
+<h3 id="updated-window-functions">Updated WINDOW Functions<a hidden class="anchor" aria-hidden="true" href="#updated-window-functions">#</a></h3>
+<ul>
+<li><a href="https://www.postgresqltutorial.com/postgresql-between/">RANGE BETWEEN</a></li>
+<li>EXCLUDE
+<ul>
+<li><code>EXCLUDE CURRENT ROW</code></li>
+<li><code>EXCLUDE TIES</code></li>
+</ul>
+</li>
+</ul>
+<p>References:</p>
+<ul>
+<li><a href="https://www.cybertec-postgresql.com/en/timeseries-exclude-ties-current-row-and-group/">Timeseries: EXCLUDE TIES, CURRENT ROW and GROUP</a></li>
+<li><a href="https://www.postgresql.org/docs/11/tutorial-window.html">Window Functions</a></li>
+</ul>
+<h3 id="jit-compilation">JIT Compilation<a hidden class="anchor" aria-hidden="true" href="#jit-compilation">#</a></h3>
+<p>Just-in-Time (JIT) compilation is the process of turning some form of interpreted program evaluation into a native program, and doing so at run time. For example, instead of using general-purpose code that can evaluate arbitrary SQL expressions to evaluate a particular SQL predicate like WHERE a.col = 3, it is possible to generate a function that is specific to that expression and can be natively executed by the CPU, yielding a speedup.</p>
+<p>PostgreSQL has builtin support to perform JIT compilation using LLVM when PostgreSQL is built with &ndash;with-llvm.</p>
+<p>References:</p>
+<ul>
+<li><a href="https://www.postgresql.org/docs/11/jit-reason.html">JIT Reason</a></li>
+</ul>
+<h3 id="better-partitioning">Better Partitioning<a hidden class="anchor" aria-hidden="true" href="#better-partitioning">#</a></h3>
+<h4 id="default-partition">Default Partition<a hidden class="anchor" aria-hidden="true" href="#default-partition">#</a></h4>
+<p>If row does not match any partition already created, it&rsquo;s now can be moved to the default partition.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> default_part PARTITION <span style="color:#66d9ef">OF</span> another_table <span style="color:#66d9ef">DEFAULT</span>;
+</span></span></code></pre></div><h4 id="partition-key-updating">Partition Key Updating<a hidden class="anchor" aria-hidden="true" href="#partition-key-updating">#</a></h4>
+<p>Now when updating the value of partition key, row is moved to another partition by PostgreSQL automatically.</p>
+<h4 id="hash-partitioning">Hash Partitioning<a hidden class="anchor" aria-hidden="true" href="#hash-partitioning">#</a></h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> tab(i int, i text) PARTITION <span style="color:#66d9ef">BY</span> HASH (i);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> tab_0 PARTITION <span style="color:#66d9ef">OF</span> tab <span style="color:#66d9ef">FOR</span> <span style="color:#66d9ef">VALUES</span> <span style="color:#66d9ef">WITH</span> (MODULUS <span style="color:#ae81ff">4</span>, REMAINDER <span style="color:#ae81ff">0</span>);
+</span></span></code></pre></div><h4 id="index-created-on-parent-table">Index Created on Parent Table<a hidden class="anchor" aria-hidden="true" href="#index-created-on-parent-table">#</a></h4>
+<p>Now when creating index on parent table it automatically created on all child`s tables.
+Also, creating &ldquo;global&rdquo; unique index on parent table creates unique index on all child`s table.</p>
+<p>References:</p>
+<ul>
+<li><a href="https://severalnines.com/database-blog/guide-partitioning-data-postgresql">A Guide to Partitioning Data In PostgreSQL</a></li>
+<li><a href="https://severalnines.com/database-blog/how-take-advantage-new-partitioning-features-postgresql-11">How to Take Advantage of the New Partitioning Features in PostgreSQL 11</a></li>
+<li><a href="https://www.postgresql.org/docs/11/ddl-partitioning.html">Table Partitioning</a></li>
+</ul>
+<h3 id="better-support-of-stored-procedures">Better Support Of Stored Procedures<a hidden class="anchor" aria-hidden="true" href="#better-support-of-stored-procedures">#</a></h3>
+<p>Main difference between functions ans procedures in PostgreSQL is that function is a part of transaction.
+But procedure may contain multiple transactions.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">PROCEDURE</span> test_proc()
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">LANGUAGE</span> plpgsql
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">AS</span> <span style="color:#960050;background-color:#1e0010">$$</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">BEGIN</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> a (aid int);
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> b (bid int);
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">COMMIT</span>;
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#66d9ef">c</span> (cid int);
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">ROLLBACK</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">END</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#960050;background-color:#1e0010">$$</span>;
+</span></span></code></pre></div><h3 id="faster-alter-table">Faster ALTER TABLE<a hidden class="anchor" aria-hidden="true" href="#faster-alter-table">#</a></h3>
+<p>To add a column to the table we can use such command:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">TABLE</span> x <span style="color:#66d9ef">ADD</span> <span style="color:#66d9ef">COLUMN</span> y int;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">TABLE</span> x <span style="color:#66d9ef">ADD</span> <span style="color:#66d9ef">COLUMN</span> z int <span style="color:#66d9ef">DEFAULT</span> <span style="color:#ae81ff">57</span>;
+</span></span></code></pre></div><p>First command will work fast always, because it simply updates system catalog.
+Second command will work fast only in PostgreSQL 11 and newer versions.
+In the PG10 this will lead table to be rewritten which may be slow.</p>
+<h2 id="locks-and-transactions">Locks and Transactions<a hidden class="anchor" aria-hidden="true" href="#locks-and-transactions">#</a></h2>
+<h3 id="now-function">now() function<a hidden class="anchor" aria-hidden="true" href="#now-function">#</a></h3>
+<p><code>now()</code> function returns time of the transaction beginning. So calling it twice in one transaction will return the same data. If you need the real time, you have to use function <code>clock_timestamp()</code></p>
+<h3 id="savepointhttpswwwpostgresqlorgdocs11sql-savepointhtml"><a href="https://www.postgresql.org/docs/11/sql-savepoint.html">SAVEPOINT</a><a hidden class="anchor" aria-hidden="true" href="#savepointhttpswwwpostgresqlorgdocs11sql-savepointhtml">#</a></h3>
+<p>In long transaction which may fail in the middle of process it&rsquo;s possible to use savepoint and rollback to it saving the job that already completed successfully.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>postgres<span style="color:#f92672">=#</span> <span style="color:#66d9ef">BEGIN</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">BEGIN</span>
+</span></span><span style="display:flex;"><span>postgres<span style="color:#f92672">=#</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">?</span><span style="color:#66d9ef">column</span><span style="color:#f92672">?</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">----------
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>(<span style="color:#ae81ff">1</span> <span style="color:#66d9ef">row</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>postgres<span style="color:#f92672">=#</span> SAVEPOINT a;
+</span></span><span style="display:flex;"><span>SAVEPOINT
+</span></span><span style="display:flex;"><span>postgres<span style="color:#f92672">=#</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>ERROR:  division <span style="color:#66d9ef">by</span> zero
+</span></span><span style="display:flex;"><span>postgres<span style="color:#f92672">=#</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#ae81ff">2</span>;
+</span></span><span style="display:flex;"><span>ERROR:  <span style="color:#66d9ef">current</span> <span style="color:#66d9ef">transaction</span> <span style="color:#66d9ef">is</span> aborted, commands ignored <span style="color:#66d9ef">until</span> <span style="color:#66d9ef">end</span> <span style="color:#66d9ef">of</span> <span style="color:#66d9ef">transaction</span> block
+</span></span><span style="display:flex;"><span>postgres<span style="color:#f92672">=#</span> <span style="color:#66d9ef">ROLLBACK</span> <span style="color:#66d9ef">TO</span> SAVEPOINT a;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">ROLLBACK</span>
+</span></span><span style="display:flex;"><span>postgres<span style="color:#f92672">=#</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#ae81ff">3</span>;
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">?</span><span style="color:#66d9ef">column</span><span style="color:#f92672">?</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">----------
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>(<span style="color:#ae81ff">1</span> <span style="color:#66d9ef">row</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>postgres<span style="color:#f92672">=#</span> <span style="color:#66d9ef">COMMIT</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">COMMIT</span>
+</span></span></code></pre></div><h3 id="ddl-commands-are-transaction-safe">DDL commands are transaction safe<a hidden class="anchor" aria-hidden="true" href="#ddl-commands-are-transaction-safe">#</a></h3>
+<p>It&rsquo;s possible to create and modify tables in transaction then rollback all changes during error.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>postgres<span style="color:#f92672">=#</span> <span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">DATABASE</span> test;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">DATABASE</span>
+</span></span><span style="display:flex;"><span>postgres<span style="color:#f92672">=#</span> <span style="color:#960050;background-color:#1e0010">\</span><span style="color:#66d9ef">c</span> test
+</span></span><span style="display:flex;"><span>You <span style="color:#66d9ef">are</span> now connected <span style="color:#66d9ef">to</span> <span style="color:#66d9ef">database</span> <span style="color:#e6db74">&#34;test&#34;</span> <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">user</span> <span style="color:#e6db74">&#34;postgres&#34;</span>.
+</span></span><span style="display:flex;"><span>test<span style="color:#f92672">=#</span> <span style="color:#960050;background-color:#1e0010">\</span>d
+</span></span><span style="display:flex;"><span>Did <span style="color:#66d9ef">not</span> find <span style="color:#66d9ef">any</span> relations.
+</span></span><span style="display:flex;"><span>test<span style="color:#f92672">=#</span> <span style="color:#66d9ef">BEGIN</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">BEGIN</span>
+</span></span><span style="display:flex;"><span>test<span style="color:#f92672">=#</span> <span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> t_test (id int);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span>
+</span></span><span style="display:flex;"><span>test<span style="color:#f92672">=#</span> <span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">TABLE</span> t_test <span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">COLUMN</span> id <span style="color:#66d9ef">TYPE</span> int8;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">TABLE</span>
+</span></span><span style="display:flex;"><span>test<span style="color:#f92672">=#</span> <span style="color:#960050;background-color:#1e0010">\</span>d t_test;
+</span></span><span style="display:flex;"><span>              <span style="color:#66d9ef">Table</span> <span style="color:#e6db74">&#34;public.t_test&#34;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#66d9ef">Column</span> <span style="color:#f92672">|</span>  <span style="color:#66d9ef">Type</span>  <span style="color:#f92672">|</span> <span style="color:#66d9ef">Collation</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">Nullable</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">Default</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">--------+--------+-----------+----------+---------
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span> id     <span style="color:#f92672">|</span> bigint <span style="color:#f92672">|</span>           <span style="color:#f92672">|</span>          <span style="color:#f92672">|</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>test<span style="color:#f92672">=#</span> <span style="color:#66d9ef">ROLLBACK</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">ROLLBACK</span>
+</span></span><span style="display:flex;"><span>test<span style="color:#f92672">=#</span> <span style="color:#960050;background-color:#1e0010">\</span>d
+</span></span><span style="display:flex;"><span>Did <span style="color:#66d9ef">not</span> find <span style="color:#66d9ef">any</span> relations.
+</span></span></code></pre></div><h3 id="explicit-locking">Explicit Locking<a hidden class="anchor" aria-hidden="true" href="#explicit-locking">#</a></h3>
+<p>Sometime it&rsquo;s needed to use locks to fix this kind of errors:</p>
+<table>
+<thead>
+<tr>
+<th>Transaction 1</th>
+<th>Transaction 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BEGIN;</td>
+<td>BEGIN;</td>
+</tr>
+<tr>
+<td>SELECT max(id) FROM product;</td>
+<td>SELECT max(id) FROM product;</td>
+</tr>
+<tr>
+<td>&ndash; query returned 17</td>
+<td>&ndash; query returned 17</td>
+</tr>
+<tr>
+<td>&ndash; user added product 18</td>
+<td>&ndash; user added product 18</td>
+</tr>
+<tr>
+<td>INSERT INTO product &hellip; VALUES (18, &hellip;)</td>
+<td>INSERT INTO product &hellip; VALUES (18, &hellip;)</td>
+</tr>
+<tr>
+<td>COMMIT;</td>
+<td>COMMIT;</td>
+</tr>
+</tbody>
+</table>
+<p>This error can be avoided this way:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">BEGIN</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">LOCK</span> <span style="color:#66d9ef">TABLE</span> product <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">ACCESS</span> <span style="color:#66d9ef">EXCLUSIVE</span> <span style="color:#66d9ef">MODE</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">INSERT</span> <span style="color:#66d9ef">INTO</span> product <span style="color:#66d9ef">SELECT</span> <span style="color:#66d9ef">max</span>(id) <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>, ... <span style="color:#66d9ef">FROM</span> product;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">COMMIT</span>;
+</span></span></code></pre></div><p>But this is very bad for performance reasons.
+Alternative solutions is to separate tables in this way:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> t_invoice (id int <span style="color:#66d9ef">PRIMARY</span> <span style="color:#66d9ef">KEY</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> t_watermark (id int);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">INSERT</span> <span style="color:#66d9ef">INTO</span> t_watermark <span style="color:#66d9ef">VALUES</span> (<span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">WITH</span> x <span style="color:#66d9ef">AS</span> (<span style="color:#66d9ef">UPDATE</span> t_watermark <span style="color:#66d9ef">SET</span> id <span style="color:#f92672">=</span> id <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span> RETURNING id)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">INSERT</span> <span style="color:#66d9ef">INTO</span> t_invoice
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> x RETURNING id;
+</span></span></code></pre></div><p>Only one UPDATE can be occurred at once but this does not blocks SELECT queries.</p>
+<p>References:</p>
+<ul>
+<li><a href="https://www.postgresql.org/docs/11/explicit-locking.html">Explicit Locking</a></li>
+</ul>
+<h3 id="for-share-and-for-update">FOR SHARE and FOR UPDATE<a hidden class="anchor" aria-hidden="true" href="#for-share-and-for-update">#</a></h3>
+<p>This is <strong>wrong</strong>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">BEGIN</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> invoice <span style="color:#66d9ef">WHERE</span> processed <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">-- now make some work with returned data
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">UPDATE</span> invoice <span style="color:#66d9ef">SET</span> processed <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span> ...
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">COMMIT</span>;
+</span></span></code></pre></div><p>Multiple requests can select the same data and then try to insert updated data.
+<code>SELECT FOR UPDATE</code> for the rescue.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">BEGIN</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> invoice <span style="color:#66d9ef">WHERE</span> processed <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span> <span style="color:#66d9ef">FOR</span> <span style="color:#66d9ef">UPDATE</span>;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">-- now processing data with modifications
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">UPDATE</span> invoice <span style="color:#66d9ef">SET</span> processed <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">COMMIT</span>;
+</span></span></code></pre></div><p>When running multiple transactions on the same rows the second one will wait until the first one will end. But we can skip them with <code>NOWAIT</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Transaction 1</th>
+<th>Transaction 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BEGIN;</td>
+<td>BEGIN;</td>
+</tr>
+<tr>
+<td>SELECT &hellip; FROM table WHERE &hellip; FOR UPDATE NOWAIT;</td>
+<td></td>
+</tr>
+<tr>
+<td>&ndash; processing</td>
+<td>SELECT &hellip; FROM tab WHERE &hellip; FOR UPDATE NOWAIT;</td>
+</tr>
+<tr>
+<td>&ndash; still processing</td>
+<td>ERROR: could not obtain lock on row in relation &ldquo;table&rdquo;</td>
+</tr>
+</tbody>
+</table>
+<p>There is also parameter <code>lock_timeout</code> to set how long we are ready to wait lock.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SET</span> lock_timeout <span style="color:#66d9ef">TO</span> <span style="color:#ae81ff">5000</span>; <span style="color:#75715e">-- set timeout to 5 seconds
+</span></span></span></code></pre></div><h4 id="skip-locked">SKIP LOCKED<a hidden class="anchor" aria-hidden="true" href="#skip-locked">#</a></h4>
+<p><code>SELECT FOR UDATE</code> can block others requests for UPDATE</p>
+<table>
+<thead>
+<tr>
+<th>Transaction 1</th>
+<th>Transaction 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BEING;</td>
+<td>BEING;</td>
+</tr>
+<tr>
+<td>SELECT &hellip; FROM table LIMIT 1 FOR UPDATE;</td>
+<td></td>
+</tr>
+<tr>
+<td>&ndash; waiting for user action</td>
+<td>SELECT &hellip; FROM table LIMIT 1 FOR UPDATE;</td>
+</tr>
+<tr>
+<td>&ndash; waiting for user action</td>
+<td>&ndash; waiting Transaction 1</td>
+</tr>
+</tbody>
+</table>
+<p>To fix that we can use <code>SKIP LOCKED</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Transaction 1</th>
+<th>Transaction 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BEGIN;</td>
+<td>BEGIN;</td>
+</tr>
+<tr>
+<td>SELECT * FROM table LIMIT 2 FOR UPDATE SKIP LOCKED;</td>
+<td>SELECT * FROM table LIMIT 2 FOR UPDATE SKIP LOCKED;</td>
+</tr>
+<tr>
+<td>&ndash; returns first pair of not locked rows</td>
+<td>&ndash; returns second pair of not locked rows</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Note</strong>:
+When using <code>FOR UPDATE</code> on table with <code>FOREIGN KEY</code>, both tables will be blocked.</p>
+<h3 id="using-cte-with-returning">Using CTE with RETURNING<a hidden class="anchor" aria-hidden="true" href="#using-cte-with-returning">#</a></h3>
+<p>When you need to update record and use result value and don&rsquo;t want to use explicit blocking or long transaction, it&rsquo;s possible to use CTE and UPDATE with RETURNING statement.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>test<span style="color:#f92672">=#</span> <span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> t_order (id int <span style="color:#66d9ef">PRIMARY</span> <span style="color:#66d9ef">KEY</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>test<span style="color:#f92672">=#</span> <span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> t_room (id int);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>test<span style="color:#f92672">=#</span> <span style="color:#66d9ef">INSERT</span> <span style="color:#66d9ef">INTO</span> t_room <span style="color:#66d9ef">VALUES</span> (<span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">INSERT</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>test<span style="color:#f92672">=#</span> <span style="color:#66d9ef">WITH</span> x <span style="color:#66d9ef">AS</span> (<span style="color:#66d9ef">UPDATE</span> t_room <span style="color:#66d9ef">SET</span> id <span style="color:#f92672">=</span> id <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span> RETURNING <span style="color:#f92672">*</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">INSERT</span> <span style="color:#66d9ef">INTO</span> t_order
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> x RETURNING <span style="color:#f92672">*</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> id
+</span></span><span style="display:flex;"><span>____
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">1</span>
+</span></span></code></pre></div><hr>
+<h3 id="for-share-and-for-update-1">FOR SHARE and FOR UPDATE<a hidden class="anchor" aria-hidden="true" href="#for-share-and-for-update-1">#</a></h3>
+<p>To select some data for database, process it and then update this data in database there is a SELECT FOR UPDATE  statement for that.</p>
+<h4 id="for--clauses-by-locking-strength">FOR &hellip; clauses by locking strength<a hidden class="anchor" aria-hidden="true" href="#for--clauses-by-locking-strength">#</a></h4>
+<p>The locking clause has general form:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">FOR</span> [lock_strength] [ <span style="color:#66d9ef">OF</span> <span style="color:#66d9ef">table_name</span> [, ...] ] [ NOWAIT <span style="color:#f92672">|</span> SKIP LOCKED ]
+</span></span></code></pre></div><p>where <em>lock_strength</em> can be one of:</p>
+<ul>
+<li><strong>UPDATE</strong> (when we definitely want to update record, most strong lock)</li>
+<li><strong>NO KEY UPDATE</strong> (the lock is weaker and can coexist with <strong>SELECT FOR SHARE</strong>)</li>
+<li><strong>SHARE</strong> (this type lock can be handled by multiple transactions)</li>
+<li><strong>KEY SHARE</strong> (like <strong>SHARE</strong> lock but weaker. this lock conflicts with <strong>FOR UPDATE</strong> but can coexist with <strong>FOR NO KEY UPDATE</strong>)</li>
+</ul>
+<p>See more details <a href="https://www.postgresql.org/docs/11/sql-select.html">here</a></p>
+<hr>
+<h4 id="for-update-skip-locked">FOR UPDATE SKIP LOCKED<a hidden class="anchor" aria-hidden="true" href="#for-update-skip-locked">#</a></h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>test<span style="color:#f92672">=#</span> <span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> t_room <span style="color:#66d9ef">AS</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> generate_series(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">200</span>) <span style="color:#66d9ef">AS</span> id;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> <span style="color:#ae81ff">200</span>
+</span></span></code></pre></div><table>
+<thead>
+<tr>
+<th>Transaction 1</th>
+<th>Transaction 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BEGIN;</code></td>
+<td><code>BEGIN;</code></td>
+</tr>
+<tr>
+<td><code>SELECT * FROM t_room LIMIT 2 FOR UPDATE SKIP LOCKED;</code></td>
+<td><code>SELECT * FROM t_room LIMIT 2 FOR UPDATE SKIP LOCKED;</code></td>
+</tr>
+<tr>
+<td># <strong>returns 1, 2</strong></td>
+<td># <strong>returns 3, 4</strong></td>
+</tr>
+</tbody>
+</table>
+<p>This only works well if there is no <a href="https://www.postgresqltutorial.com/postgresql-foreign-key/">REFERENCES</a> in the table. If table have <a href="https://www.postgresqltutorial.com/postgresql-foreign-key/">REFERENCES</a> second transaction with UPDATE will be blocked till first transaction will end.</p>
+<hr>
+<h3 id="recommended-locks">Recommended Locks<a hidden class="anchor" aria-hidden="true" href="#recommended-locks">#</a></h3>
+<p>It&rsquo;s possible to use locks for applications synchronization.
+In this case you lock not rows but numbers instead.</p>
+<table>
+<thead>
+<tr>
+<th>Transaction 1</th>
+<th>Transaction 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BEGIN;</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>SELECT pg_advisory_lock(15);</code></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td><code>SELECT pg_advisory_lock(15);</code></td>
+</tr>
+<tr>
+<td></td>
+<td>waiting for lock&hellip;</td>
+</tr>
+<tr>
+<td></td>
+<td>waiting for lock&hellip;</td>
+</tr>
+<tr>
+<td><code>COMMIT;</code></td>
+<td>waiting for lock&hellip;</td>
+</tr>
+<tr>
+<td><code>SELECT pg_advisory_unlock(15);</code></td>
+<td>waiting for lock&hellip;</td>
+</tr>
+<tr>
+<td></td>
+<td>lock granted!</td>
+</tr>
+</tbody>
+</table>
+<p>Handy functions:</p>
+<ul>
+<li><code>pg_advisory_unlock_all()</code> - unlock all previous locks</li>
+<li><code>pg_try_advisory_lock()</code> - get lock if possible</li>
+</ul>
+<p>More details in <a href="https://www.postgresql.org/docs/11/functions-admin.html">documentation</a></p>
+<hr>
+<h2 id="vacuum">VACUUM<a hidden class="anchor" aria-hidden="true" href="#vacuum">#</a></h2>
+<h3 id="autovacuum">autovacuum<a hidden class="anchor" aria-hidden="true" href="#autovacuum">#</a></h3>
+<p><a href="https://www.postgresql.org/docs/11/runtime-config-autovacuum.html">Options</a>:</p>
+<ul>
+<li><strong>autovacuum_naptime</strong>: Specifies the minimum delay between autovacuum runs on any given database. The delay is measured in seconds, and the default is one minute (1min).</li>
+<li><strong>autovacuum_vacuum_threshold</strong>: Specifies the minimum number of updated or deleted tuples needed to trigger a VACUUM in any one table. The default is 50 tuples.</li>
+<li><strong>autovacuum_analyze_threshold</strong>: Specifies the minimum number of inserted, updated or deleted tuples needed to trigger an ANALYZE in any one table. The default is 50 tuples.</li>
+<li><strong>autovacuum_vacuum_scale_factor</strong>: Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a VACUUM. The default is 0.2 (20% of table size).</li>
+<li><strong>autovacuum_analyze_scale_factor</strong>: Specifies a fraction of the table size to add to autovacuum_analyze_threshold when deciding whether to trigger an ANALYZE. The default is 0.1 (10% of table size).</li>
+</ul>
+<hr>
+<h3 id="transaction-id-wraparound">Transaction ID Wraparound<a hidden class="anchor" aria-hidden="true" href="#transaction-id-wraparound">#</a></h3>
+<p><a href="https://www.postgresql.org/docs/11/runtime-config-autovacuum.html">Options</a>:</p>
+<ul>
+<li><strong>autovacuum_freeze_max_age</strong>: Specifies the maximum age (in transactions) that a table&rsquo;s pg_class.relfrozenxid field can attain before a VACUUM operation is forced to prevent transaction ID wraparound within the table. Note that the system will launch autovacuum processes to prevent wraparound even when autovacuum is otherwise disabled.</li>
+<li><strong>autovacuum_multixact_freeze_max_age</strong>: Specifies the maximum age (in multixacts) that a table&rsquo;s pg_class.relminmxid field can attain before a VACUUM operation is forced to prevent multixact ID wraparound within the table. Note that the system will launch autovacuum processes to prevent wraparound even when autovacuum is otherwise disabled.</li>
+</ul>
+<p>Wraparound References:</p>
+<ul>
+<li><a href="https://www.postgresql.org/docs/11/routine-vacuuming.html#VACUUM-FOR-WRAPAROUND">https://www.postgresql.org/docs/11/routine-vacuuming.html#VACUUM-FOR-WRAPAROUND</a></li>
+<li><a href="https://www.cybertec-postgresql.com/en/autovacuum-wraparound-protection-in-postgresql/">https://www.cybertec-postgresql.com/en/autovacuum-wraparound-protection-in-postgresql/</a></li>
+</ul>
+<hr>
+<h3 id="transaction-duration">Transaction Duration<a hidden class="anchor" aria-hidden="true" href="#transaction-duration">#</a></h3>
+<p><strong>old_snapshot_threshold</strong>: Sets the minimum time that a snapshot can be used without risk of a snapshot too old error occurring when using the snapshot. This parameter can only be set at server start.</p>
+<p>Beyond the threshold, old data may be vacuumed away. This can help prevent bloat in the face of snapshots which remain in use for a long time. To prevent incorrect results due to cleanup of data which would otherwise be visible to the snapshot, an error is generated when the snapshot is older than this threshold and the snapshot is used to read a page which has been modified since the snapshot was built. <a href="https://www.postgresql.org/docs/11/runtime-config-resource.html#GUC-OLD-SNAPSHOT-THRESHOLD">More details</a>.</p>
+<h2 id="indexing">Indexing<a hidden class="anchor" aria-hidden="true" href="#indexing">#</a></h2>
+<h3 id="costs-model">Costs Model<a hidden class="anchor" aria-hidden="true" href="#costs-model">#</a></h3>
+<p>Costs formula for <code>Seq Scan</code>:</p>
+<pre tabindex="0"><code>(blocks to read * seq_page_cost) \
+  + (rows scanned * cpu_tuple_cost + rows scanned * cpu_operator_cost)
+</code></pre><p>To get sum of block per table:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SELECT</span> pg_relation_size(<span style="color:#e6db74">&#39;table_name&#39;</span>) <span style="color:#f92672">/</span> <span style="color:#ae81ff">8192</span>.<span style="color:#ae81ff">0</span>;
+</span></span></code></pre></div><p>Useful <a href="https://www.postgresql.org/docs/11/runtime-config-query.html">options</a>:</p>
+<ul>
+<li><a href="https://www.postgresql.org/docs/11/runtime-config-query.html#GUC-RANDOM-PAGE-COST">random_page_cost</a>: Sets the planner&rsquo;s estimate of the cost of a non-sequentially-fetched disk page. The default is 4.0.</li>
+<li><a href="https://www.postgresql.org/docs/11/runtime-config-query.html#GUC-CPU-INDEX-TUPLE-COST">cpu_index_tuple_cost</a>: Sets the planner&rsquo;s estimate of the cost of processing each index entry during an index scan. The default is 0.005.</li>
+</ul>
+<p>For parallel jobs:</p>
+<ul>
+<li><a href="https://www.postgresql.org/docs/11/runtime-config-query.html#GUC-PARALLEL-TUPLE-COST">parallel_tuple_cost</a>: Sets the planner&rsquo;s estimate of the cost of transferring one tuple from a parallel worker process to another process. The default is 0.1.</li>
+<li><a href="https://www.postgresql.org/docs/11/runtime-config-query.html#GUC-PARALLEL-SETUP-COST">parallel_setup_cost</a>: Sets the planner&rsquo;s estimate of the cost of launching parallel worker processes. The default is 1000.</li>
+<li><a href="https://www.postgresql.org/docs/11/runtime-config-query.html#GUC-MIN-PARALLEL-TABLE-SCAN-SIZE">min_parallel_table_scan_size</a>: Sets the minimum amount of table data that must be scanned in order for a parallel scan to be considered. The default is 8 megabytes (8MB).</li>
+<li><a href="https://www.postgresql.org/docs/11/runtime-config-query.html#GUC-MIN-PARALLEL-INDEX-SCAN-SIZE">min_parallel_index_scan_size</a>: Sets the minimum amount of index data that must be scanned in order for a parallel scan to be considered. The default is 512 kilobytes (512kB).</li>
+</ul>
+<p>References:</p>
+<ul>
+<li><a href="https://www.postgresql.org/docs/11/runtime-config-query.html">https://www.postgresql.org/docs/11/runtime-config-query.html</a></li>
+<li><a href="https://www.postgresql.org/docs/11/index-cost-estimation.html">https://www.postgresql.org/docs/11/index-cost-estimation.html</a></li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://undying.github.io/tags/postgresql/">postgresql</a></li>
+      <li><a href="http://undying.github.io/tags/cheatsheet/">cheatsheet</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="http://undying.github.io">My Digital Chronicle</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Выжимаем максимум интернета из деревенских сот | My Digital Chronicle</title>
+<meta name="keywords" content="3g, wifi, gprs, gsm, openwrt">
+<meta name="description" content="На кануне новогодних праздников понадобилось пораньше покинуть столицу, покинуть ее в направлении таких мест, в которых интернет бывает довольно редко. На период отсутствия на работе я обещал напарникам быть на связи. А так как мой род деятельности напрямую связан с web, то я решил поэкспериментировать с доступностью интернетов в планируемом месте пребывания.
+Суть задачи сводился к следующему:
+Из небходимого у меня было:
+В качестве хаба использовал старый добрый D-Link Dub-104 (красивый компактный хаб с невероятно здоровенным блоком питания).">
+<meta name="author" content="">
+<link rel="canonical" href="http://undying.github.io/posts/2015-12-31-maximizing-village-internet/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.3613efbd0b1772781e8f49935e973cae632a7f61471c05b17be155505ccf87b5.css" integrity="sha256-NhPvvQsXcngej0mTXpc8rmMqf2FHHAWxe&#43;FVUFzPh7U=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://undying.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://undying.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://undying.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://undying.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://undying.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Выжимаем максимум интернета из деревенских сот" />
+<meta property="og:description" content="На кануне новогодних праздников понадобилось пораньше покинуть столицу, покинуть ее в направлении таких мест, в которых интернет бывает довольно редко. На период отсутствия на работе я обещал напарникам быть на связи. А так как мой род деятельности напрямую связан с web, то я решил поэкспериментировать с доступностью интернетов в планируемом месте пребывания.
+Суть задачи сводился к следующему:
+Из небходимого у меня было:
+В качестве хаба использовал старый добрый D-Link Dub-104 (красивый компактный хаб с невероятно здоровенным блоком питания)." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://undying.github.io/posts/2015-12-31-maximizing-village-internet/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2015-12-31T12:41:17+03:00" />
+<meta property="article:modified_time" content="2015-12-31T12:41:17+03:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Выжимаем максимум интернета из деревенских сот"/>
+<meta name="twitter:description" content="На кануне новогодних праздников понадобилось пораньше покинуть столицу, покинуть ее в направлении таких мест, в которых интернет бывает довольно редко. На период отсутствия на работе я обещал напарникам быть на связи. А так как мой род деятельности напрямую связан с web, то я решил поэкспериментировать с доступностью интернетов в планируемом месте пребывания.
+Суть задачи сводился к следующему:
+Из небходимого у меня было:
+В качестве хаба использовал старый добрый D-Link Dub-104 (красивый компактный хаб с невероятно здоровенным блоком питания)."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Posts",
+      "item": "http://undying.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "Выжимаем максимум интернета из деревенских сот",
+      "item": "http://undying.github.io/posts/2015-12-31-maximizing-village-internet/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Выжимаем максимум интернета из деревенских сот",
+  "name": "Выжимаем максимум интернета из деревенских сот",
+  "description": "На кануне новогодних праздников понадобилось пораньше покинуть столицу, покинуть ее в направлении таких мест, в которых интернет бывает довольно редко. На период отсутствия на работе я обещал напарникам быть на связи. А так как мой род деятельности напрямую связан с web, то я решил поэкспериментировать с доступностью интернетов в планируемом месте пребывания.\nСуть задачи сводился к следующему:\nИз небходимого у меня было:\nВ качестве хаба использовал старый добрый D-Link Dub-104 (красивый компактный хаб с невероятно здоровенным блоком питания).",
+  "keywords": [
+    "3g", "wifi", "gprs", "gsm", "openwrt"
+  ],
+  "articleBody": "На кануне новогодних праздников понадобилось пораньше покинуть столицу, покинуть ее в направлении таких мест, в которых интернет бывает довольно редко. На период отсутствия на работе я обещал напарникам быть на связи. А так как мой род деятельности напрямую связан с web, то я решил поэкспериментировать с доступностью интернетов в планируемом месте пребывания.\nСуть задачи сводился к следующему:\nИз небходимого у меня было:\nВ качестве хаба использовал старый добрый D-Link Dub-104 (красивый компактный хаб с невероятно здоровенным блоком питания).\nПромежуточный вариант:\n{% highlight bash %} ssh root@\u003cточка доступа\u003e {% endhighlight %} {% highlight bash %} opkg update opkg install comgt kmod-usb-serial kmod-usb-serial-option kmod-usb-serial-wwan usb-modeswitch usb-modeswitch-data {% endhighlight %} В целом, после этого можно пробовать вставить модем и смотреть, появились ли устройства типа /dev/ttyUSB*. В моем случае usb_modeswitch сделал всю работу и устройства появились. Если это не ваш случай, стоит подробно почитать статью на тему usb_modeswitch.\n{% highlight bash %} vim /etc/config/network {% endhighlight %} {% highlight bash %} config interface ‘wan’ option device /dev/ttyUSB0 option username ‘gdata’ option password ‘gdata’ option apn ‘internet’ option service ‘umts’ option maxwait ‘0’ option dialnumber ‘*99#’ option proto ‘3g’ {% endhighlight %} В моем случае симка была от Мегафона, поэтому параметры подбирались специально под него.\nЕще я добавил строчку в chatscript, чтобы видеть уровень сигнала от вышки при подключении:\n{% highlight bash %} vim /etc/chatscripts/3g.chat {% endhighlight %} {% highlight bash %} ABORT BUSY ABORT ‘NO CARRIER’ ABORT ERROR REPORT CONNECT TIMEOUT 10 \"\" “AT+CSQ” \"\" “AT\u0026F” OK “ATE1” OK ‘AT+CGDCONT=1,“IP”,\"$USE_APN\"’ SAY “Calling UMTS/GPRS” TIMEOUT 30 OK “ATD$DIALNUMBER” CONNECT ’ ' {% endhighlight %}\n{% highlight bash %} Wed Dec 30 21:47:01 2015 local2.info chat[30352]: CONNECT Wed Dec 30 21:47:01 2015 local2.info chat[30352]: – got it Wed Dec 30 21:47:01 2015 local2.info chat[30352]: send ( ^M) Wed Dec 30 21:47:01 2015 daemon.info pppd[30347]: Serial connection established. Wed Dec 30 21:47:01 2015 kern.info kernel: [98634.870000] 3g-wan: renamed from ppp0 Wed Dec 30 21:47:01 2015 daemon.info pppd[30347]: Using interface 3g-wan Wed Dec 30 21:47:01 2015 daemon.notice pppd[30347]: Connect: 3g-wan \u003c–\u003e /dev/ttyUSB0 Wed Dec 30 21:47:02 2015 daemon.info pppd[30347]: CHAP authentication succeeded: Welcome!! {% endhighlight %} Если же нет и ваш оператор Мегафон, то идем дальше.\nУдивительным был тот факт, что при подключении к ноутбуку с ОС Windows, модем работал исправно. Стоило подключить к Linux - получал ошибку.\nСперва я решил проверить, действительно ли это связано с Мегафоном. Я взял из запасов симку с Tele2, чутка подправил конфигурацию подключения:\n{% highlight bash %} vim /etc/config/network {% endhighlight %} {% highlight bash %} config interface ‘wan’ option device /dev/ttyUSB0 option apn ‘internet.tele2.ru’ option service ‘umts’ option maxwait ‘0’ option dialnumber ‘*99#’ option proto ‘3g’ {% endhighlight %} Ииии, все заработало. Сразу. Окей, пойдем сперва наиболее простым путем и поотключаем все лишнее на модеме:\n{% highlight bash %} ssh root@\u003cточка доступа\u003e {% endhighlight %} {% highlight bash %} picocom -b 9600 -f n -p n -d 8 -r /dev/ttyUSB1 at^setport=“ff;10,12,16,a2” {% endhighlight %} Выходим комбинацией:\nCTRL+A+X\nТеперь выключаем usb_modeswitch за ненадобностью:\n{% highlight bash %} /etc/init.d/usbmode stop /etc/init.d/usbmode disable {% endhighlight %} Перевтыкаем модем, ждем пока загрузится и поднимаем wan интерфейс:\n{% highlight bash %} ifup wan {% endhighlight %} В моем случае теперь все заработало. Ура!\nУровень сигнала без антенны:\n{% highlight bash %} gcom sig -d /dev/ttyUSB1 Signal Quality: 15,99 {% endhighlight %} А теперь с антенной:\n{% highlight bash %} gcom sig -d /dev/ttyUSB1 Signal Quality: 21,99 {% endhighlight %} Выглядело так круто, что я почуял подвох. И подвох действительно был. Для меня стало открытием, что хороший сигнал от базовой станции еще ничего не значит.\nНиже пинги для первого и второго варианта:\n1.{% highlight bash %} root@OpenWrt:~# ping 8.8.8.8 PING 8.8.8.8 (8.8.8.8): 56 data bytes 64 bytes from 8.8.8.8: seq=0 ttl=44 time=986.652 ms 64 bytes from 8.8.8.8: seq=1 ttl=44 time=327.628 ms 64 bytes from 8.8.8.8: seq=2 ttl=44 time=246.212 ms 64 bytes from 8.8.8.8: seq=3 ttl=44 time=265.568 ms 64 bytes from 8.8.8.8: seq=4 ttl=44 time=285.271 ms {% endhighlight %} 2.{% highlight bash %} 64 bytes from 8.8.8.8: seq=233 ttl=45 time=1567.306 ms 64 bytes from 8.8.8.8: seq=234 ttl=45 time=1126.106 ms 64 bytes from 8.8.8.8: seq=235 ttl=45 time=569.993 ms 64 bytes from 8.8.8.8: seq=236 ttl=45 time=1403.010 ms 64 bytes from 8.8.8.8: seq=237 ttl=45 time=428.891 ms {% endhighlight %} И тут для меня открылся новый дивный мир мобильной связи.\nЯ открыл, что мой модем поддерживает сканирование местности на предмет базовых станций, причем необязательно того оператора, чья сим карта внутри него установлена.\nДелалось это следующей командой:\n{% highlight bash %} AT^NETSCAN=20,-110,1 {% endhighlight %}\nСписок отсортирован по уровню сигнала и выглядит следующим образом:\n{% highlight bash %} ^NETSCAN: 10638,,,1e7e,250,02,0,-78,8b77,400000 ^NETSCAN: 10687,,,1e7e,250,02,0,-79,d5c8,400000 ^NETSCAN: 10662,,,1e7e,250,02,0,-82,8ade,400000 ^NETSCAN: 10587,,,4cf8,250,20,0,-105,d4fc,400000 ^NETSCAN: 10563,,,4cf8,250,20,0,-106,d4f9,400000 {% endhighlight %}\nP.S. Узнать данные станции, к которой мы подключены на данный момент можно командой: {% highlight bash %} AT+CREG=2 OK AT+CREG? +CREG: 2,1,“1e7e”,“8b77” {% endhighlight %} Имя оператора или его код можно узнать следующим образом: {% highlight bash %} AT+COPS? +COPS: 0,0,“Megafon”,2\nAT+COPS=0,2 AT+COPS? +COPS: 0,2,“25002”,2 {% endhighlight %} Хороший справочник по AT командам можно найти здесь\nТеперь, имея эти данные, можно зайти на сайт http://xinit.ru/bs/ и посмотреть, где эти вышки расположены относительно себя.\nКак правило, если есть направленная антенна, то ее следует направлять на ближайшую базовую станцию, - я так думал. Тут меня ждало следующее открытие. Даже если мы направим на нее антенну, далеко не факт, что пройдет регистрация на этой базовой станции. А если и пройдет, то не факт, что скорость передачи данных будет выше, чем через вышку, находящуюся вдвое дальше нее. Так я прошелся по ближайшим станциям в радиусе от 1.5 километров до 3-х и все они при хорошем сигнале передавали данные с большой задержкой. Пинг в среднем был ~300ms.\nЭкспериментируя, я случайно попал на вышку, которая находилась на расстоянии 6-7 километров от меня. Подключившись к ней, время пинга упало до ~90ms, при том, что уровень сигнала упал вместе с ним.\nДля сравнения, уровень сигнала от:\nТем не менее я провел скоростные тесты на самой лучшей ближней вышке и на удаленной, результаты: одна из ближайших станций - 2/0.35 Мбит.\nУдаленная станция - 4.28/1.68 Мбит.\nЧестно говоря, я и от двух мегабит обалдел, т.к. при использовании обычного телефона даже Google Play Market не открывался. А тут, оказывается, можно еще и до 4-х разогнаться!\nВ интернетах на вопрос типа: “можно ли модему указать, с какой вышкой работать” отвечают, что не вы выбираете вышку, а она вас. Быть может знающие люди подскажут, есть ли решения для таких ситуаций?\nНа этом все. Спасибо всем тем, кто прочел до конца.\nP.S. Тут под руку попалась симка Билайна, ее вышки ближе всего к нам и после подключения тест скорости показал аж 20/2 Мегабита. Привожу конфигурацию для Билайна:\n{% highlight bash %} vim /etc/config/network {% endhighlight %} {% highlight bash %} config interface ‘wan’ option device /dev/ttyUSB0 option username ‘beeline’ option password ‘beeline’ option apn ‘internet.beeline.ru’ option service ‘umts’ option maxwait ‘0’ option dialnumber ‘*99#’ option proto ‘3g’ {% endhighlight %}\n",
+  "wordCount" : "1134",
+  "inLanguage": "en",
+  "datePublished": "2015-12-31T12:41:17+03:00",
+  "dateModified": "2015-12-31T12:41:17+03:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://undying.github.io/posts/2015-12-31-maximizing-village-internet/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "My Digital Chronicle",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://undying.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://undying.github.io" accesskey="h" title="My Digital Chronicle (Alt + H)">My Digital Chronicle</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title">
+      Выжимаем максимум интернета из деревенских сот
+    </h1>
+    <div class="post-meta"><span title='2015-12-31 12:41:17 +0300 MSK'>December 31, 2015</span>
+
+</div>
+  </header> 
+  <div class="post-content"><p>На кануне новогодних праздников понадобилось пораньше покинуть столицу, покинуть ее в направлении таких мест, в которых интернет бывает довольно редко. На период отсутствия на работе я обещал напарникам быть на связи. А так как мой род деятельности напрямую связан с web, то я решил поэкспериментировать с доступностью интернетов в планируемом месте пребывания.</p>
+<p>Суть задачи сводился к следующему:</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>Из небходимого у меня было:</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>В качестве хаба использовал старый добрый D-Link Dub-104 (красивый компактный хаб с невероятно здоровенным блоком питания).</p>
+<p>Промежуточный вариант:</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>{% highlight bash %}
+ssh root@&lt;точка доступа&gt;
+{% endhighlight %}
+{% highlight bash %}
+opkg update
+opkg install comgt kmod-usb-serial kmod-usb-serial-option kmod-usb-serial-wwan usb-modeswitch usb-modeswitch-data
+{% endhighlight %}
+В целом, после этого можно пробовать вставить модем и смотреть, появились ли устройства типа <!-- raw HTML omitted -->/dev/ttyUSB*<!-- raw HTML omitted -->. В моем случае <!-- raw HTML omitted -->usb_modeswitch<!-- raw HTML omitted --> сделал всю работу и устройства появились. Если это не ваш случай, стоит подробно почитать <!-- raw HTML omitted -->статью<!-- raw HTML omitted --> на тему <!-- raw HTML omitted -->usb_modeswitch<!-- raw HTML omitted -->.</p>
+<!-- raw HTML omitted -->
+<p>{% highlight bash %}
+vim /etc/config/network
+{% endhighlight %}
+{% highlight bash %}
+config interface &lsquo;wan&rsquo;
+option device /dev/ttyUSB0
+option username &lsquo;gdata&rsquo;
+option password &lsquo;gdata&rsquo;
+option apn &lsquo;internet&rsquo;
+option service &lsquo;umts&rsquo;
+option maxwait &lsquo;0&rsquo;
+option dialnumber &lsquo;*99#&rsquo;
+option proto &lsquo;3g&rsquo;
+{% endhighlight %}
+В моем случае симка была от Мегафона, поэтому параметры подбирались специально под него.</p>
+<p>Еще я добавил строчку в chatscript, чтобы видеть уровень сигнала от вышки при подключении:</p>
+<p>{% highlight bash %}
+vim /etc/chatscripts/3g.chat
+{% endhighlight %}
+{% highlight bash %}
+ABORT   BUSY
+ABORT   &lsquo;NO CARRIER&rsquo;
+ABORT   ERROR
+REPORT  CONNECT
+TIMEOUT 10
+&quot;&quot;      &ldquo;AT+CSQ&rdquo;
+&quot;&quot;      &ldquo;AT&amp;F&rdquo;
+OK      &ldquo;ATE1&rdquo;
+OK      &lsquo;AT+CGDCONT=1,&ldquo;IP&rdquo;,&quot;$USE_APN&quot;&rsquo;
+SAY     &ldquo;Calling UMTS/GPRS&rdquo;
+TIMEOUT 30
+OK      &ldquo;ATD$DIALNUMBER&rdquo;
+CONNECT &rsquo; '
+{% endhighlight %}</p>
+<!-- raw HTML omitted -->
+<p>{% highlight bash %}
+Wed Dec 30 21:47:01 2015 local2.info chat[30352]: CONNECT
+Wed Dec 30 21:47:01 2015 local2.info chat[30352]:  &ndash; got it
+Wed Dec 30 21:47:01 2015 local2.info chat[30352]: send ( ^M)
+Wed Dec 30 21:47:01 2015 daemon.info pppd[30347]: Serial connection established.
+Wed Dec 30 21:47:01 2015 kern.info kernel: [98634.870000] 3g-wan: renamed from ppp0
+Wed Dec 30 21:47:01 2015 daemon.info pppd[30347]: Using interface 3g-wan
+Wed Dec 30 21:47:01 2015 daemon.notice pppd[30347]: Connect: 3g-wan &lt;&ndash;&gt; /dev/ttyUSB0
+Wed Dec 30 21:47:02 2015 daemon.info pppd[30347]: CHAP authentication succeeded: Welcome!!
+{% endhighlight %}
+Если же нет и ваш оператор Мегафон, то идем дальше.</p>
+<!-- raw HTML omitted -->
+<p>Удивительным был тот факт, что при подключении к ноутбуку с ОС Windows, модем работал исправно. Стоило подключить к Linux - получал ошибку.</p>
+<p>Сперва я решил проверить, действительно ли это связано с Мегафоном. Я взял из запасов симку с Tele2, чутка подправил конфигурацию подключения:</p>
+<p>{% highlight bash %}
+vim /etc/config/network
+{% endhighlight %}
+{% highlight bash %}
+config interface &lsquo;wan&rsquo;
+option device /dev/ttyUSB0
+option apn &lsquo;internet.tele2.ru&rsquo;
+option service &lsquo;umts&rsquo;
+option maxwait &lsquo;0&rsquo;
+option dialnumber &lsquo;*99#&rsquo;
+option proto &lsquo;3g&rsquo;
+{% endhighlight %}
+Ииии, все заработало. Сразу. Окей, пойдем сперва наиболее простым путем и поотключаем все лишнее на модеме:</p>
+<p>{% highlight bash %}
+ssh root@&lt;точка доступа&gt;
+{% endhighlight %}
+{% highlight bash %}
+picocom -b 9600 -f n -p n -d 8 -r /dev/ttyUSB1
+at^setport=&ldquo;ff;10,12,16,a2&rdquo;
+{% endhighlight %}
+Выходим комбинацией:</p>
+<p><!-- raw HTML omitted -->CTRL+A+X<!-- raw HTML omitted --></p>
+<p>Теперь выключаем usb_modeswitch за ненадобностью:</p>
+<p>{% highlight bash %}
+/etc/init.d/usbmode stop
+/etc/init.d/usbmode disable
+{% endhighlight %}
+Перевтыкаем модем, ждем пока загрузится и поднимаем wan интерфейс:</p>
+<p>{% highlight bash %}
+ifup wan
+{% endhighlight %}
+В моем случае теперь все заработало. Ура!</p>
+<!-- raw HTML omitted -->
+<p>Уровень сигнала без антенны:</p>
+<p>{% highlight bash %}
+gcom sig -d /dev/ttyUSB1
+Signal Quality: 15,99
+{% endhighlight %}
+А теперь с антенной:</p>
+<p>{% highlight bash %}
+gcom sig -d /dev/ttyUSB1
+Signal Quality: 21,99
+{% endhighlight %}
+Выглядело так круто, что я почуял подвох. И подвох действительно был. Для меня стало открытием, что хороший сигнал от базовой станции еще ничего не значит.</p>
+<p>Ниже пинги для первого и второго варианта:</p>
+<p>1.{% highlight bash %}
+root@OpenWrt:~# ping 8.8.8.8
+PING 8.8.8.8 (8.8.8.8): 56 data bytes
+64 bytes from 8.8.8.8: seq=0 ttl=44 time=986.652 ms
+64 bytes from 8.8.8.8: seq=1 ttl=44 time=327.628 ms
+64 bytes from 8.8.8.8: seq=2 ttl=44 time=246.212 ms
+64 bytes from 8.8.8.8: seq=3 ttl=44 time=265.568 ms
+64 bytes from 8.8.8.8: seq=4 ttl=44 time=285.271 ms
+{% endhighlight %}
+2.{% highlight bash %}
+64 bytes from 8.8.8.8: seq=233 ttl=45 time=1567.306 ms
+64 bytes from 8.8.8.8: seq=234 ttl=45 time=1126.106 ms
+64 bytes from 8.8.8.8: seq=235 ttl=45 time=569.993 ms
+64 bytes from 8.8.8.8: seq=236 ttl=45 time=1403.010 ms
+64 bytes from 8.8.8.8: seq=237 ttl=45 time=428.891 ms
+{% endhighlight %}
+И тут для меня открылся новый дивный мир мобильной связи.</p>
+<p>Я открыл, что мой модем поддерживает сканирование местности на предмет базовых станций, причем необязательно того оператора, чья сим карта внутри него установлена.</p>
+<p>Делалось это следующей командой:</p>
+<p>{% highlight bash %}
+AT^NETSCAN=20,-110,1
+{% endhighlight %}</p>
+<!-- raw HTML omitted -->
+<p>Список отсортирован по уровню сигнала и выглядит следующим образом:</p>
+<p>{% highlight bash %}
+^NETSCAN: 10638,,,1e7e,250,02,0,-78,8b77,400000
+^NETSCAN: 10687,,,1e7e,250,02,0,-79,d5c8,400000
+^NETSCAN: 10662,,,1e7e,250,02,0,-82,8ade,400000
+^NETSCAN: 10587,,,4cf8,250,20,0,-105,d4fc,400000
+^NETSCAN: 10563,,,4cf8,250,20,0,-106,d4f9,400000
+{% endhighlight %}</p>
+<!-- raw HTML omitted -->
+<p><!-- raw HTML omitted -->P.S. Узнать данные станции, к которой мы подключены на данный момент можно командой:<!-- raw HTML omitted -->
+{% highlight bash %}
+AT+CREG=2
+OK
+AT+CREG?
++CREG: 2,1,&ldquo;1e7e&rdquo;,&ldquo;8b77&rdquo;
+{% endhighlight %}
+<!-- raw HTML omitted -->Имя оператора или его код можно узнать следующим образом:<!-- raw HTML omitted -->
+{% highlight bash %}
+AT+COPS?
++COPS: 0,0,&ldquo;Megafon&rdquo;,2</p>
+<p>AT+COPS=0,2
+AT+COPS?
++COPS: 0,2,&ldquo;25002&rdquo;,2
+{% endhighlight %}
+<!-- raw HTML omitted -->Хороший справочник по AT командам можно найти <!-- raw HTML omitted -->здесь<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<p>Теперь, имея эти данные, можно зайти на сайт <!-- raw HTML omitted --><a href="http://xinit.ru/bs/">http://xinit.ru/bs/</a><!-- raw HTML omitted --> и посмотреть, где эти вышки расположены относительно себя.</p>
+<p>Как правило, если есть направленная антенна, то ее следует направлять на ближайшую базовую станцию, - я так думал. Тут меня ждало следующее открытие. Даже если мы направим на нее антенну, далеко не факт, что пройдет регистрация на этой базовой станции. А если и пройдет, то не факт, что скорость передачи данных будет выше, чем через вышку, находящуюся вдвое дальше нее. Так я прошелся по ближайшим станциям в радиусе от 1.5 километров до 3-х и все они при хорошем сигнале передавали данные с большой задержкой. Пинг в среднем был ~300ms.</p>
+<p>Экспериментируя, я случайно попал на вышку, которая находилась на расстоянии 6-7 километров от меня. Подключившись к ней, время пинга упало до ~90ms, при том, что уровень сигнала упал вместе с ним.</p>
+<p>Для сравнения, уровень сигнала от:</p>
+<!-- raw HTML omitted -->
+<p>Тем не менее я провел скоростные тесты на самой лучшей ближней вышке и на удаленной, результаты:
+одна из ближайших станций - 2/0.35 Мбит.</p>
+<!-- raw HTML omitted -->
+<p>Удаленная станция - 4.28/1.68 Мбит.</p>
+<!-- raw HTML omitted -->
+<p>Честно говоря, я и от двух мегабит обалдел, т.к. при использовании обычного телефона даже Google Play Market не открывался. А тут, оказывается, можно еще и до 4-х разогнаться!</p>
+<!-- raw HTML omitted -->
+<p>В интернетах на вопрос типа: “можно ли модему указать, с какой вышкой работать” отвечают, что не вы выбираете вышку, а она вас. Быть может знающие люди подскажут, есть ли решения для таких ситуаций?</p>
+<p>На этом все. Спасибо всем тем, кто прочел до конца.</p>
+<p><!-- raw HTML omitted -->P.S.<!-- raw HTML omitted -->
+Тут под руку попалась симка Билайна, ее вышки ближе всего к нам и после подключения тест скорости показал аж 20/2 Мегабита. Привожу конфигурацию для Билайна:</p>
+<p>{% highlight bash %}
+vim /etc/config/network
+{% endhighlight %}
+{% highlight bash %}
+config interface &lsquo;wan&rsquo;
+option device /dev/ttyUSB0
+option username &lsquo;beeline&rsquo;
+option password &lsquo;beeline&rsquo;
+option apn &lsquo;internet.beeline.ru&rsquo;
+option service &lsquo;umts&rsquo;
+option maxwait &lsquo;0&rsquo;
+option dialnumber &lsquo;*99#&rsquo;
+option proto &lsquo;3g&rsquo;
+{% endhighlight %}</p>
+<!-- raw HTML omitted -->
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://undying.github.io/tags/3g/">3g</a></li>
+      <li><a href="http://undying.github.io/tags/wifi/">wifi</a></li>
+      <li><a href="http://undying.github.io/tags/gprs/">gprs</a></li>
+      <li><a href="http://undying.github.io/tags/gsm/">gsm</a></li>
+      <li><a href="http://undying.github.io/tags/openwrt/">openwrt</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="http://undying.github.io">My Digital Chronicle</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

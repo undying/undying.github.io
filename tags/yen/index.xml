@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>yen on My Digital Chronicle</title>
+    <link>http://undying.github.io/tags/yen/</link>
+    <description>Recent content in yen on My Digital Chronicle</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 19 Feb 2017 15:47:00 +0300</lastBuildDate><atom:link href="http://undying.github.io/tags/yen/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Gentoo: Backslash as Yen char</title>
+      <link>http://undying.github.io/posts/2017-02-19-backslash_as_yen/</link>
+      <pubDate>Sun, 19 Feb 2017 15:47:00 +0300</pubDate>
+      
+      <guid>http://undying.github.io/posts/2017-02-19-backslash_as_yen/</guid>
+      <description>If while browsing the internet you have a problem with backslash character which displayed as yen sign you can fix it this way.
+First, let&amp;rsquo;s install the appropriate fonts.
+{% highlight bash %} emerge -av media-fonts/droid {% endhighlight %}
+Then we have to enable them for wide system.
+{% highlight bash %} eselect fontconfig enable 59-google-droid-sans.conf eselect fontconfig enable 59-google-droid-sans-mono.conf eselect fontconfig enable 59-google-droid-serif.conf {% endhighlight %}
+Next step is to clean fonts cache.</description>
+    </item>
+    
+  </channel>
+</rss>

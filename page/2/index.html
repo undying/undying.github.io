@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head>
+	<meta name="generator" content="Hugo 0.111.3"><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>My Digital Chronicle</title>
+
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="canonical" href="http://undying.github.io/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.3613efbd0b1772781e8f49935e973cae632a7f61471c05b17be155505ccf87b5.css" integrity="sha256-NhPvvQsXcngej0mTXpc8rmMqf2FHHAWxe&#43;FVUFzPh7U=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://undying.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://undying.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://undying.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://undying.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://undying.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" type="application/rss+xml" href="http://undying.github.io/index.xml">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="My Digital Chronicle" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://undying.github.io/" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="My Digital Chronicle"/>
+<meta name="twitter:description" content=""/>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "My Digital Chronicle",
+  "url": "http://undying.github.io",
+  "description": "",
+  "thumbnailUrl": "http://undying.github.io/favicon.ico",
+  "sameAs": [
+      
+  ]
+}
+</script>
+</head>
+
+<body class="list" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://undying.github.io" accesskey="h" title="My Digital Chronicle (Alt + H)">My Digital Chronicle</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main"> 
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Docker: Mounting block devices into container
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Today was curious is it possible to mount block device into a docker container without mounting it on system. It’s not well documented but found one interesting comment in github.
+So, if –mount option in docker run command is “magic” on top of “mount” system call, we can use it. After experimenting a bit here is an example mounting lvm volumes.
+First, let’s create loop device for LVM:
+{% highlight bash %} dd if=/dev/zero of=/tmp/loop bs=1M count=100 losetup /dev/loop0 /tmp/loop {% endhighlight %}...</p>
+  </div>
+  <footer class="entry-footer"><span title='2019-07-25 14:27:00 +0000 +0000'>July 25, 2019</span></footer>
+  <a class="entry-link" aria-label="post link to Docker: Mounting block devices into container" href="http://undying.github.io/posts/2019-07-25-mounting_block_devices_into_docker/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Gentoo: Building FireFox 63.0.3
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Today I was trying to update FireFox on my Gentoo box and failed with error:
+{% highlight bash %} 0:06.75 checking rustc version… 1.30.1 0:06.75 ERROR: Cargo package manager not found. 0:06.75 To compile Rust language sources, you must have ‘cargo’ in your path. 0:06.75 See https://www.rust-lang.org/ for more information. 0:06.75 0:06.75 You can install cargo by running ‘./mach bootstrap’ 0:06.75 or by directly running the installer from https://rustup.rs/ 0:06.75 0:06....</p>
+  </div>
+  <footer class="entry-footer"><span title='2018-11-21 05:10:00 +0000 +0000'>November 21, 2018</span></footer>
+  <a class="entry-link" aria-label="post link to Gentoo: Building FireFox 63.0.3" href="http://undying.github.io/posts/2018-11-21-building_firefox_on_gentoo/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Gentoo: Backslash as Yen char
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>If while browsing the internet you have a problem with backslash character which displayed as yen sign you can fix it this way.
+First, let’s install the appropriate fonts.
+{% highlight bash %} emerge -av media-fonts/droid {% endhighlight %}
+Then we have to enable them for wide system.
+{% highlight bash %} eselect fontconfig enable 59-google-droid-sans.conf eselect fontconfig enable 59-google-droid-sans-mono.conf eselect fontconfig enable 59-google-droid-serif.conf {% endhighlight %}
+Next step is to clean fonts cache....</p>
+  </div>
+  <footer class="entry-footer"><span title='2017-02-19 15:47:00 +0300 MSK'>February 19, 2017</span></footer>
+  <a class="entry-link" aria-label="post link to Gentoo: Backslash as Yen char" href="http://undying.github.io/posts/2017-02-19-backslash_as_yen/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Pure Bash script for IO usage monitoring
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>I had the need to implement pure bash solution for IO usage monitoring without any tools installed on OS, do this fast and accurately. After little reaserching about /sys/ filesystem the next script was born:
+{% highlight bash %} #! /bin/bash
+SLEEP=0.01 declare -A ops=()
+for dev in /sys/block/;do dev=${dev##/} ops&#43;=( [${dev}]=0 ) done
+for i in $(seq 1 100);do while read _ _ drive _ _ _ _ _ _ _ _ tasks _ _;do [ -n “${drive}” ] || continue case ${tasks} in 0|[!...</p>
+  </div>
+  <footer class="entry-footer"><span title='2016-09-13 02:39:00 +0300 MSK'>September 13, 2016</span></footer>
+  <a class="entry-link" aria-label="post link to Pure Bash script for IO usage monitoring" href="http://undying.github.io/posts/2016-09-13-pure_bash_io_usage_monitoring/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>libgcc_s.so: cannot open shared object file
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Как то вечером, я решил, что стоит лечь по-раньше спать. Подумал, что надо бы выспаться, все дела, но перед этим просто загляну в ноутбук, и тут началось. Для чего то я одновременно запустил rtorrent &#43; emerge -vuDN @world. Стоит ли говорить, что система установлена на шпиндельном hdd, поверх которого работает ssd cache (Bcache). Видимо из-за нагрузки, ноутбук завис и ни на какие действия не реагировал. “Семь бед - один ресет”, подумал я и перезагрузил ноутбук....</p>
+  </div>
+  <footer class="entry-footer"><span title='2016-04-29 02:04:00 +0300 MSK'>April 29, 2016</span></footer>
+  <a class="entry-link" aria-label="post link to libgcc_s.so: cannot open shared object file" href="http://undying.github.io/posts/2016-04-29-lib_gcc_s_so-cannot_open_shared_object_file/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Docker: Using docker with LVM Thin Pool
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Docker is the nice tool for almost every use case in my sphere. It’s easy to use, it’s fast to build and deploy. Docker can be used with miscellaneous storage drivers such as btrfs, datamapper, overlayfs, aufs. A long time I was using docker with btrfs backend and everything seems to be nice, but when load on this server increased, corrupted layers are began to appear.
+It looks like build process in the next RUN step unable to find files from previous step....</p>
+  </div>
+  <footer class="entry-footer"><span title='2016-02-08 00:21:00 +0300 MSK'>February 8, 2016</span></footer>
+  <a class="entry-link" aria-label="post link to Docker: Using docker with LVM Thin Pool" href="http://undying.github.io/posts/2016-02-08-using-docker-with-lvm-thin-volumes/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Using FireFox to play video with Mplayer on Windows
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Some time ago I was visiting at my mom. We live a far away from each other so frequently visits is not so easy. She using a pretty old computer which I were overclocking a long time ago. It’s a AMD Barton 3200&#43; with 2GB DDR RAM and Geforce 6600 GT.
+It was a great PC a long time ago. Even now it works fine, except when you are want to watch video online....</p>
+  </div>
+  <footer class="entry-footer"><span title='2016-01-31 16:30:00 +0300 MSK'>January 31, 2016</span></footer>
+  <a class="entry-link" aria-label="post link to Using FireFox to play video with Mplayer on Windows" href="http://undying.github.io/posts/2016-01-31-firefox-and-mplayer/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>How to cleanup FS metadata from partition
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Sometimes you I’m need to create new FS on partition, which was already used for something else (another FS, RAID, LVM). I was wondering about most usable ways to clear metadata. Here is some I liked the most.
+first {% highlight bash %} wipefs -a ${DEVICE} {% endhighlight %}
+second {% highlight bash %} dd if=/dev/zero of=${DEVICE} bs=512 seek=$(( $(blockdev –getsz ${DEVICE}) - 1024 )) count=1024 {% endhighlight %}
+third {% highlight bash %} dmraid -r -E ${DEVICE} {% endhighlight %}...</p>
+  </div>
+  <footer class="entry-footer"><span title='2016-01-28 02:58:00 +0300 MSK'>January 28, 2016</span></footer>
+  <a class="entry-link" aria-label="post link to How to cleanup FS metadata from partition" href="http://undying.github.io/posts/2016-01-18-cleaning-up-metadata-from-disk/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Enabling HTTP/2.0 support with Haproxy -&gt; Amazon ELB -&gt; Nginx
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>I have a Haproxy balancer that routes traffic for multiple projects with different host names and now, I need to enable HTTP/2.0 support for couple or all of them. The problem is that current version of Haproxy not supporting HTTP/2.0 protocol. Also, In my case I have multiple backends. To some of them I need to send http/1.1 traffic and to some of them http/2.0.
+The main problem is the mix of tcp/http modes in Haproxy....</p>
+  </div>
+  <footer class="entry-footer"><span title='2016-01-12 20:35:00 +0300 MSK'>January 12, 2016</span></footer>
+  <a class="entry-link" aria-label="post link to Enabling HTTP/2.0 support with Haproxy -&gt; Amazon ELB -&gt; Nginx" href="http://undying.github.io/posts/2016-01-12-haproxy-elb-nginx-http2/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Выжимаем максимум интернета из деревенских сот
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>На кануне новогодних праздников понадобилось пораньше покинуть столицу, покинуть ее в направлении таких мест, в которых интернет бывает довольно редко. На период отсутствия на работе я обещал напарникам быть на связи. А так как мой род деятельности напрямую связан с web, то я решил поэкспериментировать с доступностью интернетов в планируемом месте пребывания.
+Суть задачи сводился к следующему:
+Из небходимого у меня было:
+В качестве хаба использовал старый добрый D-Link Dub-104 (красивый компактный хаб с невероятно здоровенным блоком питания)....</p>
+  </div>
+  <footer class="entry-footer"><span title='2015-12-31 12:41:17 +0300 MSK'>December 31, 2015</span></footer>
+  <a class="entry-link" aria-label="post link to Выжимаем максимум интернета из деревенских сот" href="http://undying.github.io/posts/2015-12-31-maximizing-village-internet/"></a>
+</article>
+<footer class="page-footer">
+  <nav class="pagination">
+    <a class="prev" href="http://undying.github.io/">
+      «&nbsp;Prev&nbsp;
+    </a>
+    <a class="next" href="http://undying.github.io/page/3/">Next&nbsp;&nbsp;»
+    </a>
+  </nav>
+</footer>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="http://undying.github.io">My Digital Chronicle</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

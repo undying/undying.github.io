@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>ycm on My Digital Chronicle</title>
+    <link>http://undying.github.io/tags/ycm/</link>
+    <description>Recent content in ycm on My Digital Chronicle</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 14 Oct 2020 23:03:02 +0300</lastBuildDate><atom:link href="http://undying.github.io/tags/ycm/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>VIM: YCM and Pipenv</title>
+      <link>http://undying.github.io/posts/2020-10-14-vim-ycm-and-pipenv/</link>
+      <pubDate>Wed, 14 Oct 2020 23:03:02 +0300</pubDate>
+      
+      <guid>http://undying.github.io/posts/2020-10-14-vim-ycm-and-pipenv/</guid>
+      <description>While writing another python script under pipenv I have met a problem that YCM autocomplete worked only for built in functions. That was annoying because without autocomplete YCM looses it&amp;rsquo;s sense.
+Solution Let&amp;rsquo;s create module for filetype plugin.
+cat ~/.vim/after/ftplugin/python.vim if !empty($VIRTUAL_ENV) let g:ycm_server_python_interpreter = $VIRTUAL_ENV . &amp;#39;/bin/python&amp;#39; let $PYTHONPATH = finddir(&amp;#39;site-packages&amp;#39;, $VIRTUAL_ENV . &amp;#39;/lib/*&amp;#39;) endif Then you can simply run command
+pipenv run vim some/script.py And now YCM works correctly :3</description>
+    </item>
+    
+  </channel>
+</rss>

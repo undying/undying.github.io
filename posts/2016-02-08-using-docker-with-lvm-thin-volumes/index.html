@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Docker: Using docker with LVM Thin Pool | My Digital Chronicle</title>
+<meta name="keywords" content="docker, lvm, datamapper, thin">
+<meta name="description" content="Docker is the nice tool for almost every use case in my sphere. It&rsquo;s easy to use, it&rsquo;s fast to build and deploy. Docker can be used with miscellaneous storage drivers such as btrfs, datamapper, overlayfs, aufs. A long time I was using docker with btrfs backend and everything seems to be nice, but when load on this server increased, corrupted layers are began to appear.
+It looks like build process in the next RUN step unable to find files from previous step.">
+<meta name="author" content="">
+<link rel="canonical" href="http://undying.github.io/posts/2016-02-08-using-docker-with-lvm-thin-volumes/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.3613efbd0b1772781e8f49935e973cae632a7f61471c05b17be155505ccf87b5.css" integrity="sha256-NhPvvQsXcngej0mTXpc8rmMqf2FHHAWxe&#43;FVUFzPh7U=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://undying.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://undying.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://undying.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://undying.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://undying.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Docker: Using docker with LVM Thin Pool" />
+<meta property="og:description" content="Docker is the nice tool for almost every use case in my sphere. It&rsquo;s easy to use, it&rsquo;s fast to build and deploy. Docker can be used with miscellaneous storage drivers such as btrfs, datamapper, overlayfs, aufs. A long time I was using docker with btrfs backend and everything seems to be nice, but when load on this server increased, corrupted layers are began to appear.
+It looks like build process in the next RUN step unable to find files from previous step." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://undying.github.io/posts/2016-02-08-using-docker-with-lvm-thin-volumes/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2016-02-08T00:21:00+03:00" />
+<meta property="article:modified_time" content="2016-02-08T00:21:00+03:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Docker: Using docker with LVM Thin Pool"/>
+<meta name="twitter:description" content="Docker is the nice tool for almost every use case in my sphere. It&rsquo;s easy to use, it&rsquo;s fast to build and deploy. Docker can be used with miscellaneous storage drivers such as btrfs, datamapper, overlayfs, aufs. A long time I was using docker with btrfs backend and everything seems to be nice, but when load on this server increased, corrupted layers are began to appear.
+It looks like build process in the next RUN step unable to find files from previous step."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Posts",
+      "item": "http://undying.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "Docker: Using docker with LVM Thin Pool",
+      "item": "http://undying.github.io/posts/2016-02-08-using-docker-with-lvm-thin-volumes/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Docker: Using docker with LVM Thin Pool",
+  "name": "Docker: Using docker with LVM Thin Pool",
+  "description": "Docker is the nice tool for almost every use case in my sphere. It\u0026rsquo;s easy to use, it\u0026rsquo;s fast to build and deploy. Docker can be used with miscellaneous storage drivers such as btrfs, datamapper, overlayfs, aufs. A long time I was using docker with btrfs backend and everything seems to be nice, but when load on this server increased, corrupted layers are began to appear.\nIt looks like build process in the next RUN step unable to find files from previous step.",
+  "keywords": [
+    "docker", "lvm", "datamapper", "thin"
+  ],
+  "articleBody": "Docker is the nice tool for almost every use case in my sphere. It’s easy to use, it’s fast to build and deploy. Docker can be used with miscellaneous storage drivers such as btrfs, datamapper, overlayfs, aufs. A long time I was using docker with btrfs backend and everything seems to be nice, but when load on this server increased, corrupted layers are began to appear.\nIt looks like build process in the next RUN step unable to find files from previous step. I had no desire to dig into it because of time, so I decided to change storage backend. It may looks like the choice is big enough, in fact every variant is full of surprises. Some of them is still not in the linux kernel, some of them have serious bugs, and others is just slow.\nSome time ago I heard abount LVM thin provisioning. It’s relatively new feature and I had no use cases to use it. Now I have it, because docker can work with it. You can create Virtual Group directly on block device and pass it to docker daemon. It works fast enough to hold many parallel docker builds in a single moment in time. So, let’s try it.\nCreating Virtual Group docker: {% highlight bash %} pvcreate /dev/sdb vgcreate docker /dev/sdb {% endhighlight %}\nNow we shall create a volume for metadata. man 8 lvcreate gives us a formula for calculating a size for metadata volume. {% highlight bash %} (Pool_LV_size / Pool_LV_chunk_size * 64b) {% endhighlight %}\nDefault chink size is 64KiB, now lets find desired metadata size. {% highlight bash %} echo $[799057190584.31995 / 65536 * 64] 780329287.67999995 echo $[780329287.67999995/1024/1024] 744.17999999999995 {% endhighlight %}\n780329287.67999995 - The VG size in bytes (744GiB) 65536 - chunk size in bytes (64KiB)\nNow creating metadata volume with calculated size. {% highlight bash %} lvcreate -n docker-pool-meta -L 744M docker Logical volume “docker-pool-meta” created. {% endhighlight %}\nNext, we need to create a volume for data. In my situations I just use the rest size of virtual group. First, I was trying to create volume this way: {% highlight bash %} lvcreate -n docker-pool-data -l 100%FREE docker Logical volume “docker-pool-data” created. {% endhighlight %}\nIt’s successfully created, but It fails in the next step when we need to convert this two volumes to the thin pool. {% highlight bash %} lvconvert –type thin-pool –poolmetadata docker/docker-pool-meta docker/docker-pool-data WARNING: Converting logical volume docker/docker-pool-data and docker/docker-pool-meta to pool’s data and metadata volumes. THIS WILL DESTROY CONTENT OF LOGICAL VOLUME (filesystem etc.) Do you really want to convert docker/docker-pool-data and docker/docker-pool-meta? [y/n]: y Volume group “docker” has insufficient free space (0 extents): 38102 required. {% endhighlight %}\nIf in your case everything is fine, my congratulations, you can skip this part.\nLooks like when pool is being creating lvm needs some extra space, in my situation it’s 38102 extents. Okay, so I need to create volume with size smaller on 38102 extents. Lets find the virtual group size in extents. {% highlight bash %} vgs -o +vg_free_count,vg_extent_count VG #PV #LV #SN Attr VSize VFree Free #Ext docker 1 2 0 wz–n- 744,18g 0 0 190511 {% endhighlight %}\nFine, now lets see how many extents uses metadata volume. {% highlight bash %} lvs -o +vg_extent_count LV VG Attr LSize #Ext docker-pool-meta docker twi-aotz– 744,0m 185 {% endhighlight %}\nNow, it’s easy to find desired data volume size. {% highlight bash %} echo $[190511-38102-185] 152224 {% endhighlight %}\n{% highlight bash %} lvremove docker/docker-pool-data Logical volume “docker-pool-data” successfully removed\nlvcreate -n docker-pool-data -l 152224 docker Logical volume “docker-pool-data” created. {% endhighlight %}\nTime to convert it.\n{% highlight bash %} lvconvert –type thin-pool –poolmetadata docker/docker-pool-meta docker/docker-pool-data WARNING: Converting logical volume docker/docker-pool-data and docker/docker-pool-meta to pool’s data and metadata volumes. THIS WILL DESTROY CONTENT OF LOGICAL VOLUME (filesystem etc.) {% endhighlight %}\n{% highlight bash %} /usr/bin/docker daemon -H unix:///run/docker.sock -H tcp://0.0.0.0:2375 –dns=172.17.0.1 –storage-driver=devicemapper –storage-opt dm.thinpooldev=/dev/mapper/docker-docker–pool–data –storage-opt=dm.use_deferred_removal=true –storage-opt=dm.mountopt=noatime –storage-opt=dm.fs=xfs {% endhighlight %}\nAt this time I’m actively testing this solution with thin pools so this article may be updated from time to time If I’ll find some new problems or features. In fact as I think, this is the most acceptable solution for now in ratio speed/safety. Maybe soon we will see something more interesting, I hope so.\n",
+  "wordCount" : "718",
+  "inLanguage": "en",
+  "datePublished": "2016-02-08T00:21:00+03:00",
+  "dateModified": "2016-02-08T00:21:00+03:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://undying.github.io/posts/2016-02-08-using-docker-with-lvm-thin-volumes/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "My Digital Chronicle",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://undying.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://undying.github.io" accesskey="h" title="My Digital Chronicle (Alt + H)">My Digital Chronicle</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title">
+      Docker: Using docker with LVM Thin Pool
+    </h1>
+    <div class="post-meta"><span title='2016-02-08 00:21:00 +0300 MSK'>February 8, 2016</span>
+
+</div>
+  </header> 
+  <div class="post-content"><p>Docker is the nice tool for almost every use case in my sphere. It&rsquo;s easy to use, it&rsquo;s fast to build and deploy.
+Docker can be used with miscellaneous storage drivers such as btrfs, datamapper, overlayfs, aufs. A long time I was using docker with btrfs backend and everything seems to be nice, but when load on this server increased, corrupted layers are began to appear.</p>
+<p>It looks like build process in the next RUN step unable to find files from previous step. I had no desire to dig into it because of time, so I decided to change storage backend. It may looks like the choice is big enough, in fact every variant is full of surprises. Some of them is still not in the linux kernel, some of them have serious bugs, and others is just slow.</p>
+<p>Some time ago I heard abount LVM thin provisioning. It&rsquo;s relatively new feature and I had no use cases to use it. Now I have it, because docker can work with it. You can create Virtual Group directly on block device and pass it to docker daemon. It works fast enough to hold many parallel docker builds in a single moment in time. So, let&rsquo;s try it.</p>
+<p>Creating <!-- raw HTML omitted -->V<!-- raw HTML omitted -->irtual <!-- raw HTML omitted -->G<!-- raw HTML omitted -->roup <!-- raw HTML omitted -->docker<!-- raw HTML omitted -->:
+{% highlight bash %}
+pvcreate /dev/sdb
+vgcreate docker /dev/sdb
+{% endhighlight %}</p>
+<p>Now we shall create a volume for metadata. <!-- raw HTML omitted -->man 8 lvcreate<!-- raw HTML omitted --> gives us a formula for calculating a size for metadata volume.
+{% highlight bash %}
+(Pool_LV_size / Pool_LV_chunk_size * 64b)
+{% endhighlight %}</p>
+<p>Default chink size is 64KiB, now lets find desired metadata size.
+{% highlight bash %}
+echo $[799057190584.31995 / 65536 * 64]
+780329287.67999995
+echo $[780329287.67999995/1024/1024]
+744.17999999999995
+{% endhighlight %}</p>
+<p><!-- raw HTML omitted -->780329287.67999995<!-- raw HTML omitted --> - The VG size in bytes (744GiB)<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->65536<!-- raw HTML omitted --> - chunk size in bytes (64KiB)</p>
+<p>Now creating metadata volume with calculated size.
+{% highlight bash %}
+lvcreate -n docker-pool-meta -L 744M docker
+Logical volume &ldquo;docker-pool-meta&rdquo; created.
+{% endhighlight %}</p>
+<!-- raw HTML omitted -->
+<p>Next, we need to create a volume for data. In my situations I just use the rest size of virtual group. First, I was trying to create volume this way:
+{% highlight bash %}
+lvcreate -n docker-pool-data -l 100%FREE docker
+Logical volume &ldquo;docker-pool-data&rdquo; created.
+{% endhighlight %}</p>
+<p>It&rsquo;s successfully created, but It fails in the next step when we need to convert this two volumes to the thin pool.
+{% highlight bash %}
+lvconvert &ndash;type thin-pool &ndash;poolmetadata docker/docker-pool-meta docker/docker-pool-data
+WARNING: Converting logical volume docker/docker-pool-data and docker/docker-pool-meta to pool&rsquo;s data and metadata volumes.
+THIS WILL DESTROY CONTENT OF LOGICAL VOLUME (filesystem etc.)
+Do you really want to convert docker/docker-pool-data and docker/docker-pool-meta? [y/n]: y
+Volume group &ldquo;docker&rdquo; has insufficient free space (0 extents): 38102 required.
+{% endhighlight %}</p>
+<p>If in your case everything is fine, my congratulations, you can <!-- raw HTML omitted -->skip<!-- raw HTML omitted --> this part.</p>
+<p>Looks like when pool is being creating lvm needs some extra space, in my situation it&rsquo;s 38102 extents. Okay, so I need to create volume with size smaller on 38102 extents.
+Lets find the virtual group size in extents.
+{% highlight bash %}
+vgs -o +vg_free_count,vg_extent_count
+VG     #PV #LV #SN Attr   VSize   VFree  Free #Ext
+docker   1   2   0 wz&ndash;n- 744,18g     0     0 190511
+{% endhighlight %}</p>
+<p>Fine, now lets see how many extents uses metadata volume.
+{% highlight bash %}
+lvs -o +vg_extent_count
+LV               VG     Attr       LSize    #Ext
+docker-pool-meta docker twi-aotz&ndash; 744,0m   185
+{% endhighlight %}</p>
+<p>Now, it&rsquo;s easy to find desired data volume size.
+{% highlight bash %}
+echo $[190511-38102-185]
+152224
+{% endhighlight %}</p>
+<p>{% highlight bash %}
+lvremove docker/docker-pool-data
+Logical volume &ldquo;docker-pool-data&rdquo; successfully removed</p>
+<p>lvcreate -n docker-pool-data -l 152224 docker
+Logical volume &ldquo;docker-pool-data&rdquo; created.
+{% endhighlight %}</p>
+<p>Time to convert it.</p>
+<p>{% highlight bash %}
+lvconvert &ndash;type thin-pool &ndash;poolmetadata docker/docker-pool-meta docker/docker-pool-data
+WARNING: Converting logical volume docker/docker-pool-data and docker/docker-pool-meta to pool&rsquo;s data and metadata volumes.
+THIS WILL DESTROY CONTENT OF LOGICAL VOLUME (filesystem etc.)
+{% endhighlight %}</p>
+<!-- raw HTML omitted -->
+<p>{% highlight bash %}
+/usr/bin/docker daemon -H unix:///run/docker.sock -H tcp://0.0.0.0:2375 &ndash;dns=172.17.0.1 &ndash;storage-driver=devicemapper &ndash;storage-opt dm.thinpooldev=/dev/mapper/docker-docker&ndash;pool&ndash;data &ndash;storage-opt=dm.use_deferred_removal=true &ndash;storage-opt=dm.mountopt=noatime &ndash;storage-opt=dm.fs=xfs
+{% endhighlight %}</p>
+<!-- raw HTML omitted -->
+<p>At this time I&rsquo;m actively testing this solution with thin pools so this article may be updated from time to time If I&rsquo;ll find some new problems or features.
+In fact as I think, this is the most acceptable solution for now in ratio speed/safety. Maybe soon we will see something more interesting, I hope so.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://undying.github.io/tags/docker/">docker</a></li>
+      <li><a href="http://undying.github.io/tags/lvm/">lvm</a></li>
+      <li><a href="http://undying.github.io/tags/datamapper/">datamapper</a></li>
+      <li><a href="http://undying.github.io/tags/thin/">thin</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="http://undying.github.io">My Digital Chronicle</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

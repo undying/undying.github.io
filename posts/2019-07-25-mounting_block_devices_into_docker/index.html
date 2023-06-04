@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Docker: Mounting block devices into container | My Digital Chronicle</title>
+<meta name="keywords" content="mount, block, lvm, docker, container">
+<meta name="description" content="Today was curious is it possible to mount block device into a docker container without mounting it on system. It&rsquo;s not well documented but found one interesting comment in github.
+So, if &ndash;mount option in docker run command is &ldquo;magic&rdquo; on top of &ldquo;mount&rdquo; system call, we can use it. After experimenting a bit here is an example mounting lvm volumes.
+First, let&rsquo;s create loop device for LVM:
+{% highlight bash %} dd if=/dev/zero of=/tmp/loop bs=1M count=100 losetup /dev/loop0 /tmp/loop {% endhighlight %}">
+<meta name="author" content="">
+<link rel="canonical" href="http://undying.github.io/posts/2019-07-25-mounting_block_devices_into_docker/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.3613efbd0b1772781e8f49935e973cae632a7f61471c05b17be155505ccf87b5.css" integrity="sha256-NhPvvQsXcngej0mTXpc8rmMqf2FHHAWxe&#43;FVUFzPh7U=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://undying.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://undying.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://undying.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://undying.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://undying.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Docker: Mounting block devices into container" />
+<meta property="og:description" content="Today was curious is it possible to mount block device into a docker container without mounting it on system. It&rsquo;s not well documented but found one interesting comment in github.
+So, if &ndash;mount option in docker run command is &ldquo;magic&rdquo; on top of &ldquo;mount&rdquo; system call, we can use it. After experimenting a bit here is an example mounting lvm volumes.
+First, let&rsquo;s create loop device for LVM:
+{% highlight bash %} dd if=/dev/zero of=/tmp/loop bs=1M count=100 losetup /dev/loop0 /tmp/loop {% endhighlight %}" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://undying.github.io/posts/2019-07-25-mounting_block_devices_into_docker/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-07-25T14:27:00+00:00" />
+<meta property="article:modified_time" content="2019-07-25T14:27:00+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Docker: Mounting block devices into container"/>
+<meta name="twitter:description" content="Today was curious is it possible to mount block device into a docker container without mounting it on system. It&rsquo;s not well documented but found one interesting comment in github.
+So, if &ndash;mount option in docker run command is &ldquo;magic&rdquo; on top of &ldquo;mount&rdquo; system call, we can use it. After experimenting a bit here is an example mounting lvm volumes.
+First, let&rsquo;s create loop device for LVM:
+{% highlight bash %} dd if=/dev/zero of=/tmp/loop bs=1M count=100 losetup /dev/loop0 /tmp/loop {% endhighlight %}"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Posts",
+      "item": "http://undying.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "Docker: Mounting block devices into container",
+      "item": "http://undying.github.io/posts/2019-07-25-mounting_block_devices_into_docker/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Docker: Mounting block devices into container",
+  "name": "Docker: Mounting block devices into container",
+  "description": "Today was curious is it possible to mount block device into a docker container without mounting it on system. It\u0026rsquo;s not well documented but found one interesting comment in github.\nSo, if \u0026ndash;mount option in docker run command is \u0026ldquo;magic\u0026rdquo; on top of \u0026ldquo;mount\u0026rdquo; system call, we can use it. After experimenting a bit here is an example mounting lvm volumes.\nFirst, let\u0026rsquo;s create loop device for LVM:\n{% highlight bash %} dd if=/dev/zero of=/tmp/loop bs=1M count=100 losetup /dev/loop0 /tmp/loop {% endhighlight %}",
+  "keywords": [
+    "mount", "block", "lvm", "docker", "container"
+  ],
+  "articleBody": "Today was curious is it possible to mount block device into a docker container without mounting it on system. It’s not well documented but found one interesting comment in github.\nSo, if –mount option in docker run command is “magic” on top of “mount” system call, we can use it. After experimenting a bit here is an example mounting lvm volumes.\nFirst, let’s create loop device for LVM:\n{% highlight bash %} dd if=/dev/zero of=/tmp/loop bs=1M count=100 losetup /dev/loop0 /tmp/loop {% endhighlight %}\nThen, making an LVM device:\n{% highlight bash %} pvcreate /dev/loop0 vgcreate vg1 /dev/loop0 lvcreate –size 90M –name lv1 vg1 mkfs.xfs /dev/vg1/lv1 {% endhighlight %}\nAnd finally let’s run container and mount block device:\n{% highlight bash %} docker run –rm -it –mount=‘type=volume,dst=/opt,volume-driver=local,volume-opt=type=xfs,volume-opt=device=/dev/vg1/lv1’ ubuntu:18.04 bash {% endhighlight %}\nThat’s it.\n",
+  "wordCount" : "133",
+  "inLanguage": "en",
+  "datePublished": "2019-07-25T14:27:00Z",
+  "dateModified": "2019-07-25T14:27:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://undying.github.io/posts/2019-07-25-mounting_block_devices_into_docker/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "My Digital Chronicle",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://undying.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://undying.github.io" accesskey="h" title="My Digital Chronicle (Alt + H)">My Digital Chronicle</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title">
+      Docker: Mounting block devices into container
+    </h1>
+    <div class="post-meta"><span title='2019-07-25 14:27:00 +0000 +0000'>July 25, 2019</span>
+
+</div>
+  </header> 
+  <div class="post-content"><p>Today was curious is it possible to mount block device into a docker container without mounting it on system.
+It&rsquo;s not well documented but found one interesting <!-- raw HTML omitted -->comment <!-- raw HTML omitted --> in github.</p>
+<p>So, if &ndash;mount option in <code>docker run</code> command is &ldquo;magic&rdquo; on top of &ldquo;mount&rdquo; system call, we can use it.
+After experimenting a bit here is an example mounting lvm volumes.</p>
+<p>First, let&rsquo;s create loop device for LVM:</p>
+<p>{% highlight bash %}
+dd if=/dev/zero of=/tmp/loop bs=1M count=100
+losetup /dev/loop0 /tmp/loop
+{% endhighlight %}</p>
+<p>Then, making an LVM device:</p>
+<p>{% highlight bash %}
+pvcreate /dev/loop0
+vgcreate vg1 /dev/loop0
+lvcreate &ndash;size 90M &ndash;name lv1 vg1
+mkfs.xfs /dev/vg1/lv1
+{% endhighlight %}</p>
+<p>And finally let&rsquo;s run container and mount block device:</p>
+<p>{% highlight bash %}
+docker run <br>
+&ndash;rm -it <br>
+&ndash;mount=&lsquo;type=volume,dst=/opt,volume-driver=local,volume-opt=type=xfs,volume-opt=device=/dev/vg1/lv1&rsquo; <br>
+ubuntu:18.04 bash
+{% endhighlight %}</p>
+<p>That&rsquo;s it.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://undying.github.io/tags/mount/">mount</a></li>
+      <li><a href="http://undying.github.io/tags/block/">block</a></li>
+      <li><a href="http://undying.github.io/tags/lvm/">lvm</a></li>
+      <li><a href="http://undying.github.io/tags/docker/">docker</a></li>
+      <li><a href="http://undying.github.io/tags/container/">container</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="http://undying.github.io">My Digital Chronicle</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

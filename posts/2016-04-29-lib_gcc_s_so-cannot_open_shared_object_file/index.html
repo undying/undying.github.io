@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>libgcc_s.so: cannot open shared object file | My Digital Chronicle</title>
+<meta name="keywords" content="gentoo, gcc">
+<meta name="description" content="Как то вечером, я решил, что стоит лечь по-раньше спать. Подумал, что надо бы выспаться, все дела, но перед этим просто загляну в ноутбук, и тут началось. Для чего то я одновременно запустил rtorrent &#43; emerge -vuDN @world. Стоит ли говорить, что система установлена на шпиндельном hdd, поверх которого работает ssd cache (Bcache). Видимо из-за нагрузки, ноутбук завис и ни на какие действия не реагировал. &ldquo;Семь бед - один ресет&rdquo;, подумал я и перезагрузил ноутбук.">
+<meta name="author" content="">
+<link rel="canonical" href="http://undying.github.io/posts/2016-04-29-lib_gcc_s_so-cannot_open_shared_object_file/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.3613efbd0b1772781e8f49935e973cae632a7f61471c05b17be155505ccf87b5.css" integrity="sha256-NhPvvQsXcngej0mTXpc8rmMqf2FHHAWxe&#43;FVUFzPh7U=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://undying.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://undying.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://undying.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://undying.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://undying.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="libgcc_s.so: cannot open shared object file" />
+<meta property="og:description" content="Как то вечером, я решил, что стоит лечь по-раньше спать. Подумал, что надо бы выспаться, все дела, но перед этим просто загляну в ноутбук, и тут началось. Для чего то я одновременно запустил rtorrent &#43; emerge -vuDN @world. Стоит ли говорить, что система установлена на шпиндельном hdd, поверх которого работает ssd cache (Bcache). Видимо из-за нагрузки, ноутбук завис и ни на какие действия не реагировал. &ldquo;Семь бед - один ресет&rdquo;, подумал я и перезагрузил ноутбук." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://undying.github.io/posts/2016-04-29-lib_gcc_s_so-cannot_open_shared_object_file/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2016-04-29T02:04:00+03:00" />
+<meta property="article:modified_time" content="2016-04-29T02:04:00+03:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="libgcc_s.so: cannot open shared object file"/>
+<meta name="twitter:description" content="Как то вечером, я решил, что стоит лечь по-раньше спать. Подумал, что надо бы выспаться, все дела, но перед этим просто загляну в ноутбук, и тут началось. Для чего то я одновременно запустил rtorrent &#43; emerge -vuDN @world. Стоит ли говорить, что система установлена на шпиндельном hdd, поверх которого работает ssd cache (Bcache). Видимо из-за нагрузки, ноутбук завис и ни на какие действия не реагировал. &ldquo;Семь бед - один ресет&rdquo;, подумал я и перезагрузил ноутбук."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Posts",
+      "item": "http://undying.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "libgcc_s.so: cannot open shared object file",
+      "item": "http://undying.github.io/posts/2016-04-29-lib_gcc_s_so-cannot_open_shared_object_file/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "libgcc_s.so: cannot open shared object file",
+  "name": "libgcc_s.so: cannot open shared object file",
+  "description": "Как то вечером, я решил, что стоит лечь по-раньше спать. Подумал, что надо бы выспаться, все дела, но перед этим просто загляну в ноутбук, и тут началось. Для чего то я одновременно запустил rtorrent + emerge -vuDN @world. Стоит ли говорить, что система установлена на шпиндельном hdd, поверх которого работает ssd cache (Bcache). Видимо из-за нагрузки, ноутбук завис и ни на какие действия не реагировал. \u0026ldquo;Семь бед - один ресет\u0026rdquo;, подумал я и перезагрузил ноутбук.",
+  "keywords": [
+    "gentoo", "gcc"
+  ],
+  "articleBody": "Как то вечером, я решил, что стоит лечь по-раньше спать. Подумал, что надо бы выспаться, все дела, но перед этим просто загляну в ноутбук, и тут началось. Для чего то я одновременно запустил rtorrent + emerge -vuDN @world. Стоит ли говорить, что система установлена на шпиндельном hdd, поверх которого работает ssd cache (Bcache). Видимо из-за нагрузки, ноутбук завис и ни на какие действия не реагировал. “Семь бед - один ресет”, подумал я и перезагрузил ноутбук. Система загрузилась быстрее обычного, чем меня смутила. Ввожу логин/пароль и терминал падает обратно с приглашением залогиниться. “Отлично, лег по-раньше…”. Записав на видео процесс загрузки и просмотрев его в замедленном режиме, я заметил, что перед приглашением терминала, вылитают ошибки:\n{% highlight bash %} error while loading shared libraries: libgcc_s.so.1: cannot open shared object file: no such file or directory {% endhighlight %}\n“Может еще не все потеряно?” - затеплился луч надежды. Начинаю судорожно перебирать все загрузочные флешки, ни одна не подходит, то винда, то не работающая федора. Записал новую, загружаюсь… Теперь нужно вспомнить, как монтировать мои диски, все-таки Luks + BCache. Поиск в интернете, нашел:\n{% highlight bash %} modprobe bcache\necho /dev/sdb \u003e /sys/fs/bcache/register #cache device echo /dev/sda4 \u003e /sys/fs/bcache/register #backed device\ncryptsetup luksOpen /dev/bcache0 gentoo Enter password:\nmount /dev/mapper/gentoo /mnt/gentoo {% endhighlight %}\nОтлично, устройство работает, смотрим внутрь:\n{% highlight bash %} ls -l / … -rw-r–r– 1 root root 0 апр 28 19:37 ????{ -rw-r–r– 1 root root 0 апр 28 19:37 ?3n? lrwxrwxrwx 1 root root 5 апр 15 02:23 lib -\u003e lib64/ -rw-r–r– 1 root root 0 апр 28 19:37 l???j????F?s -rw-r–r– 1 root root 0 апр 28 19:37 L????巴?k6? … {% endhighlight %}\nВосхитительно. Все признаки того, что fs была попорчена. Окей, делаем backup самого ценного и скидываем в облако, после чего отмонтируем устройство и прогоняем fsck:\n{% highlight bash %} cd /mnt/gentoo tar czf /home/kron.tar.gz home/kron etc/ cd /\numount -l /mnt/gentoo xfs_repair /dev/bcache0 {% endhighlight %}\nМонтируем обратно и смотрим, не исчезли ли файлы:\n{% highlight bash %} mount /dev/bcache0 /mnt/gentoo ls -l /mnt/gentoo … -rw-r–r– 1 root root 0 апр 28 19:37 ????{ -rw-r–r– 1 root root 0 апр 28 19:37 ?3n? lrwxrwxrwx 1 root root 5 апр 15 02:23 lib -\u003e lib64/ -rw-r–r– 1 root root 0 апр 28 19:37 l???j????F?s -rw-r–r– 1 root root 0 апр 28 19:37 L????巴?k6? … {% endhighlight %}\nНеа, не исчезли. И ладно, идем дальше. Пробуем сделать chroot:\n{% highlight bash %} chroot /mnt/gentoo /bin/bash error while loading shared libraries: libgcc_s.so.1: cannot open shared object file: no such file or directory {% endhighlight %}\nОжидаемо. Не знаю, зачем я очень хотел во внутрь, ведь все можно было сделать и снаружи, но меня было не остановить.\n{% highlight bash %} chroot /mnt/gentoo /bin/sh error while loading shared libraries: libgcc_s.so.1: cannot open shared object file: no such file or directory\nchroot /mnt/gentoo /bin/zsh error while loading shared libraries: libgcc_s.so.1: cannot open shared object file: no such file or directory\nchroot /mnt/gentoo ruby irb(main):001:0\u003e {% endhighlight %}\nО, а это уже не плохо. Идем дальше:\n{% highlight bash %} chroot /mnt/gentoo python Python 2.7.10 (default, Dec 3 2015, 18:09:25) [GCC 4.8.5] on linux2 Type “help”, “copyright”, “credits” or “license” for more information.\nimport subprocess subprocess.check_output([“ls”, “/lib/”])\n‘cpp\\ndevice-mapper\\ndhcpcd\\nfirmware\\ngentoo\\nld-2.22.so\\nld-linux.so.2\\nld-linux-x86-64.so.2\\nlibacl.so.1\\nlibacl.so.1.1.0\\nlibaio.so.1\\nlibaio.so.1.0.1\\nlibanl-2.22.so\\nlibanl.so.1\\nlibattr.so.1\\nlibattr.so.1.1.0\\nlibblkid.so.1\\nlibblkid.so.1.1.0\\nlibBrokenLocale-2.22.so\\nlibBrokenLocale.so.1\\nlibbz2.so.1\\nlibbz2.so.1.0\\nlibbz2.so.1.0.6\\nlibc-2.22.so\\nlibcap.so.2\\nlibcap.so.2.24\\nlibcidn-2.22.so\\nlibcidn.so.1\\nlibcom_err.so.2\\nlibcom_err.so.2.1\\nlibcrack.so.2\\nlibcrack.so.2.9.0\\nlibcrypt-2.22.so\\nlibcrypt.so.1\\nlibc.so.6\\nlibdevmapper-event-lvm2mirror.so\\nlibdevmapper-event-lvm2raid.so\\nlibdevmapper-event-lvm2snapshot.so\\nlibdevmapper-event-lvm2.so.2.02\\nlibdevmapper-event-lvm2thin.so\\nlibdevmapper-event.so.1.02\\nlibdevmapper.so.1.02\\nlibdl-2.22.so\\nlibdl.so.2\\nlibe2p.so.2\\nlibe2p.so.2.3\\nlibeinfo.so\\nlibeinfo.so.1\\nlibext2fs.so.2\\nlibext2fs.so.2.4\\nlibgcc_s.so.1\\nlibhistory.so.6\\nlibhistory.so.6.3\\nlibip4tc.so.0\\nlibip4tc.so.0.1.0\\nlibip6tc.so.0\\nlibip6tc.so.0.1.0\\nlibiptc.so.0\\nlibiptc.so.0.0.0\\nlibiw.so\\nlibiw.so.30\\nlibkeyutils.so.1\\nlibkeyutils.so.1.5\\nlibkmod.so.2\\nlibkmod.so.2.2.11\\nliblvm2app.so.2.2\\nliblvm2cmd.so.2.02\\nliblzma.so.5\\nliblzma.so.5.2.2\\nlibm-2.22.so\\nlibmemusage.so\\nlibmnl.so.0\\nlibmnl.so.0.1.0\\nlibmount.so.1\\nlibmount.so.1.1.0\\nlibm.so.6\\nlibmvec-2.22.so\\nlibmvec.so.1\\nlibncurses.so.5\\nlibncurses.so.5.9\\nlibncurses.so.6\\nlibncurses.so.6.0\\nlibncursesw.so.5\\nlibncursesw.so.5.9\\nlibncursesw.so.6\\nlibncursesw.so.6.0\\nlibnsl-2.22.so\\nlibnsl.so.1\\nlibnss_compat-2.22.so\\nlibnss_compat.so.2\\nlibnss_db-2.22.so\\nlibnss_db.so.2\\nlibnss_dns-2.22.so\\nlibnss_dns.so.2\\nlibnss_files-2.22.so\\nlibnss_files.so.2\\nlibnss_hesiod-2.22.so\\nlibnss_hesiod.so.2\\nlibnss_nis-2.22.so\\nlibnss_nisplus-2.22.so\\nlibnss_nisplus.so.2\\nlibnss_nis.so.2\\nlibpamc.so\\nlibpamc.so.0\\nlibpamc.so.0.82.1\\nlibpam_misc.so\\nlibpam_misc.so.0\\nlibpam_misc.so.0.82.1\\nlibpam.so\\nlibpam.so.0\\nlibpam.so.0.84.1\\nlibpcprofile.so\\nlibpcre.so.1\\nlibpcre.so.1.2.6\\nlibprocps.so.4\\nlibprocps.so.4.0.0\\nlibpthread-2.22.so\\nlibpthread.so.0\\nlibrc.so\\nlibrc.so.1\\nlibreadline.so.6\\nlibreadline.so.6.3\\nlibresolv-2.22.so\\nlibresolv.so.2\\nlibrt-2.22.so\\nlibrt.so.1\\nlibSegFault.so\\nlibsmartcols.so.1\\nlibsmartcols.so.1.1.0\\nlibss.so.2\\nlibss.so.2.0\\nlibthread_db-1.0.so\\nlibthread_db.so.1\\nlibudev.so.1\\nlibudev.so.1.6.4\\nlibusb-0.1.so.4\\nlibusb-0.1.so.4.4.4\\nlibusb-1.0.so.0\\nlibusb-1.0.so.0.1.0\\nlibutil-2.22.so\\nlibutil.so.1\\nlibuuid.so.1\\nlibuuid.so.1.3.0\\nlibwrap.so.0\\nlibwrap.so.0.7.6\\nlibxfs.so.0\\nlibxfs.so.0.0.0\\nlibxlog.so.0\\nlibxlog.so.0.0.0\\nlibxtables.so.10\\nlibxtables.so.10.0.0\\nlibz.so.1\\nlibz.so.1.2.8\\nmodprobe.d\\nmodules\\nnetifrc\\nrc\\nsecurity\\nsystemd\\ntc\\nudev\\n’ {% endhighlight %}\nНе, так не понятно ничего. Поищем, есть ли библиотека вообще:\n{% highlight bash %} find /mnt/gentoo -iname libgcc_s.so.1 /usr/lib64/gcc/x86_64-pc-linux-gnu/4.8.5/libgcc_s.so.1 {% endhighlight %}\nО, с этим можно что-то сделать:\n{% highlight python %} import subprocess\nlib_orig = “/usr/lib64/gcc/x86_64-pc-linux-gnu/4.8.5/libgcc_s.so.1” lib_dst = “/lib/libgcc_s.so.1”\nprint subprocess.check_output([“rm”, “-f”, lib_dst]) print subprocess.check_output([“ln”, “-s”, lib_orig, lib_dst]) {% endhighlight %}\nЗапускаем:\n{% highlight bash %} chroot /mnt/gentoo python /set_lib.py chroot /mnt/gentoo /bin/bash ~ #\u003e {% endhighlight %}\nО, похоже работает, можно пробовать перезагружаться. Система действительно загрузилась, а вот иксы нет.\n{% highlight bash %} grep EE /var/log/Xorg.0.log [ 25.504] (EE) AIGLX: reverting to software rendering [ 25.517] (EE) AIGLX error: dlopen of /usr/lib64/dri/swrast_dri.so failed (libstdc++.so.6: cannot open shared object file: No such file or directory) [ 25.517] (EE) GLX: could not load software renderer\n{% endhighlight %}\nЭта песня хороша, начинай сначала..\n{% highlight bash %} equery b libstdc++.so.6 2:40:43\nSearching for libstdc++.so.6 … sys-devel/gcc-4.8.5 (/usr/lib/gcc/x86_64-pc-linux-gnu/4.8.5/32/libstdc++.so.6 -\u003e libstdc++.so.6.0.20) sys-devel/gcc-4.8.5 (/usr/lib/gcc/x86_64-pc-linux-gnu/4.8.5/libstdc++.so.6 -\u003e libstdc++.so.6.0.20) sys-devel/gcc-4.9.3 (/usr/lib/gcc/x86_64-pc-linux-gnu/4.9.3/32/libstdc++.so.6 -\u003e libstdc++.so.6.0.20) sys-devel/gcc-4.9.3 (/usr/lib/gcc/x86_64-pc-linux-gnu/4.9.3/libstdc++.so.6 -\u003e libstdc++.so.6.0.20) {% endhighlight %} Похоже система повисла как раз в тот момент, когда старый gcc уже удалялся, а новый еще не установился. Вот так совпадение.. И именно в тот вечер, когда собираешься лечь по-раньше.. Окей, пересоберем gcc, а пока он будет собираться, напишу эту статью..\n{% highlight bash %} emerge -av1 gcc {% endhighlight %}\nСобирается новый gcc, старый удаляется и вот в момент замены одного gcc на другой (хочу заметить, что замена производится shell скриптом, который зависит от libgcc_s.so.1), все падает, с уже знакомой нам ошибкой:\n{% highlight bash %} error while loading shared libraries: libgcc_s.so.1: cannot open shared object file: no such file or directory {% endhighlight %}\nГде там наш скрипт по установке симлинка?\n{% highlight bash %} python /set_lib.py {% endhighlight bash %}\nПереустанавлиаем профиль gcc вручную.\n{% highlight bash %} gcc-config x86_64-pc-linux-gnu-4.9.3\nSwitching native-compiler to x86_64-pc-linux-gnu-4.9.3 … sh: error while loading shared libraries: libgcc_s.so.1: cannot open shared object file: No such file or directory Regenerating /etc/ld.so.cache… sh: error while loading shared libraries: libgcc_s.so.1: cannot open shared object file: No such file or directory [ ok ]\nIf you intend to use the gcc from the new profile in an already\nrunning shell, please remember to do:\n. /etc/profile {% endhighlight %}\nАхаха, что ты делаешь? Прекрати!\n{% highlight bash %} python /set_libs.py gcc-config -l [1] x86_64-pc-linux-gnu-4.9.3 *\n{% endhighlight %}\nПохоже, на этот раз установилось. Пробуем запустить Иксы:\n{% highlight bash %} ~$ \u003e startx {% endhighlight %}\nИ наконец то, все взлетело. Занавес. Вот теперь то можно пойти и лечь спать, по-раньше.. В три ночи..\nP.S. Ад на этом не закончился, конечно же. Дальнейшее обновление системы снесло ncurses-5 и заменило его на 6-й. Говорить о том, что вся система была завязана на 5-й и перестала работать, думаю не стоит. Но об этом я уже писать не буду, я же спасть собирался лечь, по-раньше.\n",
+  "wordCount" : "1007",
+  "inLanguage": "en",
+  "datePublished": "2016-04-29T02:04:00+03:00",
+  "dateModified": "2016-04-29T02:04:00+03:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://undying.github.io/posts/2016-04-29-lib_gcc_s_so-cannot_open_shared_object_file/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "My Digital Chronicle",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://undying.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://undying.github.io" accesskey="h" title="My Digital Chronicle (Alt + H)">My Digital Chronicle</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title">
+      libgcc_s.so: cannot open shared object file
+    </h1>
+    <div class="post-meta"><span title='2016-04-29 02:04:00 +0300 MSK'>April 29, 2016</span>
+
+</div>
+  </header> 
+  <div class="post-content"><p>Как то вечером, я решил, что стоит лечь по-раньше спать. Подумал, что надо бы выспаться, все дела, но перед этим просто загляну в ноутбук, и тут началось.
+Для чего то я одновременно запустил rtorrent + emerge -vuDN @world. Стоит ли говорить, что система установлена на шпиндельном hdd, поверх которого работает ssd cache (Bcache).
+Видимо из-за нагрузки, ноутбук завис и ни на какие действия не реагировал. &ldquo;Семь бед - один ресет&rdquo;, подумал я и перезагрузил ноутбук.
+Система загрузилась быстрее обычного, чем меня смутила. Ввожу логин/пароль и терминал падает обратно с приглашением залогиниться. &ldquo;Отлично, лег по-раньше&hellip;&rdquo;.
+Записав на видео процесс загрузки и просмотрев его в замедленном режиме, я заметил, что перед приглашением терминала, вылитают ошибки:</p>
+<p>{% highlight bash %}
+error while loading shared libraries: libgcc_s.so.1: cannot open shared object file: no such file or directory
+{% endhighlight %}</p>
+<p>&ldquo;Может еще не все потеряно?&rdquo; - затеплился луч надежды.
+Начинаю судорожно перебирать все загрузочные флешки, ни одна не подходит, то винда, то не работающая федора. Записал новую, загружаюсь&hellip;
+Теперь нужно вспомнить, как монтировать мои диски, все-таки Luks + BCache.
+Поиск в интернете, нашел:</p>
+<p>{% highlight bash %}
+modprobe bcache</p>
+<p>echo /dev/sdb &gt; /sys/fs/bcache/register #cache device
+echo /dev/sda4 &gt; /sys/fs/bcache/register #backed device</p>
+<p>cryptsetup luksOpen /dev/bcache0 gentoo
+Enter password:</p>
+<p>mount /dev/mapper/gentoo /mnt/gentoo
+{% endhighlight %}</p>
+<p>Отлично, устройство работает, смотрим внутрь:</p>
+<p>{% highlight bash %}
+ls -l /
+&hellip;
+-rw-r&ndash;r&ndash;   1 root root    0 апр 28 19:37 ????{
+-rw-r&ndash;r&ndash;   1 root root    0 апр 28 19:37 ?3n?
+lrwxrwxrwx   1 root root    5 апр 15 02:23 lib -&gt; lib64/
+-rw-r&ndash;r&ndash;   1 root root    0 апр 28 19:37 l???j????F?s
+-rw-r&ndash;r&ndash;   1 root root    0 апр 28 19:37 L????巴?k6?
+&hellip;
+{% endhighlight %}</p>
+<p>Восхитительно. Все признаки того, что fs была попорчена.
+Окей, делаем backup самого ценного и скидываем в облако, после чего отмонтируем устройство и прогоняем fsck:</p>
+<p>{% highlight bash %}
+cd /mnt/gentoo
+tar czf /home/kron.tar.gz home/kron etc/
+cd /</p>
+<p>umount -l /mnt/gentoo
+xfs_repair  /dev/bcache0
+{% endhighlight %}</p>
+<p>Монтируем обратно и смотрим, не исчезли ли файлы:</p>
+<p>{% highlight bash %}
+mount /dev/bcache0 /mnt/gentoo
+ls -l /mnt/gentoo
+&hellip;
+-rw-r&ndash;r&ndash;   1 root root    0 апр 28 19:37 ????{
+-rw-r&ndash;r&ndash;   1 root root    0 апр 28 19:37 ?3n?
+lrwxrwxrwx   1 root root    5 апр 15 02:23 lib -&gt; lib64/
+-rw-r&ndash;r&ndash;   1 root root    0 апр 28 19:37 l???j????F?s
+-rw-r&ndash;r&ndash;   1 root root    0 апр 28 19:37 L????巴?k6?
+&hellip;
+{% endhighlight %}</p>
+<p>Неа, не исчезли. И ладно, идем дальше.
+Пробуем сделать chroot:</p>
+<p>{% highlight bash %}
+chroot /mnt/gentoo /bin/bash
+error while loading shared libraries: libgcc_s.so.1: cannot open shared object file: no such file or directory
+{% endhighlight %}</p>
+<p>Ожидаемо. Не знаю, зачем я очень хотел во внутрь, ведь все можно было сделать и снаружи, но меня было не остановить.</p>
+<p>{% highlight bash %}
+chroot /mnt/gentoo /bin/sh
+error while loading shared libraries: libgcc_s.so.1: cannot open shared object file: no such file or directory</p>
+<p>chroot /mnt/gentoo /bin/zsh
+error while loading shared libraries: libgcc_s.so.1: cannot open shared object file: no such file or directory</p>
+<p>chroot /mnt/gentoo ruby
+irb(main):001:0&gt;
+{% endhighlight %}</p>
+<p>О, а это уже не плохо.
+Идем дальше:</p>
+<p>{% highlight bash %}
+chroot /mnt/gentoo python
+Python 2.7.10 (default, Dec  3 2015, 18:09:25)
+[GCC 4.8.5] on linux2
+Type &ldquo;help&rdquo;, &ldquo;copyright&rdquo;, &ldquo;credits&rdquo; or &ldquo;license&rdquo; for more information.</p>
+<blockquote>
+<blockquote>
+<blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>import subprocess
+subprocess.check_output([&ldquo;ls&rdquo;, &ldquo;/lib/&rdquo;])</p>
+<p>&lsquo;cpp\ndevice-mapper\ndhcpcd\nfirmware\ngentoo\nld-2.22.so\nld-linux.so.2\nld-linux-x86-64.so.2\nlibacl.so.1\nlibacl.so.1.1.0\nlibaio.so.1\nlibaio.so.1.0.1\nlibanl-2.22.so\nlibanl.so.1\nlibattr.so.1\nlibattr.so.1.1.0\nlibblkid.so.1\nlibblkid.so.1.1.0\nlibBrokenLocale-2.22.so\nlibBrokenLocale.so.1\nlibbz2.so.1\nlibbz2.so.1.0\nlibbz2.so.1.0.6\nlibc-2.22.so\nlibcap.so.2\nlibcap.so.2.24\nlibcidn-2.22.so\nlibcidn.so.1\nlibcom_err.so.2\nlibcom_err.so.2.1\nlibcrack.so.2\nlibcrack.so.2.9.0\nlibcrypt-2.22.so\nlibcrypt.so.1\nlibc.so.6\nlibdevmapper-event-lvm2mirror.so\nlibdevmapper-event-lvm2raid.so\nlibdevmapper-event-lvm2snapshot.so\nlibdevmapper-event-lvm2.so.2.02\nlibdevmapper-event-lvm2thin.so\nlibdevmapper-event.so.1.02\nlibdevmapper.so.1.02\nlibdl-2.22.so\nlibdl.so.2\nlibe2p.so.2\nlibe2p.so.2.3\nlibeinfo.so\nlibeinfo.so.1\nlibext2fs.so.2\nlibext2fs.so.2.4\nlibgcc_s.so.1\nlibhistory.so.6\nlibhistory.so.6.3\nlibip4tc.so.0\nlibip4tc.so.0.1.0\nlibip6tc.so.0\nlibip6tc.so.0.1.0\nlibiptc.so.0\nlibiptc.so.0.0.0\nlibiw.so\nlibiw.so.30\nlibkeyutils.so.1\nlibkeyutils.so.1.5\nlibkmod.so.2\nlibkmod.so.2.2.11\nliblvm2app.so.2.2\nliblvm2cmd.so.2.02\nliblzma.so.5\nliblzma.so.5.2.2\nlibm-2.22.so\nlibmemusage.so\nlibmnl.so.0\nlibmnl.so.0.1.0\nlibmount.so.1\nlibmount.so.1.1.0\nlibm.so.6\nlibmvec-2.22.so\nlibmvec.so.1\nlibncurses.so.5\nlibncurses.so.5.9\nlibncurses.so.6\nlibncurses.so.6.0\nlibncursesw.so.5\nlibncursesw.so.5.9\nlibncursesw.so.6\nlibncursesw.so.6.0\nlibnsl-2.22.so\nlibnsl.so.1\nlibnss_compat-2.22.so\nlibnss_compat.so.2\nlibnss_db-2.22.so\nlibnss_db.so.2\nlibnss_dns-2.22.so\nlibnss_dns.so.2\nlibnss_files-2.22.so\nlibnss_files.so.2\nlibnss_hesiod-2.22.so\nlibnss_hesiod.so.2\nlibnss_nis-2.22.so\nlibnss_nisplus-2.22.so\nlibnss_nisplus.so.2\nlibnss_nis.so.2\nlibpamc.so\nlibpamc.so.0\nlibpamc.so.0.82.1\nlibpam_misc.so\nlibpam_misc.so.0\nlibpam_misc.so.0.82.1\nlibpam.so\nlibpam.so.0\nlibpam.so.0.84.1\nlibpcprofile.so\nlibpcre.so.1\nlibpcre.so.1.2.6\nlibprocps.so.4\nlibprocps.so.4.0.0\nlibpthread-2.22.so\nlibpthread.so.0\nlibrc.so\nlibrc.so.1\nlibreadline.so.6\nlibreadline.so.6.3\nlibresolv-2.22.so\nlibresolv.so.2\nlibrt-2.22.so\nlibrt.so.1\nlibSegFault.so\nlibsmartcols.so.1\nlibsmartcols.so.1.1.0\nlibss.so.2\nlibss.so.2.0\nlibthread_db-1.0.so\nlibthread_db.so.1\nlibudev.so.1\nlibudev.so.1.6.4\nlibusb-0.1.so.4\nlibusb-0.1.so.4.4.4\nlibusb-1.0.so.0\nlibusb-1.0.so.0.1.0\nlibutil-2.22.so\nlibutil.so.1\nlibuuid.so.1\nlibuuid.so.1.3.0\nlibwrap.so.0\nlibwrap.so.0.7.6\nlibxfs.so.0\nlibxfs.so.0.0.0\nlibxlog.so.0\nlibxlog.so.0.0.0\nlibxtables.so.10\nlibxtables.so.10.0.0\nlibz.so.1\nlibz.so.1.2.8\nmodprobe.d\nmodules\nnetifrc\nrc\nsecurity\nsystemd\ntc\nudev\n&rsquo;
+{% endhighlight %}</p>
+<p>Не, так не понятно ничего. Поищем, есть ли библиотека вообще:</p>
+<p>{% highlight bash %}
+find /mnt/gentoo -iname libgcc_s.so.1
+/usr/lib64/gcc/x86_64-pc-linux-gnu/4.8.5/libgcc_s.so.1
+{% endhighlight %}</p>
+<p>О, с этим можно что-то сделать:</p>
+<p>{% highlight python %}
+import subprocess</p>
+<p>lib_orig = &ldquo;/usr/lib64/gcc/x86_64-pc-linux-gnu/4.8.5/libgcc_s.so.1&rdquo;
+lib_dst = &ldquo;/lib/libgcc_s.so.1&rdquo;</p>
+<p>print subprocess.check_output([&ldquo;rm&rdquo;, &ldquo;-f&rdquo;, lib_dst])
+print subprocess.check_output([&ldquo;ln&rdquo;, &ldquo;-s&rdquo;, lib_orig, lib_dst])
+{% endhighlight %}</p>
+<p>Запускаем:</p>
+<p>{% highlight bash %}
+chroot /mnt/gentoo python /set_lib.py
+chroot /mnt/gentoo /bin/bash
+~ #&gt;
+{% endhighlight %}</p>
+<p>О, похоже работает, можно пробовать перезагружаться.
+Система действительно загрузилась, а вот иксы нет.</p>
+<p>{% highlight bash %}
+grep EE /var/log/Xorg.0.log
+[    25.504] (EE) AIGLX: reverting to software rendering
+[    25.517] (EE) AIGLX error: dlopen of /usr/lib64/dri/swrast_dri.so failed (libstdc++.so.6: cannot open shared object file: No such file or directory)
+[    25.517] (EE) GLX: could not load software renderer</p>
+<p>{% endhighlight %}</p>
+<p>Эта песня хороша, начинай сначала..</p>
+<p>{% highlight bash %}
+equery b libstdc++.so.6                                                                                                                                          2:40:43</p>
+<ul>
+<li>Searching for libstdc++.so.6 &hellip;
+sys-devel/gcc-4.8.5 (/usr/lib/gcc/x86_64-pc-linux-gnu/4.8.5/32/libstdc++.so.6 -&gt; libstdc++.so.6.0.20)
+sys-devel/gcc-4.8.5 (/usr/lib/gcc/x86_64-pc-linux-gnu/4.8.5/libstdc++.so.6 -&gt; libstdc++.so.6.0.20)
+sys-devel/gcc-4.9.3 (/usr/lib/gcc/x86_64-pc-linux-gnu/4.9.3/32/libstdc++.so.6 -&gt; libstdc++.so.6.0.20)
+sys-devel/gcc-4.9.3 (/usr/lib/gcc/x86_64-pc-linux-gnu/4.9.3/libstdc++.so.6 -&gt; libstdc++.so.6.0.20)
+{% endhighlight %}</li>
+</ul>
+<p>Похоже система повисла как раз в тот момент, когда старый gcc уже удалялся, а новый еще не установился. Вот так совпадение.. И именно в тот вечер, когда собираешься лечь по-раньше..
+Окей, пересоберем gcc, а пока он будет собираться, напишу эту статью..</p>
+<p>{% highlight bash %}
+emerge -av1 gcc
+{% endhighlight %}</p>
+<p>Собирается новый gcc, старый удаляется и вот в момент замены одного gcc на другой (хочу заметить, что замена производится shell скриптом, который зависит от libgcc_s.so.1), все падает, с уже знакомой нам ошибкой:</p>
+<p>{% highlight bash %}
+error while loading shared libraries: libgcc_s.so.1: cannot open shared object file: no such file or directory
+{% endhighlight %}</p>
+<p>Где там наш скрипт по установке симлинка?</p>
+<p>{% highlight bash %}
+python /set_lib.py
+{% endhighlight bash %}</p>
+<p>Переустанавлиаем профиль gcc вручную.</p>
+<p>{% highlight bash %}
+gcc-config x86_64-pc-linux-gnu-4.9.3</p>
+<ul>
+<li>Switching native-compiler to x86_64-pc-linux-gnu-4.9.3 &hellip;
+sh: error while loading shared libraries: libgcc_s.so.1: cannot open shared object file: No such file or directory</li>
+</ul>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>Regenerating /etc/ld.so.cache&hellip;
+sh: error while loading shared libraries: libgcc_s.so.1: cannot open shared object file: No such file or directory                                                                        [ ok ]</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<ul>
+<li>
+<p>If you intend to use the gcc from the new profile in an already</p>
+</li>
+<li>
+<p>running shell, please remember to do:</p>
+</li>
+<li>
+<p>. /etc/profile
+{% endhighlight %}</p>
+</li>
+</ul>
+<p>Ахаха, что ты делаешь? Прекрати!</p>
+<p>{% highlight bash %}
+python /set_libs.py
+gcc-config -l
+[1] x86_64-pc-linux-gnu-4.9.3 *</p>
+<p>{% endhighlight %}</p>
+<p>Похоже, на этот раз установилось.
+Пробуем запустить Иксы:</p>
+<p>{% highlight bash %}
+~$ &gt; startx
+{% endhighlight %}</p>
+<p>И наконец то, все взлетело.
+Занавес.
+Вот теперь то можно пойти и лечь спать, по-раньше.. В три ночи..</p>
+<p>P.S.
+Ад на этом не закончился, конечно же. Дальнейшее обновление системы снесло ncurses-5 и заменило его на 6-й. Говорить о том, что вся система была завязана на 5-й и перестала работать, думаю не стоит. Но об этом я уже писать не буду, я же спасть собирался лечь, по-раньше.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://undying.github.io/tags/gentoo/">gentoo</a></li>
+      <li><a href="http://undying.github.io/tags/gcc/">gcc</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="http://undying.github.io">My Digital Chronicle</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
