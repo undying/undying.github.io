@@ -14,9 +14,8 @@
       
       <guid>http://undying.github.io/posts/2019-12-29-ck-unlock-session-alias/</guid>
       <description>This evening I was updating my Gentoo laptop. While updating, my session were locked with the message, that to unlock it I have to use ck-unlock-session. Unfortunately shell told me that there is no such command on my laptop:
-{% highlight bash %} └&amp;gt; ck-unlock-session zsh: command not found: ck-unlock-session {% endhighlight %}
-In the vastness of the Internet found the solution, but it&amp;rsquo;s too long to remember:
-{% highlight bash %} dbus-send &amp;ndash;system &amp;ndash;print-reply &amp;ndash;dest=&amp;ldquo;org.</description>
+└&amp;gt; ck-unlock-session zsh: command not found: ck-unlock-session In the vastness of the Internet found the solution, but it&amp;rsquo;s too long to remember:
+dbus-send --system --print-reply --dest=&amp;#34;org.freedesktop.ConsoleKit&amp;#34; /org/freedesktop/ConsoleKit/Session1 org.freedesktop.ConsoleKit.Session.Unlock Session1 - session name and it may differs.</description>
     </item>
     
     <item>
@@ -26,7 +25,7 @@ In the vastness of the Internet found the solution, but it&amp;rsquo;s too long 
       
       <guid>http://undying.github.io/posts/2018-11-21-building_firefox_on_gentoo/</guid>
       <description>Today I was trying to update FireFox on my Gentoo box and failed with error:
-{% highlight bash %} 0:06.75 checking rustc version&amp;hellip; 1.30.1 0:06.75 ERROR: Cargo package manager not found. 0:06.75 To compile Rust language sources, you must have &amp;lsquo;cargo&amp;rsquo; in your path. 0:06.75 See https://www.rust-lang.org/ for more information. 0:06.75 0:06.75 You can install cargo by running &amp;lsquo;./mach bootstrap&amp;rsquo; 0:06.75 or by directly running the installer from https://rustup.rs/ 0:06.75 0:06.</description>
+0:06.75 checking rustc version... 1.30.1 0:06.75 ERROR: Cargo package manager not found. 0:06.75 To compile Rust language sources, you must have &amp;#39;cargo&amp;#39; in your path. 0:06.75 See https://www.rust-lang.org/ for more information. 0:06.75 0:06.75 You can install cargo by running &amp;#39;./mach bootstrap&amp;#39; 0:06.75 or by directly running the installer from https://rustup.rs/ 0:06.75 0:06.79 *** Fix above errors and then restart with\ 0:06.</description>
     </item>
     
     <item>
@@ -37,10 +36,10 @@ In the vastness of the Internet found the solution, but it&amp;rsquo;s too long 
       <guid>http://undying.github.io/posts/2017-02-19-backslash_as_yen/</guid>
       <description>If while browsing the internet you have a problem with backslash character which displayed as yen sign you can fix it this way.
 First, let&amp;rsquo;s install the appropriate fonts.
-{% highlight bash %} emerge -av media-fonts/droid {% endhighlight %}
-Then we have to enable them for wide system.
-{% highlight bash %} eselect fontconfig enable 59-google-droid-sans.conf eselect fontconfig enable 59-google-droid-sans-mono.conf eselect fontconfig enable 59-google-droid-serif.conf {% endhighlight %}
-Next step is to clean fonts cache.</description>
+emerge -av media-fonts/droid Then we have to enable them for wide system.
+eselect fontconfig enable 59-google-droid-sans.conf eselect fontconfig enable 59-google-droid-sans-mono.conf eselect fontconfig enable 59-google-droid-serif.conf Next step is to clean fonts cache.
+fc-cache -rf That&amp;rsquo;s all.
+P.S. Also I had a problem displaying cyrillic characters.</description>
     </item>
     
     <item>

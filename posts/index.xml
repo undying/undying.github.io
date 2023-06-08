@@ -6,7 +6,27 @@
     <description>Recent content in Posts on My Digital Chronicle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 15 Oct 2020 22:32:39 +0300</lastBuildDate><atom:link href="http://undying.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 07 Apr 2023 10:18:38 +0300</lastBuildDate><atom:link href="http://undying.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Runlevels in Systemd</title>
+      <link>http://undying.github.io/posts/2023-04-07t1018z--runlevels-in-systemd/</link>
+      <pubDate>Fri, 07 Apr 2023 10:18:38 +0300</pubDate>
+      
+      <guid>http://undying.github.io/posts/2023-04-07t1018z--runlevels-in-systemd/</guid>
+      <description>Once, when loading into Asahi, the keyboard stopped working after loading the X server. It was necessary to boot into a bare terminal without starting the X server, but how to do it?
+One of the rough options is to boot into bash as an init process. The second option is to redefine the runlevel to the one in which X does not run.
+To do this, when loading grub, go to the edit start line menu by pressing the &amp;ldquo;e&amp;rdquo; key.</description>
+    </item>
+    
+    <item>
+      <title>Moving from MacOS to Asahi Linux</title>
+      <link>http://undying.github.io/posts/2023-04-03t0000z--moving-from-macos-to-asahi-linux/</link>
+      <pubDate>Mon, 03 Apr 2023 00:22:42 +0300</pubDate>
+      
+      <guid>http://undying.github.io/posts/2023-04-03t0000z--moving-from-macos-to-asahi-linux/</guid>
+      <description>Moving from MacOS to Asahi Linux Status Hardware Audio Jack: ✅ Bluetooth: ✅ Camera: ❌ Fingerprint: ❌ HDMI: ❌ Speakers: ❌ Touchpad: ✅ Wi-Fi: ✅ Software Obsidian: ✅ RVM: ⚠ (rvm is installed but ruby build fails) Slack: ❌ Telegram: ✅ Zoom: ❌ Functionality Brightness Control: ✅ Hibernate: ❌ Suspend to RAM: ⚠ (OS is being suspended but laptop is keep working and draining battery) </description>
+    </item>
+    
     <item>
       <title>VIM: Handle Urls</title>
       <link>http://undying.github.io/posts/2020-10-15-vim--handle-urls/</link>
@@ -91,8 +111,8 @@ server is overloaded remote server is overloaded network where servers is based 
       <guid>http://undying.github.io/posts/2020-05-29-route-53-resolver-servfail/</guid>
       <description>What we have:
 On premises data center with own domain zone (domain.local) and dns servers AWS VPC with it&amp;rsquo;s own domain zone (domain.r53) and using Route 53 as DNS Server What we need:
-Ability to resolve domain zone hosted on premises DNS Servers from AWS VPC {% mermaid %} graph LR A[EC2 Instance] &amp;ndash;&amp;gt;|a.domain.local| B[Route 53 Forward] &amp;ndash;&amp;gt;|a.domain.local| C[DNS On Premises] {% endmermaid %}
-The configuration is straightforward and well described in official documentation.</description>
+Ability to resolve domain zone hosted on premises DNS Servers from AWS VPC graph LR A[EC2 Instance] --&gt;|a.domain.local| B[Route 53 Forward] --&gt;|a.domain.local| C[DNS On Premises] The configuration is straightforward and well described in official documentation.
+You simply create rules:</description>
     </item>
     
     <item>
@@ -111,9 +131,8 @@ The configuration is straightforward and well described in official documentatio
       
       <guid>http://undying.github.io/posts/2019-12-29-ck-unlock-session-alias/</guid>
       <description>This evening I was updating my Gentoo laptop. While updating, my session were locked with the message, that to unlock it I have to use ck-unlock-session. Unfortunately shell told me that there is no such command on my laptop:
-{% highlight bash %} └&amp;gt; ck-unlock-session zsh: command not found: ck-unlock-session {% endhighlight %}
-In the vastness of the Internet found the solution, but it&amp;rsquo;s too long to remember:
-{% highlight bash %} dbus-send &amp;ndash;system &amp;ndash;print-reply &amp;ndash;dest=&amp;ldquo;org.</description>
+└&amp;gt; ck-unlock-session zsh: command not found: ck-unlock-session In the vastness of the Internet found the solution, but it&amp;rsquo;s too long to remember:
+dbus-send --system --print-reply --dest=&amp;#34;org.freedesktop.ConsoleKit&amp;#34; /org/freedesktop/ConsoleKit/Session1 org.freedesktop.ConsoleKit.Session.Unlock Session1 - session name and it may differs.</description>
     </item>
     
     <item>
@@ -125,7 +144,7 @@ In the vastness of the Internet found the solution, but it&amp;rsquo;s too long 
       <description>Today was curious is it possible to mount block device into a docker container without mounting it on system. It&amp;rsquo;s not well documented but found one interesting comment in github.
 So, if &amp;ndash;mount option in docker run command is &amp;ldquo;magic&amp;rdquo; on top of &amp;ldquo;mount&amp;rdquo; system call, we can use it. After experimenting a bit here is an example mounting lvm volumes.
 First, let&amp;rsquo;s create loop device for LVM:
-{% highlight bash %} dd if=/dev/zero of=/tmp/loop bs=1M count=100 losetup /dev/loop0 /tmp/loop {% endhighlight %}</description>
+dd if=/dev/zero of=/tmp/loop bs=1M count=100 losetup /dev/loop0 /tmp/loop Then, making an LVM device:</description>
     </item>
     
     <item>
@@ -135,7 +154,7 @@ First, let&amp;rsquo;s create loop device for LVM:
       
       <guid>http://undying.github.io/posts/2018-11-21-building_firefox_on_gentoo/</guid>
       <description>Today I was trying to update FireFox on my Gentoo box and failed with error:
-{% highlight bash %} 0:06.75 checking rustc version&amp;hellip; 1.30.1 0:06.75 ERROR: Cargo package manager not found. 0:06.75 To compile Rust language sources, you must have &amp;lsquo;cargo&amp;rsquo; in your path. 0:06.75 See https://www.rust-lang.org/ for more information. 0:06.75 0:06.75 You can install cargo by running &amp;lsquo;./mach bootstrap&amp;rsquo; 0:06.75 or by directly running the installer from https://rustup.rs/ 0:06.75 0:06.</description>
+0:06.75 checking rustc version... 1.30.1 0:06.75 ERROR: Cargo package manager not found. 0:06.75 To compile Rust language sources, you must have &amp;#39;cargo&amp;#39; in your path. 0:06.75 See https://www.rust-lang.org/ for more information. 0:06.75 0:06.75 You can install cargo by running &amp;#39;./mach bootstrap&amp;#39; 0:06.75 or by directly running the installer from https://rustup.rs/ 0:06.75 0:06.79 *** Fix above errors and then restart with\ 0:06.</description>
     </item>
     
     <item>
@@ -146,10 +165,10 @@ First, let&amp;rsquo;s create loop device for LVM:
       <guid>http://undying.github.io/posts/2017-02-19-backslash_as_yen/</guid>
       <description>If while browsing the internet you have a problem with backslash character which displayed as yen sign you can fix it this way.
 First, let&amp;rsquo;s install the appropriate fonts.
-{% highlight bash %} emerge -av media-fonts/droid {% endhighlight %}
-Then we have to enable them for wide system.
-{% highlight bash %} eselect fontconfig enable 59-google-droid-sans.conf eselect fontconfig enable 59-google-droid-sans-mono.conf eselect fontconfig enable 59-google-droid-serif.conf {% endhighlight %}
-Next step is to clean fonts cache.</description>
+emerge -av media-fonts/droid Then we have to enable them for wide system.
+eselect fontconfig enable 59-google-droid-sans.conf eselect fontconfig enable 59-google-droid-sans-mono.conf eselect fontconfig enable 59-google-droid-serif.conf Next step is to clean fonts cache.
+fc-cache -rf That&amp;rsquo;s all.
+P.S. Also I had a problem displaying cyrillic characters.</description>
     </item>
     
     <item>
@@ -159,10 +178,7 @@ Next step is to clean fonts cache.</description>
       
       <guid>http://undying.github.io/posts/2016-09-13-pure_bash_io_usage_monitoring/</guid>
       <description>I had the need to implement pure bash solution for IO usage monitoring without any tools installed on OS, do this fast and accurately. After little reaserching about /sys/ filesystem the next script was born:
-{% highlight bash %} #! /bin/bash
-SLEEP=0.01 declare -A ops=()
-for dev in /sys/block/;do dev=${dev##/} ops+=( [${dev}]=0 ) done
-for i in $(seq 1 100);do while read _ _ drive _ _ _ _ _ _ _ _ tasks _ _;do [ -n &amp;ldquo;${drive}&amp;rdquo; ] || continue case ${tasks} in 0|[!</description>
+#! /bin/bash SLEEP=0.01 declare -A ops=() for dev in /sys/block/*;do dev=${dev##*/} ops+=( [${dev}]=0 ) done for i in $(seq 1 100);do while read _ _ drive _ _ _ _ _ _ _ _ tasks _ _;do [ -n &amp;#34;${drive}&amp;#34; ] || continue case ${tasks} in 0|[!</description>
     </item>
     
     <item>
@@ -201,9 +217,10 @@ It was a great PC a long time ago. Even now it works fine, except when you are w
       
       <guid>http://undying.github.io/posts/2016-01-18-cleaning-up-metadata-from-disk/</guid>
       <description>Sometimes you I&amp;rsquo;m need to create new FS on partition, which was already used for something else (another FS, RAID, LVM). I was wondering about most usable ways to clear metadata. Here is some I liked the most.
-first {% highlight bash %} wipefs -a ${DEVICE} {% endhighlight %}
-second {% highlight bash %} dd if=/dev/zero of=${DEVICE} bs=512 seek=$(( $(blockdev &amp;ndash;getsz ${DEVICE}) - 1024 )) count=1024 {% endhighlight %}
-third {% highlight bash %} dmraid -r -E ${DEVICE} {% endhighlight %}</description>
+first
+wipefs -a ${DEVICE} second
+dd if=/dev/zero of=${DEVICE} bs=512 seek=$(( $(blockdev --getsz ${DEVICE}) - 1024 )) count=1024 third
+dmraid -r -E ${DEVICE} ~ # mkfs.btrfs /dev/sdb /dev/sdb appears to contain an existing filesystem (LVM2_member).</description>
     </item>
     
     <item>

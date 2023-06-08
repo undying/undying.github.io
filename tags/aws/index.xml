@@ -15,8 +15,8 @@
       <guid>http://undying.github.io/posts/2020-05-29-route-53-resolver-servfail/</guid>
       <description>What we have:
 On premises data center with own domain zone (domain.local) and dns servers AWS VPC with it&amp;rsquo;s own domain zone (domain.r53) and using Route 53 as DNS Server What we need:
-Ability to resolve domain zone hosted on premises DNS Servers from AWS VPC {% mermaid %} graph LR A[EC2 Instance] &amp;ndash;&amp;gt;|a.domain.local| B[Route 53 Forward] &amp;ndash;&amp;gt;|a.domain.local| C[DNS On Premises] {% endmermaid %}
-The configuration is straightforward and well described in official documentation.</description>
+Ability to resolve domain zone hosted on premises DNS Servers from AWS VPC graph LR A[EC2 Instance] --&gt;|a.domain.local| B[Route 53 Forward] --&gt;|a.domain.local| C[DNS On Premises] The configuration is straightforward and well described in official documentation.
+You simply create rules:</description>
     </item>
     
   </channel>

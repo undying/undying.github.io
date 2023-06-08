@@ -106,6 +106,11 @@
             </div>
         </div>
         <ul id="menu">
+            <li>
+                <a href="http://undying.github.io/about/" title="About">
+                    <span>About</span>
+                </a>
+            </li>
         </ul>
     </nav>
 </header>
@@ -124,10 +129,10 @@
   <div class="entry-content">
     <p>If while browsing the internet you have a problem with backslash character which displayed as yen sign you can fix it this way.
 First, let’s install the appropriate fonts.
-{% highlight bash %} emerge -av media-fonts/droid {% endhighlight %}
-Then we have to enable them for wide system.
-{% highlight bash %} eselect fontconfig enable 59-google-droid-sans.conf eselect fontconfig enable 59-google-droid-sans-mono.conf eselect fontconfig enable 59-google-droid-serif.conf {% endhighlight %}
-Next step is to clean fonts cache....</p>
+emerge -av media-fonts/droid Then we have to enable them for wide system.
+eselect fontconfig enable 59-google-droid-sans.conf eselect fontconfig enable 59-google-droid-sans-mono.conf eselect fontconfig enable 59-google-droid-serif.conf Next step is to clean fonts cache.
+fc-cache -rf That’s all.
+P.S. Also I had a problem displaying cyrillic characters....</p>
   </div>
   <footer class="entry-footer"><span title='2017-02-19 15:47:00 +0300 MSK'>February 19, 2017</span></footer>
   <a class="entry-link" aria-label="post link to Gentoo: Backslash as Yen char" href="http://undying.github.io/posts/2017-02-19-backslash_as_yen/"></a>

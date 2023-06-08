@@ -8,9 +8,10 @@
 <title>How to cleanup FS metadata from partition | My Digital Chronicle</title>
 <meta name="keywords" content="fs, raid, hdd">
 <meta name="description" content="Sometimes you I&rsquo;m need to create new FS on partition, which was already used for something else (another FS, RAID, LVM). I was wondering about most usable ways to clear metadata. Here is some I liked the most.
-first {% highlight bash %} wipefs -a ${DEVICE} {% endhighlight %}
-second {% highlight bash %} dd if=/dev/zero of=${DEVICE} bs=512 seek=$(( $(blockdev &ndash;getsz ${DEVICE}) - 1024 )) count=1024 {% endhighlight %}
-third {% highlight bash %} dmraid -r -E ${DEVICE} {% endhighlight %}">
+first
+wipefs -a ${DEVICE} second
+dd if=/dev/zero of=${DEVICE} bs=512 seek=$(( $(blockdev --getsz ${DEVICE}) - 1024 )) count=1024 third
+dmraid -r -E ${DEVICE} ~ # mkfs.btrfs /dev/sdb /dev/sdb appears to contain an existing filesystem (LVM2_member).">
 <meta name="author" content="">
 <link rel="canonical" href="http://undying.github.io/posts/2016-01-18-cleaning-up-metadata-from-disk/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.3613efbd0b1772781e8f49935e973cae632a7f61471c05b17be155505ccf87b5.css" integrity="sha256-NhPvvQsXcngej0mTXpc8rmMqf2FHHAWxe&#43;FVUFzPh7U=" rel="preload stylesheet" as="style">
@@ -61,9 +62,10 @@ third {% highlight bash %} dmraid -r -E ${DEVICE} {% endhighlight %}">
     </style>
 </noscript><meta property="og:title" content="How to cleanup FS metadata from partition" />
 <meta property="og:description" content="Sometimes you I&rsquo;m need to create new FS on partition, which was already used for something else (another FS, RAID, LVM). I was wondering about most usable ways to clear metadata. Here is some I liked the most.
-first {% highlight bash %} wipefs -a ${DEVICE} {% endhighlight %}
-second {% highlight bash %} dd if=/dev/zero of=${DEVICE} bs=512 seek=$(( $(blockdev &ndash;getsz ${DEVICE}) - 1024 )) count=1024 {% endhighlight %}
-third {% highlight bash %} dmraid -r -E ${DEVICE} {% endhighlight %}" />
+first
+wipefs -a ${DEVICE} second
+dd if=/dev/zero of=${DEVICE} bs=512 seek=$(( $(blockdev --getsz ${DEVICE}) - 1024 )) count=1024 third
+dmraid -r -E ${DEVICE} ~ # mkfs.btrfs /dev/sdb /dev/sdb appears to contain an existing filesystem (LVM2_member)." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://undying.github.io/posts/2016-01-18-cleaning-up-metadata-from-disk/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2016-01-28T02:58:00+03:00" />
@@ -72,9 +74,10 @@ third {% highlight bash %} dmraid -r -E ${DEVICE} {% endhighlight %}" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="How to cleanup FS metadata from partition"/>
 <meta name="twitter:description" content="Sometimes you I&rsquo;m need to create new FS on partition, which was already used for something else (another FS, RAID, LVM). I was wondering about most usable ways to clear metadata. Here is some I liked the most.
-first {% highlight bash %} wipefs -a ${DEVICE} {% endhighlight %}
-second {% highlight bash %} dd if=/dev/zero of=${DEVICE} bs=512 seek=$(( $(blockdev &ndash;getsz ${DEVICE}) - 1024 )) count=1024 {% endhighlight %}
-third {% highlight bash %} dmraid -r -E ${DEVICE} {% endhighlight %}"/>
+first
+wipefs -a ${DEVICE} second
+dd if=/dev/zero of=${DEVICE} bs=512 seek=$(( $(blockdev --getsz ${DEVICE}) - 1024 )) count=1024 third
+dmraid -r -E ${DEVICE} ~ # mkfs.btrfs /dev/sdb /dev/sdb appears to contain an existing filesystem (LVM2_member)."/>
 
 
 <script type="application/ld+json">
@@ -103,12 +106,12 @@ third {% highlight bash %} dmraid -r -E ${DEVICE} {% endhighlight %}"/>
   "@type": "BlogPosting",
   "headline": "How to cleanup FS metadata from partition",
   "name": "How to cleanup FS metadata from partition",
-  "description": "Sometimes you I\u0026rsquo;m need to create new FS on partition, which was already used for something else (another FS, RAID, LVM). I was wondering about most usable ways to clear metadata. Here is some I liked the most.\nfirst {% highlight bash %} wipefs -a ${DEVICE} {% endhighlight %}\nsecond {% highlight bash %} dd if=/dev/zero of=${DEVICE} bs=512 seek=$(( $(blockdev \u0026ndash;getsz ${DEVICE}) - 1024 )) count=1024 {% endhighlight %}\nthird {% highlight bash %} dmraid -r -E ${DEVICE} {% endhighlight %}",
+  "description": "Sometimes you I\u0026rsquo;m need to create new FS on partition, which was already used for something else (another FS, RAID, LVM). I was wondering about most usable ways to clear metadata. Here is some I liked the most.\nfirst\nwipefs -a ${DEVICE} second\ndd if=/dev/zero of=${DEVICE} bs=512 seek=$(( $(blockdev --getsz ${DEVICE}) - 1024 )) count=1024 third\ndmraid -r -E ${DEVICE} ~ # mkfs.btrfs /dev/sdb /dev/sdb appears to contain an existing filesystem (LVM2_member).",
   "keywords": [
     "fs", "raid", "hdd"
   ],
-  "articleBody": "Sometimes you I’m need to create new FS on partition, which was already used for something else (another FS, RAID, LVM). I was wondering about most usable ways to clear metadata. Here is some I liked the most.\nfirst {% highlight bash %} wipefs -a ${DEVICE} {% endhighlight %}\nsecond {% highlight bash %} dd if=/dev/zero of=${DEVICE} bs=512 seek=$(( $(blockdev –getsz ${DEVICE}) - 1024 )) count=1024 {% endhighlight %}\nthird {% highlight bash %} dmraid -r -E ${DEVICE} {% endhighlight %}\n{% highlight bash %} ~ # mkfs.btrfs /dev/sdb /dev/sdb appears to contain an existing filesystem (LVM2_member). Error: Use the -f option to force overwrite.\n~ # wipefs -a /dev/sdb /dev/sdb: 8 bytes were erased at offset 0x00000218 (LVM2_member): 4c 56 4d 32 20 30 30 31\n~ # mkfs.btrfs /dev/sdb Btrfs v3.16.2 See http://btrfs.wiki.kernel.org for more information.\nTurning ON incompat feature ’extref’: increased hardlink limit per file to 65536 fs created label (null) on /dev/sdb nodesize 16384 leafsize 16384 sectorsize 4096 size 744.19GiB\n{% endhighlight %}\nThis is not all the ways, but for me the most easy usable (except dd, in this case).\n",
-  "wordCount" : "185",
+  "articleBody": "Sometimes you I’m need to create new FS on partition, which was already used for something else (another FS, RAID, LVM). I was wondering about most usable ways to clear metadata. Here is some I liked the most.\nfirst\nwipefs -a ${DEVICE} second\ndd if=/dev/zero of=${DEVICE} bs=512 seek=$(( $(blockdev --getsz ${DEVICE}) - 1024 )) count=1024 third\ndmraid -r -E ${DEVICE} ~ # mkfs.btrfs /dev/sdb /dev/sdb appears to contain an existing filesystem (LVM2_member). Error: Use the -f option to force overwrite. ~ # wipefs -a /dev/sdb /dev/sdb: 8 bytes were erased at offset 0x00000218 (LVM2_member): 4c 56 4d 32 20 30 30 31 ~ # mkfs.btrfs /dev/sdb Btrfs v3.16.2 See http://btrfs.wiki.kernel.org for more information. Turning ON incompat feature 'extref': increased hardlink limit per file to 65536 fs created label (null) on /dev/sdb nodesize 16384 leafsize 16384 sectorsize 4096 size 744.19GiB This is not all the ways, but for me the most easy usable (except dd, in this case).\n",
+  "wordCount" : "157",
   "inLanguage": "en",
   "datePublished": "2016-01-28T02:58:00+03:00",
   "dateModified": "2016-01-28T02:58:00+03:00",
@@ -168,6 +171,11 @@ third {% highlight bash %} dmraid -r -E ${DEVICE} {% endhighlight %}"/>
             </div>
         </div>
         <ul id="menu">
+            <li>
+                <a href="http://undying.github.io/about/" title="About">
+                    <span>About</span>
+                </a>
+            </li>
         </ul>
     </nav>
 </header>
@@ -185,33 +193,30 @@ third {% highlight bash %} dmraid -r -E ${DEVICE} {% endhighlight %}"/>
   </header> 
   <div class="post-content"><p>Sometimes you I&rsquo;m need to create new FS on partition, which was already used for something else (another FS, RAID, LVM).
 I was wondering about most usable ways to clear metadata. Here is some I liked the most.</p>
-<p><!-- raw HTML omitted -->first<!-- raw HTML omitted -->
-{% highlight bash %}
-wipefs -a ${DEVICE}
-{% endhighlight %}</p>
-<p><!-- raw HTML omitted -->second<!-- raw HTML omitted -->
-{% highlight bash %}
-dd if=/dev/zero of=${DEVICE} bs=512 seek=$(( $(blockdev &ndash;getsz ${DEVICE}) - 1024 )) count=1024
-{% endhighlight %}</p>
-<p><!-- raw HTML omitted -->third<!-- raw HTML omitted -->
-{% highlight bash %}
-dmraid -r -E ${DEVICE}
-{% endhighlight %}</p>
-<!-- raw HTML omitted -->
-<p>{% highlight bash %}
-~ # mkfs.btrfs /dev/sdb
-/dev/sdb appears to contain an existing filesystem (LVM2_member).
-Error: Use the -f option to force overwrite.</p>
-<p>~ # wipefs -a /dev/sdb
-/dev/sdb: 8 bytes were erased at offset 0x00000218 (LVM2_member): 4c 56 4d 32 20 30 30 31</p>
-<p>~ # mkfs.btrfs /dev/sdb
-Btrfs v3.16.2
-See <a href="http://btrfs.wiki.kernel.org">http://btrfs.wiki.kernel.org</a> for more information.</p>
-<p>Turning ON incompat feature &rsquo;extref&rsquo;: increased hardlink limit per file to 65536
-fs created label (null) on /dev/sdb
-nodesize 16384 leafsize 16384 sectorsize 4096 size 744.19GiB</p>
-<p>{% endhighlight %}</p>
-<p>This is not all the ways, but for me the most easy usable (except dd, in this case).</p>
+<p><!-- raw HTML omitted -->first<!-- raw HTML omitted --></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>wipefs -a <span style="color:#e6db74">${</span>DEVICE<span style="color:#e6db74">}</span>
+</span></span></code></pre></div><p><!-- raw HTML omitted -->second<!-- raw HTML omitted --></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>dd <span style="color:#66d9ef">if</span><span style="color:#f92672">=</span>/dev/zero of<span style="color:#f92672">=</span><span style="color:#e6db74">${</span>DEVICE<span style="color:#e6db74">}</span> bs<span style="color:#f92672">=</span><span style="color:#ae81ff">512</span> seek<span style="color:#f92672">=</span><span style="color:#66d9ef">$((</span> <span style="color:#66d9ef">$(</span>blockdev --getsz <span style="color:#e6db74">${</span>DEVICE<span style="color:#e6db74">}</span><span style="color:#66d9ef">)</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1024</span> <span style="color:#66d9ef">))</span> count<span style="color:#f92672">=</span><span style="color:#ae81ff">1024</span>
+</span></span></code></pre></div><p><!-- raw HTML omitted -->third<!-- raw HTML omitted --></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>dmraid -r -E <span style="color:#e6db74">${</span>DEVICE<span style="color:#e6db74">}</span>
+</span></span></code></pre></div><!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>~ <span style="color:#75715e"># mkfs.btrfs /dev/sdb</span>
+</span></span><span style="display:flex;"><span>/dev/sdb appears to contain an existing filesystem <span style="color:#f92672">(</span>LVM2_member<span style="color:#f92672">)</span>.
+</span></span><span style="display:flex;"><span>Error: Use the -f option to force overwrite.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>~ <span style="color:#75715e"># wipefs -a /dev/sdb</span>
+</span></span><span style="display:flex;"><span>/dev/sdb: <span style="color:#ae81ff">8</span> bytes were erased at offset 0x00000218 <span style="color:#f92672">(</span>LVM2_member<span style="color:#f92672">)</span>: 4c <span style="color:#ae81ff">56</span> 4d <span style="color:#ae81ff">32</span> <span style="color:#ae81ff">20</span> <span style="color:#ae81ff">30</span> <span style="color:#ae81ff">30</span> <span style="color:#ae81ff">31</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>~ <span style="color:#75715e"># mkfs.btrfs /dev/sdb</span>
+</span></span><span style="display:flex;"><span>Btrfs v3.16.2
+</span></span><span style="display:flex;"><span>See http://btrfs.wiki.kernel.org <span style="color:#66d9ef">for</span> more information.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Turning ON incompat feature <span style="color:#e6db74">&#39;extref&#39;</span>: increased hardlink limit per file to <span style="color:#ae81ff">65536</span>
+</span></span><span style="display:flex;"><span>fs created label <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span> on /dev/sdb
+</span></span><span style="display:flex;"><span>        nodesize <span style="color:#ae81ff">16384</span> leafsize <span style="color:#ae81ff">16384</span> sectorsize <span style="color:#ae81ff">4096</span> size 744.19GiB
+</span></span></code></pre></div><p>This is not all the ways, but for me the most easy usable (except dd, in this case).</p>
 
 
   </div>

@@ -2,16 +2,40 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://undying.github.io/tags/http/</loc>
-    <lastmod>2020-10-15T22:32:39+03:00</lastmod>
+    <loc>http://undying.github.io/about/</loc>
+    <lastmod>2023-06-04T21:21:38+03:00</lastmod>
   </url><url>
     <loc>http://undying.github.io/</loc>
-    <lastmod>2020-10-15T22:32:39+03:00</lastmod>
+    <lastmod>2023-04-07T10:18:38+03:00</lastmod>
   </url><url>
     <loc>http://undying.github.io/posts/</loc>
-    <lastmod>2020-10-15T22:32:39+03:00</lastmod>
+    <lastmod>2023-04-07T10:18:38+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/runlevel/</loc>
+    <lastmod>2023-04-07T10:18:38+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/posts/2023-04-07t1018z--runlevels-in-systemd/</loc>
+    <lastmod>2023-04-07T10:18:38+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/systemd/</loc>
+    <lastmod>2023-04-07T10:18:38+03:00</lastmod>
   </url><url>
     <loc>http://undying.github.io/tags/</loc>
+    <lastmod>2023-04-07T10:18:38+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/asahi/</loc>
+    <lastmod>2023-04-03T00:22:42+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/linux/</loc>
+    <lastmod>2023-04-03T00:22:42+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/macos/</loc>
+    <lastmod>2023-04-03T00:22:42+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/posts/2023-04-03t0000z--moving-from-macos-to-asahi-linux/</loc>
+    <lastmod>2023-04-03T00:22:42+03:00</lastmod>
+  </url><url>
+    <loc>http://undying.github.io/tags/http/</loc>
     <lastmod>2020-10-15T22:32:39+03:00</lastmod>
   </url><url>
     <loc>http://undying.github.io/tags/url/</loc>
@@ -49,9 +73,6 @@
   </url><url>
     <loc>http://undying.github.io/posts/2020-06-25-zsh--auto-git-config.user/</loc>
     <lastmod>2020-06-25T22:36:59+03:00</lastmod>
-  </url><url>
-    <loc>http://undying.github.io/tags/linux/</loc>
-    <lastmod>2020-06-20T16:04:35+03:00</lastmod>
   </url><url>
     <loc>http://undying.github.io/tags/network/</loc>
     <lastmod>2020-06-20T16:04:35+03:00</lastmod>

@@ -101,8 +101,8 @@ It looks like build process in the next RUN step unable to find files from previ
   "keywords": [
     "docker", "lvm", "datamapper", "thin"
   ],
-  "articleBody": "Docker is the nice tool for almost every use case in my sphere. It’s easy to use, it’s fast to build and deploy. Docker can be used with miscellaneous storage drivers such as btrfs, datamapper, overlayfs, aufs. A long time I was using docker with btrfs backend and everything seems to be nice, but when load on this server increased, corrupted layers are began to appear.\nIt looks like build process in the next RUN step unable to find files from previous step. I had no desire to dig into it because of time, so I decided to change storage backend. It may looks like the choice is big enough, in fact every variant is full of surprises. Some of them is still not in the linux kernel, some of them have serious bugs, and others is just slow.\nSome time ago I heard abount LVM thin provisioning. It’s relatively new feature and I had no use cases to use it. Now I have it, because docker can work with it. You can create Virtual Group directly on block device and pass it to docker daemon. It works fast enough to hold many parallel docker builds in a single moment in time. So, let’s try it.\nCreating Virtual Group docker: {% highlight bash %} pvcreate /dev/sdb vgcreate docker /dev/sdb {% endhighlight %}\nNow we shall create a volume for metadata. man 8 lvcreate gives us a formula for calculating a size for metadata volume. {% highlight bash %} (Pool_LV_size / Pool_LV_chunk_size * 64b) {% endhighlight %}\nDefault chink size is 64KiB, now lets find desired metadata size. {% highlight bash %} echo $[799057190584.31995 / 65536 * 64] 780329287.67999995 echo $[780329287.67999995/1024/1024] 744.17999999999995 {% endhighlight %}\n780329287.67999995 - The VG size in bytes (744GiB) 65536 - chunk size in bytes (64KiB)\nNow creating metadata volume with calculated size. {% highlight bash %} lvcreate -n docker-pool-meta -L 744M docker Logical volume “docker-pool-meta” created. {% endhighlight %}\nNext, we need to create a volume for data. In my situations I just use the rest size of virtual group. First, I was trying to create volume this way: {% highlight bash %} lvcreate -n docker-pool-data -l 100%FREE docker Logical volume “docker-pool-data” created. {% endhighlight %}\nIt’s successfully created, but It fails in the next step when we need to convert this two volumes to the thin pool. {% highlight bash %} lvconvert –type thin-pool –poolmetadata docker/docker-pool-meta docker/docker-pool-data WARNING: Converting logical volume docker/docker-pool-data and docker/docker-pool-meta to pool’s data and metadata volumes. THIS WILL DESTROY CONTENT OF LOGICAL VOLUME (filesystem etc.) Do you really want to convert docker/docker-pool-data and docker/docker-pool-meta? [y/n]: y Volume group “docker” has insufficient free space (0 extents): 38102 required. {% endhighlight %}\nIf in your case everything is fine, my congratulations, you can skip this part.\nLooks like when pool is being creating lvm needs some extra space, in my situation it’s 38102 extents. Okay, so I need to create volume with size smaller on 38102 extents. Lets find the virtual group size in extents. {% highlight bash %} vgs -o +vg_free_count,vg_extent_count VG #PV #LV #SN Attr VSize VFree Free #Ext docker 1 2 0 wz–n- 744,18g 0 0 190511 {% endhighlight %}\nFine, now lets see how many extents uses metadata volume. {% highlight bash %} lvs -o +vg_extent_count LV VG Attr LSize #Ext docker-pool-meta docker twi-aotz– 744,0m 185 {% endhighlight %}\nNow, it’s easy to find desired data volume size. {% highlight bash %} echo $[190511-38102-185] 152224 {% endhighlight %}\n{% highlight bash %} lvremove docker/docker-pool-data Logical volume “docker-pool-data” successfully removed\nlvcreate -n docker-pool-data -l 152224 docker Logical volume “docker-pool-data” created. {% endhighlight %}\nTime to convert it.\n{% highlight bash %} lvconvert –type thin-pool –poolmetadata docker/docker-pool-meta docker/docker-pool-data WARNING: Converting logical volume docker/docker-pool-data and docker/docker-pool-meta to pool’s data and metadata volumes. THIS WILL DESTROY CONTENT OF LOGICAL VOLUME (filesystem etc.) {% endhighlight %}\n{% highlight bash %} /usr/bin/docker daemon -H unix:///run/docker.sock -H tcp://0.0.0.0:2375 –dns=172.17.0.1 –storage-driver=devicemapper –storage-opt dm.thinpooldev=/dev/mapper/docker-docker–pool–data –storage-opt=dm.use_deferred_removal=true –storage-opt=dm.mountopt=noatime –storage-opt=dm.fs=xfs {% endhighlight %}\nAt this time I’m actively testing this solution with thin pools so this article may be updated from time to time If I’ll find some new problems or features. In fact as I think, this is the most acceptable solution for now in ratio speed/safety. Maybe soon we will see something more interesting, I hope so.\n",
-  "wordCount" : "718",
+  "articleBody": "Docker is the nice tool for almost every use case in my sphere. It’s easy to use, it’s fast to build and deploy. Docker can be used with miscellaneous storage drivers such as btrfs, datamapper, overlayfs, aufs. A long time I was using docker with btrfs backend and everything seems to be nice, but when load on this server increased, corrupted layers are began to appear.\nIt looks like build process in the next RUN step unable to find files from previous step. I had no desire to dig into it because of time, so I decided to change storage backend. It may looks like the choice is big enough, in fact every variant is full of surprises. Some of them is still not in the linux kernel, some of them have serious bugs, and others is just slow.\nSome time ago I heard abount LVM thin provisioning. It’s relatively new feature and I had no use cases to use it. Now I have it, because docker can work with it. You can create Virtual Group directly on block device and pass it to docker daemon. It works fast enough to hold many parallel docker builds in a single moment in time. So, let’s try it.\nCreating Virtual Group docker:\npvcreate /dev/sdb vgcreate docker /dev/sdb Now we shall create a volume for metadata. man 8 lvcreate gives us a formula for calculating a size for metadata volume.\n(Pool_LV_size / Pool_LV_chunk_size * 64b) Default chink size is 64KiB, now lets find desired metadata size.\necho $[799057190584.31995 / 65536 * 64] 780329287.67999995 echo $[780329287.67999995/1024/1024] 744.17999999999995 780329287.67999995 - The VG size in bytes (744GiB) 65536 - chunk size in bytes (64KiB)\nNow creating metadata volume with calculated size.\nlvcreate -n docker-pool-meta -L 744M docker Logical volume \"docker-pool-meta\" created. Next, we need to create a volume for data. In my situations I just use the rest size of virtual group. First, I was trying to create volume this way:\nlvcreate -n docker-pool-data -l 100%FREE docker Logical volume \"docker-pool-data\" created. It’s successfully created, but It fails in the next step when we need to convert this two volumes to the thin pool.\nlvconvert --type thin-pool --poolmetadata docker/docker-pool-meta docker/docker-pool-data WARNING: Converting logical volume docker/docker-pool-data and docker/docker-pool-meta to pool's data and metadata volumes. THIS WILL DESTROY CONTENT OF LOGICAL VOLUME (filesystem etc.) Do you really want to convert docker/docker-pool-data and docker/docker-pool-meta? [y/n]: y Volume group \"docker\" has insufficient free space (0 extents): 38102 required. If in your case everything is fine, my congratulations, you can skip this part.\nLooks like when pool is being creating lvm needs some extra space, in my situation it’s 38102 extents. Okay, so I need to create volume with size smaller on 38102 extents. Lets find the virtual group size in extents.\nvgs -o +vg_free_count,vg_extent_count VG #PV #LV #SN Attr VSize VFree Free #Ext docker 1 2 0 wz--n- 744,18g 0 0 190511 Fine, now lets see how many extents uses metadata volume.\nlvs -o +vg_extent_count LV VG Attr LSize #Ext docker-pool-meta docker twi-aotz-- 744,0m 185 Now, it’s easy to find desired data volume size.\necho $[190511-38102-185] 152224 lvremove docker/docker-pool-data Logical volume \"docker-pool-data\" successfully removed lvcreate -n docker-pool-data -l 152224 docker Logical volume \"docker-pool-data\" created. Time to convert it.\nlvconvert --type thin-pool --poolmetadata docker/docker-pool-meta docker/docker-pool-data WARNING: Converting logical volume docker/docker-pool-data and docker/docker-pool-meta to pool's data and metadata volumes. THIS WILL DESTROY CONTENT OF LOGICAL VOLUME (filesystem etc.) /usr/bin/docker daemon -H unix:///run/docker.sock -H tcp://0.0.0.0:2375 --dns=172.17.0.1 --storage-driver=devicemapper --storage-opt dm.thinpooldev=/dev/mapper/docker-docker--pool--data --storage-opt=dm.use_deferred_removal=true --storage-opt=dm.mountopt=noatime --storage-opt=dm.fs=xfs At this time I’m actively testing this solution with thin pools so this article may be updated from time to time If I’ll find some new problems or features. In fact as I think, this is the most acceptable solution for now in ratio speed/safety. Maybe soon we will see something more interesting, I hope so.\n",
+  "wordCount" : "634",
   "inLanguage": "en",
   "datePublished": "2016-02-08T00:21:00+03:00",
   "dateModified": "2016-02-08T00:21:00+03:00",
@@ -162,6 +162,11 @@ It looks like build process in the next RUN step unable to find files from previ
             </div>
         </div>
         <ul id="menu">
+            <li>
+                <a href="http://undying.github.io/about/" title="About">
+                    <span>About</span>
+                </a>
+            </li>
         </ul>
     </nav>
 </header>
@@ -181,79 +186,56 @@ It looks like build process in the next RUN step unable to find files from previ
 Docker can be used with miscellaneous storage drivers such as btrfs, datamapper, overlayfs, aufs. A long time I was using docker with btrfs backend and everything seems to be nice, but when load on this server increased, corrupted layers are began to appear.</p>
 <p>It looks like build process in the next RUN step unable to find files from previous step. I had no desire to dig into it because of time, so I decided to change storage backend. It may looks like the choice is big enough, in fact every variant is full of surprises. Some of them is still not in the linux kernel, some of them have serious bugs, and others is just slow.</p>
 <p>Some time ago I heard abount LVM thin provisioning. It&rsquo;s relatively new feature and I had no use cases to use it. Now I have it, because docker can work with it. You can create Virtual Group directly on block device and pass it to docker daemon. It works fast enough to hold many parallel docker builds in a single moment in time. So, let&rsquo;s try it.</p>
-<p>Creating <!-- raw HTML omitted -->V<!-- raw HTML omitted -->irtual <!-- raw HTML omitted -->G<!-- raw HTML omitted -->roup <!-- raw HTML omitted -->docker<!-- raw HTML omitted -->:
-{% highlight bash %}
-pvcreate /dev/sdb
-vgcreate docker /dev/sdb
-{% endhighlight %}</p>
-<p>Now we shall create a volume for metadata. <!-- raw HTML omitted -->man 8 lvcreate<!-- raw HTML omitted --> gives us a formula for calculating a size for metadata volume.
-{% highlight bash %}
-(Pool_LV_size / Pool_LV_chunk_size * 64b)
-{% endhighlight %}</p>
-<p>Default chink size is 64KiB, now lets find desired metadata size.
-{% highlight bash %}
-echo $[799057190584.31995 / 65536 * 64]
-780329287.67999995
-echo $[780329287.67999995/1024/1024]
-744.17999999999995
-{% endhighlight %}</p>
-<p><!-- raw HTML omitted -->780329287.67999995<!-- raw HTML omitted --> - The VG size in bytes (744GiB)<!-- raw HTML omitted -->
+<p>Creating <!-- raw HTML omitted -->V<!-- raw HTML omitted -->irtual <!-- raw HTML omitted -->G<!-- raw HTML omitted -->roup <!-- raw HTML omitted -->docker<!-- raw HTML omitted -->:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>pvcreate /dev/sdb
+</span></span><span style="display:flex;"><span>vgcreate docker /dev/sdb
+</span></span></code></pre></div><p>Now we shall create a volume for metadata. <!-- raw HTML omitted -->man 8 lvcreate<!-- raw HTML omitted --> gives us a formula for calculating a size for metadata volume.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#f92672">(</span>Pool_LV_size / Pool_LV_chunk_size * 64b<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>Default chink size is 64KiB, now lets find desired metadata size.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>echo $<span style="color:#f92672">[</span>799057190584.31995 / <span style="color:#ae81ff">65536</span> * 64<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>  780329287.67999995
+</span></span><span style="display:flex;"><span>echo $<span style="color:#f92672">[</span>780329287.67999995/1024/1024<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>  744.17999999999995
+</span></span></code></pre></div><p><!-- raw HTML omitted -->780329287.67999995<!-- raw HTML omitted --> - The VG size in bytes (744GiB)<!-- raw HTML omitted -->
 <!-- raw HTML omitted -->65536<!-- raw HTML omitted --> - chunk size in bytes (64KiB)</p>
-<p>Now creating metadata volume with calculated size.
-{% highlight bash %}
-lvcreate -n docker-pool-meta -L 744M docker
-Logical volume &ldquo;docker-pool-meta&rdquo; created.
-{% endhighlight %}</p>
-<!-- raw HTML omitted -->
-<p>Next, we need to create a volume for data. In my situations I just use the rest size of virtual group. First, I was trying to create volume this way:
-{% highlight bash %}
-lvcreate -n docker-pool-data -l 100%FREE docker
-Logical volume &ldquo;docker-pool-data&rdquo; created.
-{% endhighlight %}</p>
-<p>It&rsquo;s successfully created, but It fails in the next step when we need to convert this two volumes to the thin pool.
-{% highlight bash %}
-lvconvert &ndash;type thin-pool &ndash;poolmetadata docker/docker-pool-meta docker/docker-pool-data
-WARNING: Converting logical volume docker/docker-pool-data and docker/docker-pool-meta to pool&rsquo;s data and metadata volumes.
-THIS WILL DESTROY CONTENT OF LOGICAL VOLUME (filesystem etc.)
-Do you really want to convert docker/docker-pool-data and docker/docker-pool-meta? [y/n]: y
-Volume group &ldquo;docker&rdquo; has insufficient free space (0 extents): 38102 required.
-{% endhighlight %}</p>
-<p>If in your case everything is fine, my congratulations, you can <!-- raw HTML omitted -->skip<!-- raw HTML omitted --> this part.</p>
+<p>Now creating metadata volume with calculated size.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>lvcreate -n docker-pool-meta -L 744M docker
+</span></span><span style="display:flex;"><span>  Logical volume <span style="color:#e6db74">&#34;docker-pool-meta&#34;</span> created.
+</span></span></code></pre></div><!-- raw HTML omitted -->
+<p>Next, we need to create a volume for data. In my situations I just use the rest size of virtual group. First, I was trying to create volume this way:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>lvcreate -n docker-pool-data -l 100%FREE docker
+</span></span><span style="display:flex;"><span>  Logical volume <span style="color:#e6db74">&#34;docker-pool-data&#34;</span> created.
+</span></span></code></pre></div><p>It&rsquo;s successfully created, but It fails in the next step when we need to convert this two volumes to the thin pool.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>lvconvert --type thin-pool --poolmetadata docker/docker-pool-meta docker/docker-pool-data
+</span></span><span style="display:flex;"><span>  WARNING: Converting logical volume docker/docker-pool-data and docker/docker-pool-meta to pool<span style="color:#960050;background-color:#1e0010">&#39;</span>s data and metadata volumes.
+</span></span><span style="display:flex;"><span>  THIS WILL DESTROY CONTENT OF LOGICAL VOLUME <span style="color:#f92672">(</span>filesystem etc.<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Do you really want to convert docker/docker-pool-data and docker/docker-pool-meta? <span style="color:#f92672">[</span>y/n<span style="color:#f92672">]</span>: y
+</span></span><span style="display:flex;"><span>  Volume group <span style="color:#e6db74">&#34;docker&#34;</span> has insufficient free space <span style="color:#f92672">(</span><span style="color:#ae81ff">0</span> extents<span style="color:#f92672">)</span>: <span style="color:#ae81ff">38102</span> required.
+</span></span></code></pre></div><p>If in your case everything is fine, my congratulations, you can <!-- raw HTML omitted -->skip<!-- raw HTML omitted --> this part.</p>
 <p>Looks like when pool is being creating lvm needs some extra space, in my situation it&rsquo;s 38102 extents. Okay, so I need to create volume with size smaller on 38102 extents.
-Lets find the virtual group size in extents.
-{% highlight bash %}
-vgs -o +vg_free_count,vg_extent_count
-VG     #PV #LV #SN Attr   VSize   VFree  Free #Ext
-docker   1   2   0 wz&ndash;n- 744,18g     0     0 190511
-{% endhighlight %}</p>
-<p>Fine, now lets see how many extents uses metadata volume.
-{% highlight bash %}
-lvs -o +vg_extent_count
-LV               VG     Attr       LSize    #Ext
-docker-pool-meta docker twi-aotz&ndash; 744,0m   185
-{% endhighlight %}</p>
-<p>Now, it&rsquo;s easy to find desired data volume size.
-{% highlight bash %}
-echo $[190511-38102-185]
-152224
-{% endhighlight %}</p>
-<p>{% highlight bash %}
-lvremove docker/docker-pool-data
-Logical volume &ldquo;docker-pool-data&rdquo; successfully removed</p>
-<p>lvcreate -n docker-pool-data -l 152224 docker
-Logical volume &ldquo;docker-pool-data&rdquo; created.
-{% endhighlight %}</p>
-<p>Time to convert it.</p>
-<p>{% highlight bash %}
-lvconvert &ndash;type thin-pool &ndash;poolmetadata docker/docker-pool-meta docker/docker-pool-data
-WARNING: Converting logical volume docker/docker-pool-data and docker/docker-pool-meta to pool&rsquo;s data and metadata volumes.
-THIS WILL DESTROY CONTENT OF LOGICAL VOLUME (filesystem etc.)
-{% endhighlight %}</p>
-<!-- raw HTML omitted -->
-<p>{% highlight bash %}
-/usr/bin/docker daemon -H unix:///run/docker.sock -H tcp://0.0.0.0:2375 &ndash;dns=172.17.0.1 &ndash;storage-driver=devicemapper &ndash;storage-opt dm.thinpooldev=/dev/mapper/docker-docker&ndash;pool&ndash;data &ndash;storage-opt=dm.use_deferred_removal=true &ndash;storage-opt=dm.mountopt=noatime &ndash;storage-opt=dm.fs=xfs
-{% endhighlight %}</p>
-<!-- raw HTML omitted -->
+Lets find the virtual group size in extents.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>vgs -o +vg_free_count,vg_extent_count
+</span></span><span style="display:flex;"><span>  VG     <span style="color:#75715e">#PV #LV #SN Attr   VSize   VFree  Free #Ext</span>
+</span></span><span style="display:flex;"><span>  docker   <span style="color:#ae81ff">1</span>   <span style="color:#ae81ff">2</span>   <span style="color:#ae81ff">0</span> wz--n- 744,18g     <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">190511</span>
+</span></span></code></pre></div><p>Fine, now lets see how many extents uses metadata volume.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>lvs -o +vg_extent_count
+</span></span><span style="display:flex;"><span>  LV               VG     Attr       LSize    <span style="color:#75715e">#Ext</span>
+</span></span><span style="display:flex;"><span>  docker-pool-meta docker twi-aotz-- 744,0m   <span style="color:#ae81ff">185</span>
+</span></span></code></pre></div><p>Now, it&rsquo;s easy to find desired data volume size.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>echo $<span style="color:#f92672">[</span>190511-38102-185<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">152224</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>lvremove docker/docker-pool-data
+</span></span><span style="display:flex;"><span>  Logical volume <span style="color:#e6db74">&#34;docker-pool-data&#34;</span> successfully removed
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>lvcreate -n docker-pool-data -l <span style="color:#ae81ff">152224</span> docker
+</span></span><span style="display:flex;"><span>  Logical volume <span style="color:#e6db74">&#34;docker-pool-data&#34;</span> created.
+</span></span></code></pre></div><p>Time to convert it.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>lvconvert --type thin-pool --poolmetadata docker/docker-pool-meta docker/docker-pool-data
+</span></span><span style="display:flex;"><span>  WARNING: Converting logical volume docker/docker-pool-data and docker/docker-pool-meta to pool<span style="color:#960050;background-color:#1e0010">&#39;</span>s data and metadata volumes.
+</span></span><span style="display:flex;"><span>  THIS WILL DESTROY CONTENT OF LOGICAL VOLUME <span style="color:#f92672">(</span>filesystem etc.<span style="color:#f92672">)</span>
+</span></span></code></pre></div><!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>/usr/bin/docker daemon -H unix:///run/docker.sock -H tcp://0.0.0.0:2375 --dns<span style="color:#f92672">=</span>172.17.0.1 --storage-driver<span style="color:#f92672">=</span>devicemapper --storage-opt dm.thinpooldev<span style="color:#f92672">=</span>/dev/mapper/docker-docker--pool--data --storage-opt<span style="color:#f92672">=</span>dm.use_deferred_removal<span style="color:#f92672">=</span>true --storage-opt<span style="color:#f92672">=</span>dm.mountopt<span style="color:#f92672">=</span>noatime --storage-opt<span style="color:#f92672">=</span>dm.fs<span style="color:#f92672">=</span>xfs
+</span></span></code></pre></div><!-- raw HTML omitted -->
 <p>At this time I&rsquo;m actively testing this solution with thin pools so this article may be updated from time to time If I&rsquo;ll find some new problems or features.
 In fact as I think, this is the most acceptable solution for now in ratio speed/safety. Maybe soon we will see something more interesting, I hope so.</p>
 <!-- raw HTML omitted -->

@@ -106,6 +106,11 @@
             </div>
         </div>
         <ul id="menu">
+            <li>
+                <a href="http://undying.github.io/about/" title="About">
+                    <span>About</span>
+                </a>
+            </li>
         </ul>
     </nav>
 </header>
@@ -123,9 +128,8 @@
   </header>
   <div class="entry-content">
     <p>This evening I was updating my Gentoo laptop. While updating, my session were locked with the message, that to unlock it I have to use ck-unlock-session. Unfortunately shell told me that there is no such command on my laptop:
-{% highlight bash %} └&gt; ck-unlock-session zsh: command not found: ck-unlock-session {% endhighlight %}
-In the vastness of the Internet found the solution, but it’s too long to remember:
-{% highlight bash %} dbus-send –system –print-reply –dest=“org....</p>
+└&gt; ck-unlock-session zsh: command not found: ck-unlock-session In the vastness of the Internet found the solution, but it’s too long to remember:
+dbus-send --system --print-reply --dest=&#34;org.freedesktop.ConsoleKit&#34; /org/freedesktop/ConsoleKit/Session1 org.freedesktop.ConsoleKit.Session.Unlock Session1 - session name and it may differs....</p>
   </div>
   <footer class="entry-footer"><span title='2019-07-25 14:27:00 +0000 +0000'>July 25, 2019</span></footer>
   <a class="entry-link" aria-label="post link to command not found: ck-unlock-session" href="http://undying.github.io/posts/2019-12-29-ck-unlock-session-alias/"></a>

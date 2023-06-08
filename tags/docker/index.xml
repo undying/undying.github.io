@@ -16,7 +16,7 @@
       <description>Today was curious is it possible to mount block device into a docker container without mounting it on system. It&amp;rsquo;s not well documented but found one interesting comment in github.
 So, if &amp;ndash;mount option in docker run command is &amp;ldquo;magic&amp;rdquo; on top of &amp;ldquo;mount&amp;rdquo; system call, we can use it. After experimenting a bit here is an example mounting lvm volumes.
 First, let&amp;rsquo;s create loop device for LVM:
-{% highlight bash %} dd if=/dev/zero of=/tmp/loop bs=1M count=100 losetup /dev/loop0 /tmp/loop {% endhighlight %}</description>
+dd if=/dev/zero of=/tmp/loop bs=1M count=100 losetup /dev/loop0 /tmp/loop Then, making an LVM device:</description>
     </item>
     
     <item>

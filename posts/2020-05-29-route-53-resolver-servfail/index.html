@@ -9,8 +9,8 @@
 <meta name="keywords" content="aws, dns">
 <meta name="description" content="What we have:
 On premises data center with own domain zone (domain.local) and dns servers AWS VPC with it&rsquo;s own domain zone (domain.r53) and using Route 53 as DNS Server What we need:
-Ability to resolve domain zone hosted on premises DNS Servers from AWS VPC {% mermaid %} graph LR A[EC2 Instance] &ndash;&gt;|a.domain.local| B[Route 53 Forward] &ndash;&gt;|a.domain.local| C[DNS On Premises] {% endmermaid %}
-The configuration is straightforward and well described in official documentation.">
+Ability to resolve domain zone hosted on premises DNS Servers from AWS VPC graph LR A[EC2 Instance] --&gt;|a.domain.local| B[Route 53 Forward] --&gt;|a.domain.local| C[DNS On Premises] The configuration is straightforward and well described in official documentation.
+You simply create rules:">
 <meta name="author" content="">
 <link rel="canonical" href="http://undying.github.io/posts/2020-05-29-route-53-resolver-servfail/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.3613efbd0b1772781e8f49935e973cae632a7f61471c05b17be155505ccf87b5.css" integrity="sha256-NhPvvQsXcngej0mTXpc8rmMqf2FHHAWxe&#43;FVUFzPh7U=" rel="preload stylesheet" as="style">
@@ -62,8 +62,8 @@ The configuration is straightforward and well described in official documentatio
 </noscript><meta property="og:title" content="Route 53 Resolver: NXDOMAIN|SERVFAIL" />
 <meta property="og:description" content="What we have:
 On premises data center with own domain zone (domain.local) and dns servers AWS VPC with it&rsquo;s own domain zone (domain.r53) and using Route 53 as DNS Server What we need:
-Ability to resolve domain zone hosted on premises DNS Servers from AWS VPC {% mermaid %} graph LR A[EC2 Instance] &ndash;&gt;|a.domain.local| B[Route 53 Forward] &ndash;&gt;|a.domain.local| C[DNS On Premises] {% endmermaid %}
-The configuration is straightforward and well described in official documentation." />
+Ability to resolve domain zone hosted on premises DNS Servers from AWS VPC graph LR A[EC2 Instance] --&gt;|a.domain.local| B[Route 53 Forward] --&gt;|a.domain.local| C[DNS On Premises] The configuration is straightforward and well described in official documentation.
+You simply create rules:" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://undying.github.io/posts/2020-05-29-route-53-resolver-servfail/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-05-29T11:24:01+03:00" />
@@ -73,8 +73,8 @@ The configuration is straightforward and well described in official documentatio
 <meta name="twitter:title" content="Route 53 Resolver: NXDOMAIN|SERVFAIL"/>
 <meta name="twitter:description" content="What we have:
 On premises data center with own domain zone (domain.local) and dns servers AWS VPC with it&rsquo;s own domain zone (domain.r53) and using Route 53 as DNS Server What we need:
-Ability to resolve domain zone hosted on premises DNS Servers from AWS VPC {% mermaid %} graph LR A[EC2 Instance] &ndash;&gt;|a.domain.local| B[Route 53 Forward] &ndash;&gt;|a.domain.local| C[DNS On Premises] {% endmermaid %}
-The configuration is straightforward and well described in official documentation."/>
+Ability to resolve domain zone hosted on premises DNS Servers from AWS VPC graph LR A[EC2 Instance] --&gt;|a.domain.local| B[Route 53 Forward] --&gt;|a.domain.local| C[DNS On Premises] The configuration is straightforward and well described in official documentation.
+You simply create rules:"/>
 
 
 <script type="application/ld+json">
@@ -103,12 +103,12 @@ The configuration is straightforward and well described in official documentatio
   "@type": "BlogPosting",
   "headline": "Route 53 Resolver: NXDOMAIN|SERVFAIL",
   "name": "Route 53 Resolver: NXDOMAIN|SERVFAIL",
-  "description": "What we have:\nOn premises data center with own domain zone (domain.local) and dns servers AWS VPC with it\u0026rsquo;s own domain zone (domain.r53) and using Route 53 as DNS Server What we need:\nAbility to resolve domain zone hosted on premises DNS Servers from AWS VPC {% mermaid %} graph LR A[EC2 Instance] \u0026ndash;\u0026gt;|a.domain.local| B[Route 53 Forward] \u0026ndash;\u0026gt;|a.domain.local| C[DNS On Premises] {% endmermaid %}\nThe configuration is straightforward and well described in official documentation.",
+  "description": "What we have: On premises data center with own domain zone (domain.local) and dns servers AWS VPC with it\u0026rsquo;s own domain zone (domain.r53) and using Route 53 as DNS Server What we need: Ability to resolve domain zone hosted on premises DNS Servers from AWS VPC graph LR A[EC2 Instance] --\u003e|a.domain.local| B[Route 53 Forward] --\u003e|a.domain.local| C[DNS On Premises] The configuration is straightforward and well described in official documentation. You simply create rules:",
   "keywords": [
     "aws", "dns"
   ],
-  "articleBody": "What we have:\nOn premises data center with own domain zone (domain.local) and dns servers AWS VPC with it’s own domain zone (domain.r53) and using Route 53 as DNS Server What we need:\nAbility to resolve domain zone hosted on premises DNS Servers from AWS VPC {% mermaid %} graph LR A[EC2 Instance] –\u003e|a.domain.local| B[Route 53 Forward] –\u003e|a.domain.local| C[DNS On Premises] {% endmermaid %}\nThe configuration is straightforward and well described in official documentation.\nYou simply create rules:\nwhat domain this rule for where forward requests to But there is a problem. When you are trying to resolve domain that points to CNAME you can get a timeout. When investigating traffic you can find the following errors:\n18:32:21.328494 IP 10.0.0.2.domain \u003e 192.168.1.10.33414: 57918 NXDomain 0/0/0 (68) 18:32:22.127343 IP 10.0.0.2.domain \u003e 192.168.1.10.46394: 31940 ServFail 0/0/0 (38) This is because when dealing with CNAME server makes multiple requests. And if there is no rules for CNAME requests will go to the internet resolvers.\n{% mermaid %} graph LR A[EC2 Instance] –\u003e|a.domain.local| B[Route 53] –\u003e|a.domain.local| C[DNS On Premises] C –\u003e |CNAME x.domain.local| B {% endmermaid %}\n{% mermaid %} graph LR A[EC2 Instance] –\u003e|a.domain.local| B[Route 53] –\u003e|x.domain.local| C[Internet] C –\u003e|NXDOMAIN| B B –\u003e|NXDOMAIN| A {% endmermaid %}\nTo fix errors we need create R53 Forward Rules for CNAME domains as well.\n{% mermaid %} graph LR A[EC2 Instance] –\u003e|a.domain.local| B[R53 Forward] –\u003e|a.domain.local| C[DNS On Premises] C[DNS On Premises] –\u003e|CNAME x.domain.local| B[R53 Forward] {% endmermaid %}\n{% mermaid %} graph LR A[EC2 Instance] –\u003e|a.domain.local| B[R53 Forward] –\u003e|x.domain.local| C[DNS On Premises] C –\u003e|A 192.168.1.200| B B –\u003e|A 192.168.1.200| A {% endmermaid %}\n",
-  "wordCount" : "267",
+  "articleBody": "What we have:\nOn premises data center with own domain zone (domain.local) and dns servers AWS VPC with it’s own domain zone (domain.r53) and using Route 53 as DNS Server What we need:\nAbility to resolve domain zone hosted on premises DNS Servers from AWS VPC graph LR A[EC2 Instance] --\u003e|a.domain.local| B[Route 53 Forward] --\u003e|a.domain.local| C[DNS On Premises] The configuration is straightforward and well described in official documentation.\nYou simply create rules:\nwhat domain this rule for where forward requests to But there is a problem. When you are trying to resolve domain that points to CNAME you can get a timeout. When investigating traffic you can find the following errors:\n18:32:21.328494 IP 10.0.0.2.domain \u003e 192.168.1.10.33414: 57918 NXDomain 0/0/0 (68) 18:32:22.127343 IP 10.0.0.2.domain \u003e 192.168.1.10.46394: 31940 ServFail 0/0/0 (38) This is because when dealing with CNAME server makes multiple requests. And if there is no rules for CNAME requests will go to the internet resolvers.\ngraph LR A[EC2 Instance] --\u003e|a.domain.local| B[Route 53] --\u003e|a.domain.local| C[DNS On Premises] C --\u003e |CNAME x.domain.local| B graph LR A[EC2 Instance] --\u003e|a.domain.local| B[Route 53] --\u003e|x.domain.local| C[Internet] C --\u003e|NXDOMAIN| B B --\u003e|NXDOMAIN| A To fix errors we need create R53 Forward Rules for CNAME domains as well.\ngraph LR A[EC2 Instance] --\u003e|a.domain.local| B[R53 Forward] --\u003e|a.domain.local| C[DNS On Premises] C[DNS On Premises] --\u003e|CNAME x.domain.local| B[R53 Forward] graph LR A[EC2 Instance] --\u003e|a.domain.local| B[R53 Forward] --\u003e|x.domain.local| C[DNS On Premises] C --\u003e|A 192.168.1.200| B B --\u003e|A 192.168.1.200| A ",
+  "wordCount" : "237",
   "inLanguage": "en",
   "datePublished": "2020-05-29T11:24:01+03:00",
   "dateModified": "2020-05-29T11:24:01+03:00",
@@ -168,6 +168,11 @@ The configuration is straightforward and well described in official documentatio
             </div>
         </div>
         <ul id="menu">
+            <li>
+                <a href="http://undying.github.io/about/" title="About">
+                    <span>About</span>
+                </a>
+            </li>
         </ul>
     </nav>
 </header>
@@ -192,10 +197,25 @@ The configuration is straightforward and well described in official documentatio
 <ul>
 <li>Ability to resolve domain zone hosted on premises DNS Servers from AWS VPC</li>
 </ul>
-<p>{% mermaid %}
+
+
+<script async type="application/javascript" src="https://unpkg.com/mermaid@10.2.2/dist/mermaid.min.js">
+  var config = {
+    startOnLoad:true,
+    theme:'neutral',
+    align:'center'
+  };
+  mermaid.initialize(config);
+</script>
+
+
+<div class="mermaid">
+  
 graph LR
-A[EC2 Instance] &ndash;&gt;|a.domain.local| B[Route 53 Forward] &ndash;&gt;|a.domain.local| C[DNS On Premises]
-{% endmermaid %}</p>
+  A[EC2 Instance] -->|a.domain.local| B[Route 53 Forward] -->|a.domain.local| C[DNS On Premises]
+
+</div>
+
 <p>The configuration is straightforward and well described in <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver.html">official documentation</a>.</p>
 <p>You simply create rules:</p>
 <ul>
@@ -208,29 +228,49 @@ When investigating traffic you can find the following errors:</p>
 </span></span><span style="display:flex;"><span>18:32:22.127343 IP 10.0.0.2.domain &gt; 192.168.1.10.46394: <span style="color:#ae81ff">31940</span> ServFail 0/0/0 <span style="color:#f92672">(</span>38<span style="color:#f92672">)</span>
 </span></span></code></pre></div><p>This is because when dealing with CNAME server makes multiple requests.
 And if there is no rules for CNAME requests will go to the internet resolvers.</p>
-<p>{% mermaid %}
+
+
+<div class="mermaid">
+  
 graph LR
-A[EC2 Instance] &ndash;&gt;|a.domain.local| B[Route 53] &ndash;&gt;|a.domain.local| C[DNS On Premises]
-C &ndash;&gt; |CNAME x.domain.local| B
-{% endmermaid %}</p>
-<p>{% mermaid %}
+  A[EC2 Instance] -->|a.domain.local| B[Route 53] -->|a.domain.local| C[DNS On Premises]
+  C --> |CNAME x.domain.local| B
+
+</div>
+
+
+
+<div class="mermaid">
+  
 graph LR
-A[EC2 Instance] &ndash;&gt;|a.domain.local| B[Route 53] &ndash;&gt;|x.domain.local| C[Internet]
-C &ndash;&gt;|NXDOMAIN| B
-B &ndash;&gt;|NXDOMAIN| A
-{% endmermaid %}</p>
+  A[EC2 Instance] -->|a.domain.local| B[Route 53] -->|x.domain.local| C[Internet]
+  C -->|NXDOMAIN| B
+  B -->|NXDOMAIN| A
+
+</div>
+
 <p>To fix errors we need create R53 Forward Rules for CNAME domains as well.</p>
-<p>{% mermaid %}
+
+
+<div class="mermaid">
+  
 graph LR
-A[EC2 Instance] &ndash;&gt;|a.domain.local| B[R53 Forward] &ndash;&gt;|a.domain.local| C[DNS On Premises]
-C[DNS On Premises] &ndash;&gt;|CNAME x.domain.local| B[R53 Forward]
-{% endmermaid %}</p>
-<p>{% mermaid %}
+  A[EC2 Instance] -->|a.domain.local| B[R53 Forward] -->|a.domain.local| C[DNS On Premises]
+  C[DNS On Premises] -->|CNAME x.domain.local| B[R53 Forward]
+
+</div>
+
+
+
+<div class="mermaid">
+  
 graph LR
-A[EC2 Instance] &ndash;&gt;|a.domain.local| B[R53 Forward] &ndash;&gt;|x.domain.local| C[DNS On Premises]
-C &ndash;&gt;|A 192.168.1.200| B
-B &ndash;&gt;|A 192.168.1.200| A
-{% endmermaid %}</p>
+  A[EC2 Instance] -->|a.domain.local| B[R53 Forward] -->|x.domain.local| C[DNS On Premises]
+  C -->|A 192.168.1.200| B
+  B -->|A 192.168.1.200| A
+
+</div>
+
 
 
   </div>

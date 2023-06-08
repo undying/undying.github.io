@@ -121,6 +121,11 @@
             </div>
         </div>
         <ul id="menu">
+            <li>
+                <a href="http://undying.github.io/about/" title="About">
+                    <span>About</span>
+                </a>
+            </li>
         </ul>
     </nav>
 </header>
@@ -133,6 +138,32 @@
 
 <article class="post-entry"> 
   <header class="entry-header">
+    <h2>PostgreSQL 11 Administration Summary
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>PostgreSQL Administration Cheatsheet Intro New In PostgreSQL 11 WAL Size CREATE STATISTICS INCLUDE indexes CREATE INDEX in parallel pg_prewarm Updated WINDOW Functions JIT Compilation Better Partitioning Default Partition Partition Key Updating Hash Partitioning Index Created on Parent Table Better Support Of Stored Procedures Faster ALTER TABLE Locks and Transactions now() function SAVEPOINT DDL commands are transaction safe Explicit Locking FOR SHARE and FOR UPDATE SKIP LOCKED Using CTE with RETURNING FOR SHARE and FOR UPDATE FOR … clauses by locking strength FOR UPDATE SKIP LOCKED Recommended Locks VACUUM autovacuum Transaction ID Wraparound Transaction Duration Indexing Costs Model PostgreSQL Administration Cheatsheet Intro This cheatsheet is based on the great book about PostgreSQL 11 Administration...</p>
+  </div>
+  <footer class="entry-footer"><span title='2020-05-22 09:48:49 +0300 MSK'>May 22, 2020</span></footer>
+  <a class="entry-link" aria-label="post link to PostgreSQL 11 Administration Summary" href="http://undying.github.io/posts/2020-05-22-postgresql-11-administration-summary/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>command not found: ck-unlock-session
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>This evening I was updating my Gentoo laptop. While updating, my session were locked with the message, that to unlock it I have to use ck-unlock-session. Unfortunately shell told me that there is no such command on my laptop:
+└&gt; ck-unlock-session zsh: command not found: ck-unlock-session In the vastness of the Internet found the solution, but it’s too long to remember:
+dbus-send --system --print-reply --dest=&#34;org.freedesktop.ConsoleKit&#34; /org/freedesktop/ConsoleKit/Session1 org.freedesktop.ConsoleKit.Session.Unlock Session1 - session name and it may differs....</p>
+  </div>
+  <footer class="entry-footer"><span title='2019-07-25 14:27:00 +0000 +0000'>July 25, 2019</span></footer>
+  <a class="entry-link" aria-label="post link to command not found: ck-unlock-session" href="http://undying.github.io/posts/2019-12-29-ck-unlock-session-alias/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
     <h2>Docker: Mounting block devices into container
     </h2>
   </header>
@@ -140,7 +171,7 @@
     <p>Today was curious is it possible to mount block device into a docker container without mounting it on system. It’s not well documented but found one interesting comment in github.
 So, if –mount option in docker run command is “magic” on top of “mount” system call, we can use it. After experimenting a bit here is an example mounting lvm volumes.
 First, let’s create loop device for LVM:
-{% highlight bash %} dd if=/dev/zero of=/tmp/loop bs=1M count=100 losetup /dev/loop0 /tmp/loop {% endhighlight %}...</p>
+dd if=/dev/zero of=/tmp/loop bs=1M count=100 losetup /dev/loop0 /tmp/loop Then, making an LVM device:...</p>
   </div>
   <footer class="entry-footer"><span title='2019-07-25 14:27:00 +0000 +0000'>July 25, 2019</span></footer>
   <a class="entry-link" aria-label="post link to Docker: Mounting block devices into container" href="http://undying.github.io/posts/2019-07-25-mounting_block_devices_into_docker/"></a>
@@ -153,7 +184,7 @@ First, let’s create loop device for LVM:
   </header>
   <div class="entry-content">
     <p>Today I was trying to update FireFox on my Gentoo box and failed with error:
-{% highlight bash %} 0:06.75 checking rustc version… 1.30.1 0:06.75 ERROR: Cargo package manager not found. 0:06.75 To compile Rust language sources, you must have ‘cargo’ in your path. 0:06.75 See https://www.rust-lang.org/ for more information. 0:06.75 0:06.75 You can install cargo by running ‘./mach bootstrap’ 0:06.75 or by directly running the installer from https://rustup.rs/ 0:06.75 0:06....</p>
+0:06.75 checking rustc version... 1.30.1 0:06.75 ERROR: Cargo package manager not found. 0:06.75 To compile Rust language sources, you must have &#39;cargo&#39; in your path. 0:06.75 See https://www.rust-lang.org/ for more information. 0:06.75 0:06.75 You can install cargo by running &#39;./mach bootstrap&#39; 0:06.75 or by directly running the installer from https://rustup.rs/ 0:06.75 0:06.79 *** Fix above errors and then restart with\ 0:06....</p>
   </div>
   <footer class="entry-footer"><span title='2018-11-21 05:10:00 +0000 +0000'>November 21, 2018</span></footer>
   <a class="entry-link" aria-label="post link to Gentoo: Building FireFox 63.0.3" href="http://undying.github.io/posts/2018-11-21-building_firefox_on_gentoo/"></a>
@@ -167,10 +198,10 @@ First, let’s create loop device for LVM:
   <div class="entry-content">
     <p>If while browsing the internet you have a problem with backslash character which displayed as yen sign you can fix it this way.
 First, let’s install the appropriate fonts.
-{% highlight bash %} emerge -av media-fonts/droid {% endhighlight %}
-Then we have to enable them for wide system.
-{% highlight bash %} eselect fontconfig enable 59-google-droid-sans.conf eselect fontconfig enable 59-google-droid-sans-mono.conf eselect fontconfig enable 59-google-droid-serif.conf {% endhighlight %}
-Next step is to clean fonts cache....</p>
+emerge -av media-fonts/droid Then we have to enable them for wide system.
+eselect fontconfig enable 59-google-droid-sans.conf eselect fontconfig enable 59-google-droid-sans-mono.conf eselect fontconfig enable 59-google-droid-serif.conf Next step is to clean fonts cache.
+fc-cache -rf That’s all.
+P.S. Also I had a problem displaying cyrillic characters....</p>
   </div>
   <footer class="entry-footer"><span title='2017-02-19 15:47:00 +0300 MSK'>February 19, 2017</span></footer>
   <a class="entry-link" aria-label="post link to Gentoo: Backslash as Yen char" href="http://undying.github.io/posts/2017-02-19-backslash_as_yen/"></a>
@@ -183,10 +214,7 @@ Next step is to clean fonts cache....</p>
   </header>
   <div class="entry-content">
     <p>I had the need to implement pure bash solution for IO usage monitoring without any tools installed on OS, do this fast and accurately. After little reaserching about /sys/ filesystem the next script was born:
-{% highlight bash %} #! /bin/bash
-SLEEP=0.01 declare -A ops=()
-for dev in /sys/block/;do dev=${dev##/} ops&#43;=( [${dev}]=0 ) done
-for i in $(seq 1 100);do while read _ _ drive _ _ _ _ _ _ _ _ tasks _ _;do [ -n “${drive}” ] || continue case ${tasks} in 0|[!...</p>
+#! /bin/bash SLEEP=0.01 declare -A ops=() for dev in /sys/block/*;do dev=${dev##*/} ops&#43;=( [${dev}]=0 ) done for i in $(seq 1 100);do while read _ _ drive _ _ _ _ _ _ _ _ tasks _ _;do [ -n &#34;${drive}&#34; ] || continue case ${tasks} in 0|[!...</p>
   </div>
   <footer class="entry-footer"><span title='2016-09-13 02:39:00 +0300 MSK'>September 13, 2016</span></footer>
   <a class="entry-link" aria-label="post link to Pure Bash script for IO usage monitoring" href="http://undying.github.io/posts/2016-09-13-pure_bash_io_usage_monitoring/"></a>
@@ -237,40 +265,13 @@ It was a great PC a long time ago. Even now it works fine, except when you are w
   </header>
   <div class="entry-content">
     <p>Sometimes you I’m need to create new FS on partition, which was already used for something else (another FS, RAID, LVM). I was wondering about most usable ways to clear metadata. Here is some I liked the most.
-first {% highlight bash %} wipefs -a ${DEVICE} {% endhighlight %}
-second {% highlight bash %} dd if=/dev/zero of=${DEVICE} bs=512 seek=$(( $(blockdev –getsz ${DEVICE}) - 1024 )) count=1024 {% endhighlight %}
-third {% highlight bash %} dmraid -r -E ${DEVICE} {% endhighlight %}...</p>
+first
+wipefs -a ${DEVICE} second
+dd if=/dev/zero of=${DEVICE} bs=512 seek=$(( $(blockdev --getsz ${DEVICE}) - 1024 )) count=1024 third
+dmraid -r -E ${DEVICE} ~ # mkfs.btrfs /dev/sdb /dev/sdb appears to contain an existing filesystem (LVM2_member)....</p>
   </div>
   <footer class="entry-footer"><span title='2016-01-28 02:58:00 +0300 MSK'>January 28, 2016</span></footer>
   <a class="entry-link" aria-label="post link to How to cleanup FS metadata from partition" href="http://undying.github.io/posts/2016-01-18-cleaning-up-metadata-from-disk/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2>Enabling HTTP/2.0 support with Haproxy -&gt; Amazon ELB -&gt; Nginx
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>I have a Haproxy balancer that routes traffic for multiple projects with different host names and now, I need to enable HTTP/2.0 support for couple or all of them. The problem is that current version of Haproxy not supporting HTTP/2.0 protocol. Also, In my case I have multiple backends. To some of them I need to send http/1.1 traffic and to some of them http/2.0.
-The main problem is the mix of tcp/http modes in Haproxy....</p>
-  </div>
-  <footer class="entry-footer"><span title='2016-01-12 20:35:00 +0300 MSK'>January 12, 2016</span></footer>
-  <a class="entry-link" aria-label="post link to Enabling HTTP/2.0 support with Haproxy -&gt; Amazon ELB -&gt; Nginx" href="http://undying.github.io/posts/2016-01-12-haproxy-elb-nginx-http2/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2>Выжимаем максимум интернета из деревенских сот
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>На кануне новогодних праздников понадобилось пораньше покинуть столицу, покинуть ее в направлении таких мест, в которых интернет бывает довольно редко. На период отсутствия на работе я обещал напарникам быть на связи. А так как мой род деятельности напрямую связан с web, то я решил поэкспериментировать с доступностью интернетов в планируемом месте пребывания.
-Суть задачи сводился к следующему:
-Из небходимого у меня было:
-В качестве хаба использовал старый добрый D-Link Dub-104 (красивый компактный хаб с невероятно здоровенным блоком питания)....</p>
-  </div>
-  <footer class="entry-footer"><span title='2015-12-31 12:41:17 +0300 MSK'>December 31, 2015</span></footer>
-  <a class="entry-link" aria-label="post link to Выжимаем максимум интернета из деревенских сот" href="http://undying.github.io/posts/2015-12-31-maximizing-village-internet/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">
