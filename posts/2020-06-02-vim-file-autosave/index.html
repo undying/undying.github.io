@@ -185,37 +185,37 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <h1 class="post-title">
       VIM: File Autosave
     </h1>
-    <div class="post-meta"><span title='2020-06-02 00:10:12 +0300 MSK'>June 2, 2020</span>
+    <div class="post-meta">&lt;span title=&#39;2020-06-02 00:10:12 &#43;0300 MSK&#39;&gt;June 2, 2020&lt;/span&gt;
 
 </div>
   </header> 
   <div class="post-content"><p>I was wondering how to save file in VIM automatically. Found some solutions in internet but decided to do it my way.
 So I wrote this small solution:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vim" data-lang="vim"><span style="display:flex;"><span><span style="color:#75715e">&#34;&#34;&#34; Save file on each edit exit</span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">FileAutoSave</span>()<span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">exists</span>(<span style="color:#e6db74">&#39;g:file_autosave_async&#39;</span>)<span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#a6e22e">return</span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">endif</span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">if</span> @% == <span style="color:#e6db74">&#34;&#34;</span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#a6e22e">return</span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">elseif</span> !<span style="color:#a6e22e">filewritable</span>(@%)<span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#a6e22e">return</span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">endif</span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">g</span>:<span style="color:#a6e22e">file_autosave_async</span> = <span style="color:#ae81ff">1</span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#a6e22e">call</span> <span style="color:#a6e22e">timer_start</span>(<span style="color:#ae81ff">500</span>, <span style="color:#e6db74">&#39;FileAutoSaveAsync&#39;</span>, {<span style="color:#e6db74">&#39;repeat&#39;</span>: <span style="color:#ae81ff">1</span>})<span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">endfunction</span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">FileAutoSaveAsync</span>(<span style="color:#a6e22e">timer</span>)<span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#a6e22e">update</span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#a6e22e">unlet</span> <span style="color:#a6e22e">g</span>:<span style="color:#a6e22e">file_autosave_async</span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">endfunction</span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>:<span style="color:#a6e22e">autocmd</span> <span style="color:#a6e22e">InsertLeave</span>,<span style="color:#a6e22e">TextChanged</span> * <span style="color:#a6e22e">call</span> <span style="color:#a6e22e">FileAutoSave</span>()<span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34;</span><span style="color:#960050;background-color:#1e0010">
-</span></span></span></code></pre></div><p>It updates file in two cases:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vim" data-lang="vim"><span style="display:flex;"><span><span style="color:#75715e">&#34;&#34;&#34; Save file on each edit exit</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">FileAutoSave</span>()
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">exists</span>(<span style="color:#e6db74">&#39;g:file_autosave_async&#39;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">return</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">endif</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> @% == <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">return</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">elseif</span> !<span style="color:#a6e22e">filewritable</span>(@%)
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">return</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">endif</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">g</span>:<span style="color:#a6e22e">file_autosave_async</span> = <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">call</span> <span style="color:#a6e22e">timer_start</span>(<span style="color:#ae81ff">500</span>, <span style="color:#e6db74">&#39;FileAutoSaveAsync&#39;</span>, {<span style="color:#e6db74">&#39;repeat&#39;</span>: <span style="color:#ae81ff">1</span>})
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">endfunction</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">FileAutoSaveAsync</span>(<span style="color:#a6e22e">timer</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">update</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">unlet</span> <span style="color:#a6e22e">g</span>:<span style="color:#a6e22e">file_autosave_async</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">endfunction</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>:<span style="color:#66d9ef">autocmd</span> <span style="color:#a6e22e">InsertLeave</span>,<span style="color:#a6e22e">TextChanged</span> * <span style="color:#a6e22e">call</span> <span style="color:#a6e22e">FileAutoSave</span>()
+</span></span><span style="display:flex;"><span><span style="color:#75715e">&#34;&#34;&#34;</span>
+</span></span></code></pre></div><p>It updates file in two cases:</p>
 <ul>
 <li>when you leave insert mode</li>
 <li>when text in buffer have been changed</li>
@@ -237,7 +237,7 @@ This solution will prevent to trigger update too often and will save after every
     </main>
     
 <footer class="footer">
-    <span>&copy; 2023 <a href="http://undying.github.io">My Digital Chronicle</a></span>
+    <span>&copy; 2024 <a href="http://undying.github.io">My Digital Chronicle</a></span>
     <span>
         Powered by
         <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &

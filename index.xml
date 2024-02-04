@@ -6,7 +6,18 @@
     <description>Recent content on My Digital Chronicle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 07 Apr 2023 10:18:38 +0300</lastBuildDate><atom:link href="http://undying.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 04 Feb 2024 22:03:39 +0300</lastBuildDate><atom:link href="http://undying.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Convert OnePlus 12 From ColorOS to OxygenOS</title>
+      <link>http://undying.github.io/posts/2024-02-04t2203z--convert-oneplus-12-from-coloros-to-oxygenos/</link>
+      <pubDate>Sun, 04 Feb 2024 22:03:39 +0300</pubDate>
+      
+      <guid>http://undying.github.io/posts/2024-02-04t2203z--convert-oneplus-12-from-coloros-to-oxygenos/</guid>
+      <description>How to convert OnePlus 12 from ColorOS to OxygenOS using Linux Intro Somehow I decided to order a new phone from China. At the same time, I missed the moment to explore how problematic this option is.
+As a result, I received a phone with the ColorOS operating system, which is designed for the Chinese region.
+The seller wrote to me after receiving the phone that it could be blocked in case of an attempt to update it.</description>
+    </item>
+    
     <item>
       <title>About</title>
       <link>http://undying.github.io/about/</link>

@@ -140,13 +140,13 @@ wipefs -a ${DEVICE} second
 dd if=/dev/zero of=${DEVICE} bs=512 seek=$(( $(blockdev --getsz ${DEVICE}) - 1024 )) count=1024 third
 dmraid -r -E ${DEVICE} ~ # mkfs.btrfs /dev/sdb /dev/sdb appears to contain an existing filesystem (LVM2_member)....</p>
   </div>
-  <footer class="entry-footer"><span title='2016-01-28 02:58:00 +0300 MSK'>January 28, 2016</span></footer>
+  <footer class="entry-footer">&lt;span title=&#39;2016-01-28 02:58:00 &#43;0300 MSK&#39;&gt;January 28, 2016&lt;/span&gt;</footer>
   <a class="entry-link" aria-label="post link to How to cleanup FS metadata from partition" href="http://undying.github.io/posts/2016-01-18-cleaning-up-metadata-from-disk/"></a>
 </article>
     </main>
     
 <footer class="footer">
-    <span>&copy; 2023 <a href="http://undying.github.io">My Digital Chronicle</a></span>
+    <span>&copy; 2024 <a href="http://undying.github.io">My Digital Chronicle</a></span>
     <span>
         Powered by
         <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
