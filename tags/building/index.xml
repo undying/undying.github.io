@@ -6,16 +6,15 @@
     <description>Recent content in building on My Digital Chronicle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 21 Nov 2018 05:10:00 +0000</lastBuildDate><atom:link href="http://undying.github.io/tags/building/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 21 Nov 2018 05:10:00 +0000</lastBuildDate>
+    <atom:link href="http://undying.github.io/tags/building/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Gentoo: Building FireFox 63.0.3</title>
       <link>http://undying.github.io/posts/2018-11-21-building_firefox_on_gentoo/</link>
       <pubDate>Wed, 21 Nov 2018 05:10:00 +0000</pubDate>
-      
       <guid>http://undying.github.io/posts/2018-11-21-building_firefox_on_gentoo/</guid>
       <description>Today I was trying to update FireFox on my Gentoo box and failed with error:
 0:06.75 checking rustc version... 1.30.1 0:06.75 ERROR: Cargo package manager not found. 0:06.75 To compile Rust language sources, you must have &amp;#39;cargo&amp;#39; in your path. 0:06.75 See https://www.rust-lang.org/ for more information. 0:06.75 0:06.75 You can install cargo by running &amp;#39;./mach bootstrap&amp;#39; 0:06.75 or by directly running the installer from https://rustup.rs/ 0:06.75 0:06.79 *** Fix above errors and then restart with\ 0:06.</description>
     </item>
-    
   </channel>
 </rss>

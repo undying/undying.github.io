@@ -6,15 +6,14 @@
     <description>Recent content in cheatsheet on My Digital Chronicle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 22 May 2020 09:48:49 +0300</lastBuildDate><atom:link href="http://undying.github.io/tags/cheatsheet/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 22 May 2020 09:48:49 +0300</lastBuildDate>
+    <atom:link href="http://undying.github.io/tags/cheatsheet/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>PostgreSQL 11 Administration Summary</title>
       <link>http://undying.github.io/posts/2020-05-22-postgresql-11-administration-summary/</link>
       <pubDate>Fri, 22 May 2020 09:48:49 +0300</pubDate>
-      
       <guid>http://undying.github.io/posts/2020-05-22-postgresql-11-administration-summary/</guid>
       <description>PostgreSQL Administration Cheatsheet Intro New In PostgreSQL 11 WAL Size CREATE STATISTICS INCLUDE indexes CREATE INDEX in parallel pg_prewarm Updated WINDOW Functions JIT Compilation Better Partitioning Default Partition Partition Key Updating Hash Partitioning Index Created on Parent Table Better Support Of Stored Procedures Faster ALTER TABLE Locks and Transactions now() function SAVEPOINT DDL commands are transaction safe Explicit Locking FOR SHARE and FOR UPDATE SKIP LOCKED Using CTE with RETURNING FOR SHARE and FOR UPDATE FOR &amp;hellip; clauses by locking strength FOR UPDATE SKIP LOCKED Recommended Locks VACUUM autovacuum Transaction ID Wraparound Transaction Duration Indexing Costs Model PostgreSQL Administration Cheatsheet Intro This cheatsheet is based on the great book about PostgreSQL 11 Administration</description>
     </item>
-    
   </channel>
 </rss>

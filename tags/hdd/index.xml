@@ -6,12 +6,12 @@
     <description>Recent content in hdd on My Digital Chronicle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 28 Jan 2016 02:58:00 +0300</lastBuildDate><atom:link href="http://undying.github.io/tags/hdd/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 28 Jan 2016 02:58:00 +0300</lastBuildDate>
+    <atom:link href="http://undying.github.io/tags/hdd/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>How to cleanup FS metadata from partition</title>
       <link>http://undying.github.io/posts/2016-01-18-cleaning-up-metadata-from-disk/</link>
       <pubDate>Thu, 28 Jan 2016 02:58:00 +0300</pubDate>
-      
       <guid>http://undying.github.io/posts/2016-01-18-cleaning-up-metadata-from-disk/</guid>
       <description>Sometimes you I&amp;rsquo;m need to create new FS on partition, which was already used for something else (another FS, RAID, LVM). I was wondering about most usable ways to clear metadata. Here is some I liked the most.
 first
@@ -19,6 +19,5 @@ wipefs -a ${DEVICE} second
 dd if=/dev/zero of=${DEVICE} bs=512 seek=$(( $(blockdev --getsz ${DEVICE}) - 1024 )) count=1024 third
 dmraid -r -E ${DEVICE} ~ # mkfs.btrfs /dev/sdb /dev/sdb appears to contain an existing filesystem (LVM2_member).</description>
     </item>
-    
   </channel>
 </rss>

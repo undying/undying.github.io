@@ -6,59 +6,50 @@
     <description>Recent content in vim on My Digital Chronicle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 15 Oct 2020 22:32:39 +0300</lastBuildDate><atom:link href="http://undying.github.io/tags/vim/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 15 Oct 2020 22:32:39 +0300</lastBuildDate>
+    <atom:link href="http://undying.github.io/tags/vim/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>VIM: Handle Urls</title>
       <link>http://undying.github.io/posts/2020-10-15-vim--handle-urls/</link>
       <pubDate>Thu, 15 Oct 2020 22:32:39 +0300</pubDate>
-      
       <guid>http://undying.github.io/posts/2020-10-15-vim--handle-urls/</guid>
       <description>Making a shortcut to open urls under cursor Note: There is also available gx shortcut that uses netrw plugin. But I&amp;rsquo;ve decided to use own little solution instead of big plugin for one function.
 &amp;#34;&amp;#34;&amp;#34; open urls using \u shortcut function HandleURL() let l:uri = matchstr(getline(&amp;#34;.&amp;#34;), &amp;#39;[a-z]*:\/\/[^ &amp;gt;,;)]*&amp;#39;) if l:uri != &amp;#34;&amp;#34; silent call system(&amp;#34;xdg-open &amp;#34; . shellescape(l:uri, 1)) else echo &amp;#34;No URI found in line.&amp;#34; endif endfunction nnoremap &amp;lt;leader&amp;gt;u :call HandleURL()&amp;lt;cr&amp;gt; &amp;#34;&amp;#34;&amp;#34; Now if we hit \u shortcut while our cursor is on the url line, this url will be opened in default browser.</description>
     </item>
-    
     <item>
       <title>VIM: Making Markdown Checklist Shortcut</title>
       <link>http://undying.github.io/posts/2020-10-14-vim--making-markdown-checklist-shortcut/</link>
       <pubDate>Wed, 14 Oct 2020 23:45:53 +0300</pubDate>
-      
       <guid>http://undying.github.io/posts/2020-10-14-vim--making-markdown-checklist-shortcut/</guid>
       <description>Interesting exercise to implement shortcut in vim. Often while writing markdown files in vim I&amp;rsquo;m writing a lot of checkboxes. It&amp;rsquo;s a bit annoying to do by hand so let&amp;rsquo;s make a script and bind it to shortcut.
 &amp;#34;&amp;#34;&amp;#34; markdown shortcuts function MarkdownCheckboxInsert() let l:line = line(&amp;#39;.&amp;#39;) let l:str = getline(l:line) let l:match = matchlist(l:str, &amp;#39;^\([ ]*\)\?\([-+*]\)\? \?\(.*\)$&amp;#39;) if empty(l:match[2]) let l:list_syn = &amp;#39;-&amp;#39; else let l:list_syn = l:match[2] endif let l:buf = l:match[1] .</description>
     </item>
-    
     <item>
       <title>VIM: YCM and Pipenv</title>
       <link>http://undying.github.io/posts/2020-10-14-vim-ycm-and-pipenv/</link>
       <pubDate>Wed, 14 Oct 2020 23:03:02 +0300</pubDate>
-      
       <guid>http://undying.github.io/posts/2020-10-14-vim-ycm-and-pipenv/</guid>
       <description>While writing another python script under pipenv I have met a problem that YCM autocomplete worked only for built in functions. That was annoying because without autocomplete YCM looses it&amp;rsquo;s sense.
 Solution Let&amp;rsquo;s create module for filetype plugin.
 cat ~/.vim/after/ftplugin/python.vim if !empty($VIRTUAL_ENV) let g:ycm_server_python_interpreter = $VIRTUAL_ENV . &amp;#39;/bin/python&amp;#39; let $PYTHONPATH = finddir(&amp;#39;site-packages&amp;#39;, $VIRTUAL_ENV . &amp;#39;/lib/*&amp;#39;) endif Then you can simply run command
 pipenv run vim some/script.py And now YCM works correctly :3</description>
     </item>
-    
     <item>
       <title>VIM: Append Filetype</title>
       <link>http://undying.github.io/posts/2020-06-06-vim-append-filetype/</link>
       <pubDate>Sat, 06 Jun 2020 22:47:03 +0300</pubDate>
-      
       <guid>http://undying.github.io/posts/2020-06-06-vim-append-filetype/</guid>
       <description>If you open a file with a non-standard extension, syntax highlighting will not work. This is easily solved by installing filetype manually.
 :set filetype=markdown You can add a hint for VIM about the file type to the file so that you don&amp;rsquo;t have to set the type manually the next time.
 ~ cat Readme # vi:syntax=markdown I wanted to make a hotkey to add information about its type to the end of the file.</description>
     </item>
-    
     <item>
       <title>VIM: File Autosave</title>
       <link>http://undying.github.io/posts/2020-06-02-vim-file-autosave/</link>
       <pubDate>Tue, 02 Jun 2020 00:10:12 +0300</pubDate>
-      
       <guid>http://undying.github.io/posts/2020-06-02-vim-file-autosave/</guid>
       <description>I was wondering how to save file in VIM automatically. Found some solutions in internet but decided to do it my way. So I wrote this small solution:
 &amp;#34;&amp;#34;&amp;#34; Save file on each edit exit function FileAutoSave() if exists(&amp;#39;g:file_autosave_async&amp;#39;) return endif if @% == &amp;#34;&amp;#34; return elseif !filewritable(@%) return endif let g:file_autosave_async = 1 call timer_start(500, &amp;#39;FileAutoSaveAsync&amp;#39;, {&amp;#39;repeat&amp;#39;: 1}) endfunction function FileAutoSaveAsync(timer) update unlet g:file_autosave_async endfunction :autocmd InsertLeave,TextChanged * call FileAutoSave() &amp;#34;&amp;#34;&amp;#34; It updates file in two cases:</description>
     </item>
-    
   </channel>
 </rss>

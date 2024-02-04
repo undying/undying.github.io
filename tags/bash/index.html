@@ -10,7 +10,7 @@
 <meta name="description" content="">
 <meta name="author" content="">
 <link rel="canonical" href="http://undying.github.io/tags/bash/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.3613efbd0b1772781e8f49935e973cae632a7f61471c05b17be155505ccf87b5.css" integrity="sha256-NhPvvQsXcngej0mTXpc8rmMqf2FHHAWxe&#43;FVUFzPh7U=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css" integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z&#43;V9&#43;cO1A=" rel="preload stylesheet" as="style">
 <link rel="icon" href="http://undying.github.io/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="http://undying.github.io/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="http://undying.github.io/favicon-32x32.png">
@@ -36,7 +36,7 @@
                 --secondary: rgb(155, 156, 157);
                 --tertiary: rgb(65, 66, 68);
                 --content: rgb(196, 196, 197);
-                --hljs-bg: rgb(46, 46, 51);
+                --code-block-bg: rgb(46, 46, 51);
                 --code-bg: rgb(55, 56, 62);
                 --border: rgb(51, 51, 51);
             }
@@ -130,14 +130,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <article class="post-entry tag-entry"> 
   <header class="entry-header">
-    <h2>Pure Bash script for IO usage monitoring
+    <h2 class="entry-hint-parent">Pure Bash script for IO usage monitoring
     </h2>
   </header>
   <div class="entry-content">
     <p>I had the need to implement pure bash solution for IO usage monitoring without any tools installed on OS, do this fast and accurately. After little reaserching about /sys/ filesystem the next script was born:
 #! /bin/bash SLEEP=0.01 declare -A ops=() for dev in /sys/block/*;do dev=${dev##*/} ops&#43;=( [${dev}]=0 ) done for i in $(seq 1 100);do while read _ _ drive _ _ _ _ _ _ _ _ tasks _ _;do [ -n &#34;${drive}&#34; ] || continue case ${tasks} in 0|[!...</p>
   </div>
-  <footer class="entry-footer">&lt;span title=&#39;2016-09-13 02:39:00 &#43;0300 MSK&#39;&gt;September 13, 2016&lt;/span&gt;</footer>
+  <footer class="entry-footer"><span title='2016-09-13 02:39:00 +0300 MSK'>September 13, 2016</span></footer>
   <a class="entry-link" aria-label="post link to Pure Bash script for IO usage monitoring" href="http://undying.github.io/posts/2016-09-13-pure_bash_io_usage_monitoring/"></a>
 </article>
     </main>

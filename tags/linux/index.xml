@@ -6,27 +6,24 @@
     <description>Recent content in linux on My Digital Chronicle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 03 Apr 2023 00:22:42 +0300</lastBuildDate><atom:link href="http://undying.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 03 Apr 2023 00:22:42 +0300</lastBuildDate>
+    <atom:link href="http://undying.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Moving from MacOS to Asahi Linux</title>
       <link>http://undying.github.io/posts/2023-04-03t0000z--moving-from-macos-to-asahi-linux/</link>
       <pubDate>Mon, 03 Apr 2023 00:22:42 +0300</pubDate>
-      
       <guid>http://undying.github.io/posts/2023-04-03t0000z--moving-from-macos-to-asahi-linux/</guid>
       <description>Moving from MacOS to Asahi Linux Status Hardware 3.5mm Audio Jack: ⚠ (It&amp;rsquo;s been detected properly, but not working) 1 Bluetooth: ✅ Camera: ❌ Fingerprint: ❌ HDMI: ❌ Speakers: ❌ Touchpad: ✅ Wi-Fi: ✅ Software Obsidian: ✅ RVM: ⚠ (rvm is installed but ruby build fails) Slack: ❌ Telegram: ✅ Zoom: ❌ Functionality Brightness Control: ✅ Hibernate: ❌ Suspend to RAM: ⚠ (OS is being suspended but laptop is keep working and draining battery) References Asahi Feature Support </description>
     </item>
-    
     <item>
       <title>Network: Capturing TCP Retransmissions</title>
       <link>http://undying.github.io/posts/2020-06-20-capturing-tcp-retransmissions/</link>
       <pubDate>Sat, 20 Jun 2020 16:04:35 +0300</pubDate>
-      
       <guid>http://undying.github.io/posts/2020-06-20-capturing-tcp-retransmissions/</guid>
       <description>When server have a lot network connections it&amp;rsquo;s not rare to see tcp retransmissions. The permanent background retransmissions it&amp;rsquo;s even normal situation if it&amp;rsquo;s not abnormally high.
 But when the charts shows abnormally jump of retransmissions it&amp;rsquo;s good to find the reason.
 The reason is may be:
 server is overloaded remote server is overloaded network where servers is based is degraded network of remote endpoint is degraded When servers is not overloaded the next step is to find which endpoint causes the retransmissions.</description>
     </item>
-    
   </channel>
 </rss>

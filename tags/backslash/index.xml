@@ -6,12 +6,12 @@
     <description>Recent content in backslash on My Digital Chronicle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 19 Feb 2017 15:47:00 +0300</lastBuildDate><atom:link href="http://undying.github.io/tags/backslash/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 19 Feb 2017 15:47:00 +0300</lastBuildDate>
+    <atom:link href="http://undying.github.io/tags/backslash/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Gentoo: Backslash as Yen char</title>
       <link>http://undying.github.io/posts/2017-02-19-backslash_as_yen/</link>
       <pubDate>Sun, 19 Feb 2017 15:47:00 +0300</pubDate>
-      
       <guid>http://undying.github.io/posts/2017-02-19-backslash_as_yen/</guid>
       <description>If while browsing the internet you have a problem with backslash character which displayed as yen sign you can fix it this way.
 First, let&amp;rsquo;s install the appropriate fonts.
@@ -20,6 +20,5 @@ eselect fontconfig enable 59-google-droid-sans.conf eselect fontconfig enable 59
 fc-cache -rf That&amp;rsquo;s all.
 P.S. Also I had a problem displaying cyrillic characters.</description>
     </item>
-    
   </channel>
 </rss>

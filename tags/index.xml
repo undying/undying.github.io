@@ -6,564 +6,441 @@
     <description>Recent content in Tags on My Digital Chronicle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 07 Apr 2023 10:18:38 +0300</lastBuildDate><atom:link href="http://undying.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 07 Apr 2023 10:18:38 +0300</lastBuildDate>
+    <atom:link href="http://undying.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>runlevel</title>
       <link>http://undying.github.io/tags/runlevel/</link>
       <pubDate>Fri, 07 Apr 2023 10:18:38 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/runlevel/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>systemd</title>
       <link>http://undying.github.io/tags/systemd/</link>
       <pubDate>Fri, 07 Apr 2023 10:18:38 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/systemd/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>asahi</title>
       <link>http://undying.github.io/tags/asahi/</link>
       <pubDate>Mon, 03 Apr 2023 00:22:42 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/asahi/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>linux</title>
       <link>http://undying.github.io/tags/linux/</link>
       <pubDate>Mon, 03 Apr 2023 00:22:42 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/linux/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>macOS</title>
       <link>http://undying.github.io/tags/macos/</link>
       <pubDate>Mon, 03 Apr 2023 00:22:42 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/macos/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>http</title>
       <link>http://undying.github.io/tags/http/</link>
       <pubDate>Thu, 15 Oct 2020 22:32:39 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/http/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>url</title>
       <link>http://undying.github.io/tags/url/</link>
       <pubDate>Thu, 15 Oct 2020 22:32:39 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/url/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>vim</title>
       <link>http://undying.github.io/tags/vim/</link>
       <pubDate>Thu, 15 Oct 2020 22:32:39 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/vim/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>markdown</title>
       <link>http://undying.github.io/tags/markdown/</link>
       <pubDate>Wed, 14 Oct 2020 23:45:53 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/markdown/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>vimscript</title>
       <link>http://undying.github.io/tags/vimscript/</link>
       <pubDate>Wed, 14 Oct 2020 23:45:53 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/vimscript/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>pipenv</title>
       <link>http://undying.github.io/tags/pipenv/</link>
       <pubDate>Wed, 14 Oct 2020 23:03:02 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/pipenv/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>ycm</title>
       <link>http://undying.github.io/tags/ycm/</link>
       <pubDate>Wed, 14 Oct 2020 23:03:02 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/ycm/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>git</title>
       <link>http://undying.github.io/tags/git/</link>
       <pubDate>Thu, 25 Jun 2020 22:36:59 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/git/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>zsh</title>
       <link>http://undying.github.io/tags/zsh/</link>
       <pubDate>Thu, 25 Jun 2020 22:36:59 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/zsh/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>network</title>
       <link>http://undying.github.io/tags/network/</link>
       <pubDate>Sat, 20 Jun 2020 16:04:35 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/network/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>tcp</title>
       <link>http://undying.github.io/tags/tcp/</link>
       <pubDate>Sat, 20 Jun 2020 16:04:35 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/tcp/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>filetype</title>
       <link>http://undying.github.io/tags/filetype/</link>
       <pubDate>Sat, 06 Jun 2020 22:47:03 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/filetype/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>autosave</title>
       <link>http://undying.github.io/tags/autosave/</link>
       <pubDate>Tue, 02 Jun 2020 00:10:12 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/autosave/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>aws</title>
       <link>http://undying.github.io/tags/aws/</link>
       <pubDate>Fri, 29 May 2020 11:24:01 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/aws/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>dns</title>
       <link>http://undying.github.io/tags/dns/</link>
       <pubDate>Fri, 29 May 2020 11:24:01 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/dns/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>cheatsheet</title>
       <link>http://undying.github.io/tags/cheatsheet/</link>
       <pubDate>Fri, 22 May 2020 09:48:49 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/cheatsheet/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>postgresql</title>
       <link>http://undying.github.io/tags/postgresql/</link>
       <pubDate>Fri, 22 May 2020 09:48:49 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/postgresql/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>block</title>
       <link>http://undying.github.io/tags/block/</link>
       <pubDate>Thu, 25 Jul 2019 14:27:00 +0000</pubDate>
-      
       <guid>http://undying.github.io/tags/block/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>container</title>
       <link>http://undying.github.io/tags/container/</link>
       <pubDate>Thu, 25 Jul 2019 14:27:00 +0000</pubDate>
-      
       <guid>http://undying.github.io/tags/container/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>docker</title>
       <link>http://undying.github.io/tags/docker/</link>
       <pubDate>Thu, 25 Jul 2019 14:27:00 +0000</pubDate>
-      
       <guid>http://undying.github.io/tags/docker/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>gentoo</title>
       <link>http://undying.github.io/tags/gentoo/</link>
       <pubDate>Thu, 25 Jul 2019 14:27:00 +0000</pubDate>
-      
       <guid>http://undying.github.io/tags/gentoo/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>kde</title>
       <link>http://undying.github.io/tags/kde/</link>
       <pubDate>Thu, 25 Jul 2019 14:27:00 +0000</pubDate>
-      
       <guid>http://undying.github.io/tags/kde/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>lvm</title>
       <link>http://undying.github.io/tags/lvm/</link>
       <pubDate>Thu, 25 Jul 2019 14:27:00 +0000</pubDate>
-      
       <guid>http://undying.github.io/tags/lvm/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>mount</title>
       <link>http://undying.github.io/tags/mount/</link>
       <pubDate>Thu, 25 Jul 2019 14:27:00 +0000</pubDate>
-      
       <guid>http://undying.github.io/tags/mount/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>building</title>
       <link>http://undying.github.io/tags/building/</link>
       <pubDate>Wed, 21 Nov 2018 05:10:00 +0000</pubDate>
-      
       <guid>http://undying.github.io/tags/building/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>cargo</title>
       <link>http://undying.github.io/tags/cargo/</link>
       <pubDate>Wed, 21 Nov 2018 05:10:00 +0000</pubDate>
-      
       <guid>http://undying.github.io/tags/cargo/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>firefox</title>
       <link>http://undying.github.io/tags/firefox/</link>
       <pubDate>Wed, 21 Nov 2018 05:10:00 +0000</pubDate>
-      
       <guid>http://undying.github.io/tags/firefox/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>backslash</title>
       <link>http://undying.github.io/tags/backslash/</link>
       <pubDate>Sun, 19 Feb 2017 15:47:00 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/backslash/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>yen</title>
       <link>http://undying.github.io/tags/yen/</link>
       <pubDate>Sun, 19 Feb 2017 15:47:00 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/yen/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>bash</title>
       <link>http://undying.github.io/tags/bash/</link>
       <pubDate>Tue, 13 Sep 2016 02:39:00 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/bash/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>io</title>
       <link>http://undying.github.io/tags/io/</link>
       <pubDate>Tue, 13 Sep 2016 02:39:00 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/io/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>monitoring</title>
       <link>http://undying.github.io/tags/monitoring/</link>
       <pubDate>Tue, 13 Sep 2016 02:39:00 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/monitoring/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>gcc</title>
       <link>http://undying.github.io/tags/gcc/</link>
       <pubDate>Fri, 29 Apr 2016 02:04:00 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/gcc/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>datamapper</title>
       <link>http://undying.github.io/tags/datamapper/</link>
       <pubDate>Mon, 08 Feb 2016 00:21:00 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/datamapper/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>thin</title>
       <link>http://undying.github.io/tags/thin/</link>
       <pubDate>Mon, 08 Feb 2016 00:21:00 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/thin/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>mplayer</title>
       <link>http://undying.github.io/tags/mplayer/</link>
       <pubDate>Sun, 31 Jan 2016 16:30:00 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/mplayer/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>mpv</title>
       <link>http://undying.github.io/tags/mpv/</link>
       <pubDate>Sun, 31 Jan 2016 16:30:00 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/mpv/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>video</title>
       <link>http://undying.github.io/tags/video/</link>
       <pubDate>Sun, 31 Jan 2016 16:30:00 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/video/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>youtube</title>
       <link>http://undying.github.io/tags/youtube/</link>
       <pubDate>Sun, 31 Jan 2016 16:30:00 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/youtube/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>fs</title>
       <link>http://undying.github.io/tags/fs/</link>
       <pubDate>Thu, 28 Jan 2016 02:58:00 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/fs/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>hdd</title>
       <link>http://undying.github.io/tags/hdd/</link>
       <pubDate>Thu, 28 Jan 2016 02:58:00 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/hdd/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>raid</title>
       <link>http://undying.github.io/tags/raid/</link>
       <pubDate>Thu, 28 Jan 2016 02:58:00 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/raid/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>elb</title>
       <link>http://undying.github.io/tags/elb/</link>
       <pubDate>Tue, 12 Jan 2016 20:35:00 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/elb/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>haproxy</title>
       <link>http://undying.github.io/tags/haproxy/</link>
       <pubDate>Tue, 12 Jan 2016 20:35:00 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/haproxy/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>nginx</title>
       <link>http://undying.github.io/tags/nginx/</link>
       <pubDate>Tue, 12 Jan 2016 20:35:00 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/nginx/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>3g</title>
       <link>http://undying.github.io/tags/3g/</link>
       <pubDate>Thu, 31 Dec 2015 12:41:17 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/3g/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>gprs</title>
       <link>http://undying.github.io/tags/gprs/</link>
       <pubDate>Thu, 31 Dec 2015 12:41:17 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/gprs/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>gsm</title>
       <link>http://undying.github.io/tags/gsm/</link>
       <pubDate>Thu, 31 Dec 2015 12:41:17 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/gsm/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>openwrt</title>
       <link>http://undying.github.io/tags/openwrt/</link>
       <pubDate>Thu, 31 Dec 2015 12:41:17 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/openwrt/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>wifi</title>
       <link>http://undying.github.io/tags/wifi/</link>
       <pubDate>Thu, 31 Dec 2015 12:41:17 +0300</pubDate>
-      
       <guid>http://undying.github.io/tags/wifi/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>cyrillic</title>
       <link>http://undying.github.io/tags/cyrillic/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
       <guid>http://undying.github.io/tags/cyrillic/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>encoding</title>
       <link>http://undying.github.io/tags/encoding/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
       <guid>http://undying.github.io/tags/encoding/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>http/2</title>
       <link>http://undying.github.io/tags/http/2/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
       <guid>http://undying.github.io/tags/http/2/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>konsole</title>
       <link>http://undying.github.io/tags/konsole/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
       <guid>http://undying.github.io/tags/konsole/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>locale</title>
       <link>http://undying.github.io/tags/locale/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
       <guid>http://undying.github.io/tags/locale/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>plasma</title>
       <link>http://undying.github.io/tags/plasma/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
       <guid>http://undying.github.io/tags/plasma/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>terminal</title>
       <link>http://undying.github.io/tags/terminal/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
       <guid>http://undying.github.io/tags/terminal/</guid>
       <description></description>
     </item>
-    
   </channel>
 </rss>

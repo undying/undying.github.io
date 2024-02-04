@@ -5,26 +5,23 @@
     <link>http://undying.github.io/tags/http/2/</link>
     <description>Recent content in http/2 on My Digital Chronicle</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="http://undying.github.io/tags/http/2/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    <atom:link href="http://undying.github.io/tags/http/2/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Enabling HTTP/2.0 support with Haproxy -&gt; Amazon ELB -&gt; Nginx</title>
       <link>http://undying.github.io/posts/2016-01-12-haproxy-elb-nginx-http2/</link>
       <pubDate>Tue, 12 Jan 2016 20:35:00 +0300</pubDate>
-      
       <guid>http://undying.github.io/posts/2016-01-12-haproxy-elb-nginx-http2/</guid>
       <description>I have a Haproxy balancer that routes traffic for multiple projects with different host names and now, I need to enable HTTP/2.0 support for couple or all of them. The problem is that current version of Haproxy not supporting HTTP/2.0 protocol. Also, In my case I have multiple backends. To some of them I need to send http/1.1 traffic and to some of them http/2.0.
 The main problem is the mix of tcp/http modes in Haproxy.</description>
     </item>
-    
     <item>
       <title>Enabling HTTP/2.0 support with Haproxy -&gt; Amazon ELB -&gt; Nginx</title>
       <link>http://undying.github.io/posts/2016-01-12-haproxy-elb-nginx-http2/</link>
       <pubDate>Tue, 12 Jan 2016 20:35:00 +0300</pubDate>
-      
       <guid>http://undying.github.io/posts/2016-01-12-haproxy-elb-nginx-http2/</guid>
       <description>I have a Haproxy balancer that routes traffic for multiple projects with different host names and now, I need to enable HTTP/2.0 support for couple or all of them. The problem is that current version of Haproxy not supporting HTTP/2.0 protocol. Also, In my case I have multiple backends. To some of them I need to send http/1.1 traffic and to some of them http/2.0.
 The main problem is the mix of tcp/http modes in Haproxy.</description>
     </item>
-    
   </channel>
 </rss>

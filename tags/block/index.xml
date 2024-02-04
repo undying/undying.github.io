@@ -6,18 +6,17 @@
     <description>Recent content in block on My Digital Chronicle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 25 Jul 2019 14:27:00 +0000</lastBuildDate><atom:link href="http://undying.github.io/tags/block/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 25 Jul 2019 14:27:00 +0000</lastBuildDate>
+    <atom:link href="http://undying.github.io/tags/block/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Docker: Mounting block devices into container</title>
       <link>http://undying.github.io/posts/2019-07-25-mounting_block_devices_into_docker/</link>
       <pubDate>Thu, 25 Jul 2019 14:27:00 +0000</pubDate>
-      
       <guid>http://undying.github.io/posts/2019-07-25-mounting_block_devices_into_docker/</guid>
       <description>Today was curious is it possible to mount block device into a docker container without mounting it on system. It&amp;rsquo;s not well documented but found one interesting comment in github.
 So, if &amp;ndash;mount option in docker run command is &amp;ldquo;magic&amp;rdquo; on top of &amp;ldquo;mount&amp;rdquo; system call, we can use it. After experimenting a bit here is an example mounting lvm volumes.
 First, let&amp;rsquo;s create loop device for LVM:
 dd if=/dev/zero of=/tmp/loop bs=1M count=100 losetup /dev/loop0 /tmp/loop Then, making an LVM device:</description>
     </item>
-    
   </channel>
 </rss>

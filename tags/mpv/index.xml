@@ -6,16 +6,15 @@
     <description>Recent content in mpv on My Digital Chronicle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 31 Jan 2016 16:30:00 +0300</lastBuildDate><atom:link href="http://undying.github.io/tags/mpv/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 31 Jan 2016 16:30:00 +0300</lastBuildDate>
+    <atom:link href="http://undying.github.io/tags/mpv/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Using FireFox to play video with Mplayer on Windows</title>
       <link>http://undying.github.io/posts/2016-01-31-firefox-and-mplayer/</link>
       <pubDate>Sun, 31 Jan 2016 16:30:00 +0300</pubDate>
-      
       <guid>http://undying.github.io/posts/2016-01-31-firefox-and-mplayer/</guid>
       <description>Some time ago I was visiting at my mom. We live a far away from each other so frequently visits is not so easy. She using a pretty old computer which I were overclocking a long time ago. It&amp;rsquo;s a AMD Barton 3200+ with 2GB DDR RAM and Geforce 6600 GT.
 It was a great PC a long time ago. Even now it works fine, except when you are want to watch video online.</description>
     </item>
-    
   </channel>
 </rss>

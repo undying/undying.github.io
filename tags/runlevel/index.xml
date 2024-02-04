@@ -6,17 +6,16 @@
     <description>Recent content in runlevel on My Digital Chronicle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 07 Apr 2023 10:18:38 +0300</lastBuildDate><atom:link href="http://undying.github.io/tags/runlevel/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 07 Apr 2023 10:18:38 +0300</lastBuildDate>
+    <atom:link href="http://undying.github.io/tags/runlevel/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Runlevels in Systemd</title>
       <link>http://undying.github.io/posts/2023-04-07t1018z--runlevels-in-systemd/</link>
       <pubDate>Fri, 07 Apr 2023 10:18:38 +0300</pubDate>
-      
       <guid>http://undying.github.io/posts/2023-04-07t1018z--runlevels-in-systemd/</guid>
       <description>Once, when loading into Asahi, the keyboard stopped working after loading the X server. It was necessary to boot into a bare terminal without starting the X server, but how to do it?
 One of the rough options is to boot into bash as an init process. The second option is to redefine the runlevel to the one in which X does not run.
 To do this, when loading grub, go to the edit start line menu by pressing the &amp;ldquo;e&amp;rdquo; key.</description>
     </item>
-    
   </channel>
 </rss>

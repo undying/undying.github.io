@@ -5,18 +5,17 @@
     <link>http://undying.github.io/tags/encoding/</link>
     <description>Recent content in encoding on My Digital Chronicle</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="http://undying.github.io/tags/encoding/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    <atom:link href="http://undying.github.io/tags/encoding/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Fixing cyrillic symbols in KDE Konsole</title>
       <link>http://undying.github.io/posts/2020-05-08-cyrillic-symbols-in-konsole/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
       <guid>http://undying.github.io/posts/2020-05-08-cyrillic-symbols-in-konsole/</guid>
       <description>После очередной переустановки системы, вернее после установки ради интереса новой системы, в терминале Konsole возникли проблемы с кириллицей. Что характерно, в виртуальных терминалах (tty1-7) с кодировкой проблем не было, а значит системные шрифты были настроены верно.
 Знатно покопавшись в сетях нашел древний пост на эту тему. Попробовал выставить LC_ALL=en_US.utf8 и запустить konsole, чудо произошло. Осталось сделать это красиво.
 А красиво можно запилить двумя путями:
 глобально закинув определение переменной куда-нибудь сюда /etc/profile.</description>
     </item>
-    
   </channel>
 </rss>

@@ -6,17 +6,16 @@
     <description>Recent content in git on My Digital Chronicle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 25 Jun 2020 22:36:59 +0300</lastBuildDate><atom:link href="http://undying.github.io/tags/git/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 25 Jun 2020 22:36:59 +0300</lastBuildDate>
+    <atom:link href="http://undying.github.io/tags/git/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>ZSH: auto git config.user</title>
       <link>http://undying.github.io/posts/2020-06-25-zsh--auto-git-config.user/</link>
       <pubDate>Thu, 25 Jun 2020 22:36:59 +0300</pubDate>
-      
       <guid>http://undying.github.io/posts/2020-06-25-zsh--auto-git-config.user/</guid>
       <description>On my laptop and desktop I usually have many git repositories. Some of them are personal and some of them are from my main job. In companies it&amp;rsquo;s common practice to have corporate email that used in repository configuration.
 git config user.name &amp;#34;Mr Anderson&amp;#34; git config user.email &amp;#34;anderson@corp.in&amp;#34; In personal repository you may use some cool nickname and personal email.
 git config user.name &amp;#34;Neo&amp;#34; git config user.email &amp;#34;0xff@matr.ix&amp;#34; But there is an headache to not forget configure every repository to be corporate or personal after cloning.</description>
     </item>
-    
   </channel>
 </rss>
