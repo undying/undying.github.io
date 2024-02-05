@@ -56,12 +56,28 @@
 
     </style>
 </noscript>
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-5GK4JRS');</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6EM4NECWNX"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-6EM4NECWNX', { 'anonymize_ip': false });
+}
+</script>
 
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6EM4NECWNX"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-6EM4NECWNX', { 'anonymize_ip': false });
+}
+</script>
 <meta property="og:title" content="VIM: File Autosave" />
 <meta property="og:description" content="I was wondering how to save file in VIM automatically. Found some solutions in internet but decided to do it my way. So I wrote this small solution:
 &#34;&#34;&#34; Save file on each edit exit function FileAutoSave() if exists(&#39;g:file_autosave_async&#39;) return endif if @% == &#34;&#34; return elseif !filewritable(@%) return endif let g:file_autosave_async = 1 call timer_start(500, &#39;FileAutoSaveAsync&#39;, {&#39;repeat&#39;: 1}) endfunction function FileAutoSaveAsync(timer) update unlet g:file_autosave_async endfunction :autocmd InsertLeave,TextChanged * call FileAutoSave() &#34;&#34;&#34; It updates file in two cases:" />

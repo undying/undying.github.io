@@ -59,12 +59,28 @@ dmraid -r -E ${DEVICE} ~ # mkfs.btrfs /dev/sdb /dev/sdb appears to contain an ex
 
     </style>
 </noscript>
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-5GK4JRS');</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6EM4NECWNX"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-6EM4NECWNX', { 'anonymize_ip': false });
+}
+</script>
 
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6EM4NECWNX"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-6EM4NECWNX', { 'anonymize_ip': false });
+}
+</script>
 <meta property="og:title" content="How to cleanup FS metadata from partition" />
 <meta property="og:description" content="Sometimes you I&rsquo;m need to create new FS on partition, which was already used for something else (another FS, RAID, LVM). I was wondering about most usable ways to clear metadata. Here is some I liked the most.
 first

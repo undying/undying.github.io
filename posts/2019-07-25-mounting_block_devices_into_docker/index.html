@@ -58,12 +58,28 @@ dd if=/dev/zero of=/tmp/loop bs=1M count=100 losetup /dev/loop0 /tmp/loop Then, 
 
     </style>
 </noscript>
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-5GK4JRS');</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6EM4NECWNX"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-6EM4NECWNX', { 'anonymize_ip': false });
+}
+</script>
 
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6EM4NECWNX"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-6EM4NECWNX', { 'anonymize_ip': false });
+}
+</script>
 <meta property="og:title" content="Docker: Mounting block devices into container" />
 <meta property="og:description" content="Today was curious is it possible to mount block device into a docker container without mounting it on system. It&rsquo;s not well documented but found one interesting comment in github.
 So, if &ndash;mount option in docker run command is &ldquo;magic&rdquo; on top of &ldquo;mount&rdquo; system call, we can use it. After experimenting a bit here is an example mounting lvm volumes.

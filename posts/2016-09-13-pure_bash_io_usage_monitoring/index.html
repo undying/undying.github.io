@@ -56,12 +56,28 @@
 
     </style>
 </noscript>
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-5GK4JRS');</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6EM4NECWNX"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-6EM4NECWNX', { 'anonymize_ip': false });
+}
+</script>
 
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6EM4NECWNX"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-6EM4NECWNX', { 'anonymize_ip': false });
+}
+</script>
 <meta property="og:title" content="Pure Bash script for IO usage monitoring" />
 <meta property="og:description" content="I had the need to implement pure bash solution for IO usage monitoring without any tools installed on OS, do this fast and accurately. After little reaserching about /sys/ filesystem the next script was born:
 #! /bin/bash SLEEP=0.01 declare -A ops=() for dev in /sys/block/*;do dev=${dev##*/} ops&#43;=( [${dev}]=0 ) done for i in $(seq 1 100);do while read _ _ drive _ _ _ _ _ _ _ _ tasks _ _;do [ -n &#34;${drive}&#34; ] || continue case ${tasks} in 0|[!" />
