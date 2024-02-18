@@ -6,8 +6,16 @@
     <description>Recent content on My Digital Chronicle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 04 Feb 2024 22:03:39 +0300</lastBuildDate>
+    <lastBuildDate>Sun, 18 Feb 2024 13:36:23 +0300</lastBuildDate>
     <atom:link href="http://undying.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Creating PDF File From Multiple Images Of Different Sizes</title>
+      <link>http://undying.github.io/posts/2024-02-18t1336z--creating-pdf-file-from-multiple-images-with-different-sizes/</link>
+      <pubDate>Sun, 18 Feb 2024 13:36:23 +0300</pubDate>
+      <guid>http://undying.github.io/posts/2024-02-18t1336z--creating-pdf-file-from-multiple-images-with-different-sizes/</guid>
+      <description>export SIZE=&amp;#39;4960x7014&amp;#39; &amp;amp;&amp;amp; \ convert image_* \ -resize &amp;#34;${SIZE}&amp;#34;&amp;#39;^&amp;gt;&amp;#39; \ -extent &amp;#34;${SIZE}&amp;#34; \ -gravity center \ -background white \ -units PixelsPerInch \ -density 600 result.pdf export SIZE=&#39;4960x7014&#39;:
+export: This bash shell command sets the environment variable SIZE to be available to subsequent commands. SIZE=&amp;lsquo;4960x7014&amp;rsquo;: This sets the value of the SIZE environment variable to the string 4960x7014, which represents the dimensions (width x height) for an image in pixels. convert image_*:</description>
+    </item>
     <item>
       <title>Convert OnePlus 12 From ColorOS to OxygenOS</title>
       <link>http://undying.github.io/posts/2024-02-04t2203z--convert-oneplus-12-from-coloros-to-oxygenos/</link>
